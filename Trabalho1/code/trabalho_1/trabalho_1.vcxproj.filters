@@ -1,16 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\utils\glslprogram.cpp" />
-    <ClCompile Include="..\..\utils\GLUtils.cpp" />
-    <ClCompile Include="..\..\utils\TextureManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\TessellatedQuad.cpp" />
+    <ClCompile Include="..\..\utils\glslprogram.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\utils\GLUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\utils\TextureManager.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\utils\GLUtils.h" />
-    <ClInclude Include="..\..\utils\TextureManager.h" />
     <ClInclude Include="src\TessellatedQuad.h" />
+    <ClInclude Include="..\..\utils\GLUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\utils\TextureManager.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\glsl40_tess_disp_mapp.frag">
@@ -29,6 +41,9 @@
   <ItemGroup>
     <Filter Include="Shaders">
       <UniqueIdentifier>{d42dc494-bc7a-4da1-88d6-411e0d786b63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{595da535-591f-4021-ba74-72b3a10bd542}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

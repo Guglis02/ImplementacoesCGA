@@ -25,15 +25,14 @@ TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size)
 
 void TessellatedQuad::init()
 {
+	cameraController = CameraController::Inst();
+	cameraController->init(window);
+
 	genPlane();
 	genBuffers();
 
 	// init matrices
 	modelMatrix = glm::mat4(1.0f);
-	viewMatrix = glm::lookAt(
-		vec3(0.0f, 0.0f, -1.0f), //eye
-		vec3(0.0f, 0.0f, 0.0f), //center
-		vec3(0.0f, 1.0f, 0.0f)); //up
 	
 	int w, h;
 	glfwGetFramebufferSize(window, &w, &h);
@@ -76,13 +75,14 @@ void TessellatedQuad::init()
 void TessellatedQuad::update(double deltaTime)
 {
 	processInput();
+	cameraController->processInput();
 
 	//// matrices setup
 	modelMatrix = mat4(); // identity
 	modelMatrix = glm::translate(modelMatrix, planePos); // translate back
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(rot), vec3(0.0f, 1.0f, 0.0f));
 	
-	modelViewMatrix = viewMatrix * modelMatrix;
+	modelViewMatrix = cameraController->getViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
 
 	// set var MVP on the shader
@@ -94,43 +94,35 @@ void TessellatedQuad::update(double deltaTime)
 	shader.setUniform("colorTextureSampler", 0);
 }
 
-bool isWKeyPressed = false;
-
 void TessellatedQuad::processInput()
 {
 	// Tessellation Level
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !isWKeyPressed)
+	if (glfwGetKeyOnce(window, 'R'))
 	{
 		tessLevel+=10;
 		if (tessLevel > 64)
 			tessLevel = 64;
-		cout << tessLevel << endl;
-		isWKeyPressed = true;
 	}
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE)
+	if (glfwGetKeyOnce(window, 'F'))
 	{
-		isWKeyPressed = false;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		tessLevel--;
+		tessLevel-=10;
 		if (tessLevel < 1)
 			tessLevel = 1;
 	}
 
-	// Rotation on Y axis
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		rot+=0.1;
-		if (rot > 360)
-			rot = 0;
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		rot-=0.1;
-		if (rot < 0)
-			rot = 360;
-	}
+	//// Rotation on Y axis
+	//if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	//{
+	//	rot+=0.1;
+	//	if (rot > 360)
+	//		rot = 0;
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	//{
+	//	rot-=0.1;
+	//	if (rot < 0)
+	//		rot = 360;
+	//}
 
 	// toggle wireframe
 	if (glfwGetKeyOnce(window, 'E')) {

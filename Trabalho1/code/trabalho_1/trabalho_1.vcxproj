@@ -22,12 +22,14 @@
     <ClCompile Include="..\..\utils\glslprogram.cpp" />
     <ClCompile Include="..\..\utils\GLUtils.cpp" />
     <ClCompile Include="..\..\utils\TextureManager.cpp" />
+    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\TessellatedQuad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\utils\GLUtils.h" />
     <ClInclude Include="..\..\utils\TextureManager.h" />
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="src\TessellatedQuad.h" />
   </ItemGroup>
   <ItemGroup>

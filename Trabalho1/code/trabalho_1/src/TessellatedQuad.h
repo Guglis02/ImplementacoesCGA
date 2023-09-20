@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include <vector>
 #include "glslprogram.h"
+#include "../CameraController.h"
 
 class TessellatedQuad : public Scene
 {
@@ -23,6 +24,8 @@ private:
 	void genBuffers();
 	void processInput();
 
+	CameraController* cameraController;
+
 	GLuint vaoID;
 	int size;
 	std::vector<vec3> vertices;
@@ -33,7 +36,6 @@ private:
 	GLFWwindow* window;
 
 	glm::mat4 modelMatrix;
-	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;
 	glm::mat4 modelViewProjectionMatrix;
 	glm::mat4 modelViewMatrix;

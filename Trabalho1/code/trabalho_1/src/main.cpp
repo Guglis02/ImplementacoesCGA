@@ -56,6 +56,7 @@ void errorCallback(int error, const char* description)
 	fputs(description, stderr);
 	_fgetchar();
 }
+
 // Key callback
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -88,12 +89,14 @@ void initGLFW()
 		exit(EXIT_FAILURE);
 	}
 }
+
 void initCallbacks()
 {
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetErrorCallback(errorCallback);
 }
+
 void initGLEW()
 {
 	cout << "Initializing GLEW..." << endl;
@@ -109,13 +112,15 @@ void initGLEW()
 	GLUtils::checkForOpenGLError(__FILE__, __LINE__); // Will throw error. Just ignore, glew bug.
 	GLUtils::dumpGLInfo();
 }
+
 void initializeGL()
 {
 	cout << "Initializing GL..." << endl;
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	GLUtils::checkForOpenGLError(__FILE__, __LINE__);
 }
+
 // Close OpenGL window and terminate GLFW  
 void closeApplication()
 {
