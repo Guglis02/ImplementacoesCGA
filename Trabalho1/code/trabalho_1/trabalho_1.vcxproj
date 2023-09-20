@@ -27,6 +27,7 @@
     <ClCompile Include="src\TessellatedQuad.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\utils\FpsController.h" />
     <ClInclude Include="..\..\utils\GLUtils.h" />
     <ClInclude Include="..\..\utils\TextureManager.h" />
     <ClInclude Include="CameraController.h" />

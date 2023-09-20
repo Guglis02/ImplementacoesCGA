@@ -41,7 +41,6 @@ private:
 	glm::mat4 modelViewMatrix;
 
 	vec3 planePos;
-	float rot = 30.0f;
 	bool wireframe = false;
 
 	int tessLevel = 1;

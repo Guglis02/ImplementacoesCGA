@@ -19,6 +19,7 @@
 #include <string>
 #include <iostream>
 #include "TessellatedQuad.h"
+#include "FpsController.h"
 
 #define WINDOW_WIDTH	1000
 #define WINDOW_HEIGHT	1000
@@ -30,17 +31,13 @@ GLFWwindow* window;
 
 void mainLoop()
 {
-	double thisTime;
-	double lastTime = glfwGetTime();
 	do
 	{
 		// Check for OpenGL errors
 		GLUtils::checkForOpenGLError(__FILE__, __LINE__);
 
-		// set deltatime and call update
-		thisTime = glfwGetTime();
-		tessellatedQuad->update(thisTime - lastTime);
-		lastTime = thisTime;
+		FpsController::getInstance().update();
+		tessellatedQuad->update(FpsController::getInstance().GetDeltaTime());
 
 		tessellatedQuad->render();
 
@@ -134,17 +131,12 @@ int main(void)
 	initCallbacks();
 	initGLEW();
 	initializeGL();
-		
+	
 	tessellatedQuad = new TessellatedQuad(window, 5);
 	tessellatedQuad->init();
 
-	cout << endl << "Q: rotate around Y axis" << endl;
-	cout << "A:  rotate around Y axis" << endl;
-
-	cout << endl << "W: increase tess level" << endl;
-	cout << "S: decrease tess level" << endl;
-
-	cout << endl << "E: toggle wireframe" << endl;
+	cout << endl << "WASD: Move câmera pelo mapa" << endl;
+	cout << "Mouse Click: Rotaciona câmera" << endl;
 
 	mainLoop();
 

@@ -72,7 +72,7 @@ void TessellatedQuad::init()
 		cout << "Failed to load texture." << endl;
 }
 
-void TessellatedQuad::update(double deltaTime)
+void TessellatedQuad::update(double t)
 {
 	processInput();
 	cameraController->processInput();

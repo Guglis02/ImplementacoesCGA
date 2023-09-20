@@ -23,6 +23,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="..\..\utils\FpsController.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\glsl40_tess_disp_mapp.frag">

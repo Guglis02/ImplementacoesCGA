@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <FpsController.h>
 
 CameraController* CameraController::m_inst = nullptr;
 CameraController* CameraController::Inst()
@@ -21,7 +22,7 @@ void CameraController::init(GLFWwindow* window)
 {
 	this->window = window;
     this->cameraPos = vec3(0.0f, 2.0f, 0.0f);
-    this->front = vec3(1.0f, 0.0f, 0.0f);
+    this->cameraDir = vec3(1.0f, 0.0f, 0.0f);
 
     lastX = 0.0f;
     lastY = 0.0f;
@@ -32,10 +33,10 @@ void CameraController::init(GLFWwindow* window)
 glm::mat4 CameraController::getViewMatrix()
 {
     std::cout << "Camera pos: " << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << std::endl;
-    std::cout << "Camera front towards: " << front.x << " " << front.y << " " << front.z << std::endl;
+    std::cout << "Camera dir: " << cameraDir.x << " " << cameraDir.y << " " << cameraDir.z << std::endl;
     return glm::lookAt(
         cameraPos,
-        cameraPos + front,
+        cameraPos + cameraDir,
         cameraUp);
 }
 
@@ -47,17 +48,13 @@ void CameraController::processInput()
 
 void CameraController::processMouse()
 {
-
     double mouseX, mouseY;
     glfwGetCursorPos(window, &mouseX, &mouseY);
-
+    
     if (glfwGetMouseButton(window, 0) == GLFW_PRESS)
     {
-        float xOffset = static_cast<float>(mouseX) - lastX;
-        float yOffset = lastY - static_cast<float>(mouseY);
-
-        lastX = static_cast<float>(mouseX);
-        lastY = static_cast<float>(mouseY);
+        float xOffset = mouseX - lastX;
+        float yOffset = lastY - mouseY;
 
         xOffset *= mouseSensitivity;
         yOffset *= mouseSensitivity;
@@ -65,38 +62,37 @@ void CameraController::processMouse()
         yaw += xOffset;
         pitch += yOffset;
 
-        //yaw = glm::clamp(yaw, -179.0f, 179.0f);
-        //pitch = glm::clamp(pitch, -90.0f, 90.0f);
+        cameraDir.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        cameraDir.y = sin(glm::radians(pitch));
+        cameraDir.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        cameraDir = glm::normalize(cameraDir);
+    }
 
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front = glm::normalize(front);
-    }
-    else
-    {
-        lastX = static_cast<float>(mouseX);
-        lastY = static_cast<float>(mouseY);
-    }
+    lastX = mouseX;
+    lastY = mouseY;
 }
 
 void CameraController::processKeyboard()
 {
+    float normSpeed = FpsController::getInstance().normalize(cameraSpeed);
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        cameraPos.z += cameraSpeed;
+        cameraPos.x += normSpeed * cameraDir.x;
+        cameraPos.z += normSpeed * cameraDir.z;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        cameraPos.z -= cameraSpeed;
+        cameraPos.x -= normSpeed * cameraDir.x;
+        cameraPos.z -= normSpeed * cameraDir.z;
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        cameraPos.x -= cameraSpeed;
+        cameraPos -= normSpeed * glm::normalize(glm::cross(cameraDir, cameraUp));
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        cameraPos.x += cameraSpeed;
+        cameraPos += normSpeed * glm::normalize(glm::cross(cameraDir, cameraUp));
     }
 }
 
