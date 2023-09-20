@@ -12,8 +12,8 @@ public:
 	static CameraController* Inst();
 	CameraController();
 	
-	void processInput();
 	void init(GLFWwindow* window);
+	void processInput();
 
 	glm::mat4 getViewMatrix();
 private:

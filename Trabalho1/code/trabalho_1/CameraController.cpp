@@ -16,6 +16,10 @@ CameraController* CameraController::Inst()
 CameraController::CameraController()
 {
     window = nullptr;
+    lastX = 0.0f;
+    lastY = 0.0f;
+    yaw = 0.0f;
+    pitch = 0.0f;
 }
 
 void CameraController::init(GLFWwindow* window)
@@ -23,17 +27,12 @@ void CameraController::init(GLFWwindow* window)
 	this->window = window;
     this->cameraPos = vec3(0.0f, 2.0f, 0.0f);
     this->cameraDir = vec3(1.0f, 0.0f, 0.0f);
-
-    lastX = 0.0f;
-    lastY = 0.0f;
-    yaw = 0.0f;
-    pitch = 0.0f;
 }
 
 glm::mat4 CameraController::getViewMatrix()
 {
-    std::cout << "Camera pos: " << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << std::endl;
-    std::cout << "Camera dir: " << cameraDir.x << " " << cameraDir.y << " " << cameraDir.z << std::endl;
+    //std::cout << "Camera pos: " << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << std::endl;
+    //std::cout << "Camera dir: " << cameraDir.x << " " << cameraDir.y << " " << cameraDir.z << std::endl;
     return glm::lookAt(
         cameraPos,
         cameraPos + cameraDir,

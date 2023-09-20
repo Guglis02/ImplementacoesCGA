@@ -137,6 +137,8 @@ int main(void)
 
 	cout << endl << "WASD: Move câmera pelo mapa" << endl;
 	cout << "Mouse Click: Rotaciona câmera" << endl;
+	cout << "R/F: Aumenta/Diminui tessellation level" << endl;
+	cout << "E: Ativa/Desativa wireframe" << endl;
 
 	mainLoop();
 

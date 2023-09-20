@@ -20,7 +20,7 @@ TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size)
 {
 	this->size = size;
 	this->window = window;
-	planePos = vec3(0.0f, 0.0f, 1.0f);
+	planePos = vec3(0.0f, 0.0f, 0.0f);
 }
 
 void TessellatedQuad::init()
@@ -80,7 +80,6 @@ void TessellatedQuad::update(double t)
 	//// matrices setup
 	modelMatrix = mat4(); // identity
 	modelMatrix = glm::translate(modelMatrix, planePos); // translate back
-	modelMatrix = glm::rotate(modelMatrix, glm::radians(rot), vec3(0.0f, 1.0f, 0.0f));
 	
 	modelViewMatrix = cameraController->getViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
@@ -109,20 +108,6 @@ void TessellatedQuad::processInput()
 		if (tessLevel < 1)
 			tessLevel = 1;
 	}
-
-	//// Rotation on Y axis
-	//if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-	//{
-	//	rot+=0.1;
-	//	if (rot > 360)
-	//		rot = 0;
-	//}
-	//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	//{
-	//	rot-=0.1;
-	//	if (rot < 0)
-	//		rot = 360;
-	//}
 
 	// toggle wireframe
 	if (glfwGetKeyOnce(window, 'E')) {
