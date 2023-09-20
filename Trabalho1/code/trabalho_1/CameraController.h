@@ -15,12 +15,25 @@ public:
 	void processInput();
 	void init(GLFWwindow* window);
 
-	glm::mat4 getViewMatrix() { return viewMatrix; }
+	glm::mat4 getViewMatrix();
 private:
 	float const cameraSpeed = 0.05f;
+	float const mouseSensitivity = 0.5f;
+	vec3 const cameraUp = vec3(0.0f, 1.0f, 0.0f);
+
+	vec3 cameraPos;
+	vec3 front;
+
 	static CameraController* m_inst;
-	
+
+	double lastX;
+	double lastY;
+	float yaw;
+	float pitch;
+
 	GLFWwindow* window;
-	glm::mat4 viewMatrix;
+
+	void processMouse();
+	void processKeyboard();
 };
 

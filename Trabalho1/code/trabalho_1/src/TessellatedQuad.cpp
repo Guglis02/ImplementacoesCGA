@@ -61,8 +61,8 @@ void TessellatedQuad::init()
 
 	// Load our color texture with Id 0
 	glActiveTexture(GL_TEXTURE0);
-	if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_COLOR.png", 0))
-	//if (!texManager->LoadTexture("..\\..\\resources\\inter_color.png", 0))
+	//if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_COLOR.png", 0))
+	if (!texManager->LoadTexture("..\\..\\resources\\inter_color.png", 0))
 		cout << "Failed to load texture." << endl;
 	
 	// Load our displacement texture with Id 1
@@ -186,19 +186,19 @@ void TessellatedQuad::resize(int x, int y)
 void TessellatedQuad::genPlane()
 {
 	// v0 -- bottom left
-	vertices.push_back(vec3(-size, -size, 0.0f));
+	vertices.push_back(vec3(-size, 0.0f, -size));
 	texcoord.push_back(vec2(0.0f, 0.0f));
 
 	//v1 -- top left
-	vertices.push_back(vec3(-size, size, 0.0f));
+	vertices.push_back(vec3(-size, 0.0f, size));
 	texcoord.push_back(vec2(0.0f, 3.0f));
 
 	//v2 -- top right
-	vertices.push_back(vec3(size, size, 0.0f));
+	vertices.push_back(vec3(size, 0.0f, size));
 	texcoord.push_back(vec2(2.0f, 3.0f));
 
 	////v3 -- bottom right
-	vertices.push_back(vec3(size, -size, 0.0f));
+	vertices.push_back(vec3(size, 0.0f, -size));
 	texcoord.push_back(vec2(2.0f, 0.0f));
 	
 	// Quad indices

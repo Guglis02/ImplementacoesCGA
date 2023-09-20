@@ -135,7 +135,7 @@ int main(void)
 	initGLEW();
 	initializeGL();
 		
-	tessellatedQuad = new TessellatedQuad(window, 1);
+	tessellatedQuad = new TessellatedQuad(window, 5);
 	tessellatedQuad->init();
 
 	cout << endl << "Q: rotate around Y axis" << endl;
