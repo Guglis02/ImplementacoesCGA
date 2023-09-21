@@ -11,7 +11,7 @@
 class TessellatedQuad : public Scene
 {
 public:
-	TessellatedQuad(GLFWwindow* window, int size = 1);
+	TessellatedQuad(GLFWwindow* window, int size = 1, int numberOfPatches = 9);
 
 	// mesh virtual functions
 	void init();
@@ -20,17 +20,28 @@ public:
 	void resize(int, int);
 
 private:
-	void genPlane();
+	struct TessellatedQuad::Patch {
+		std::vector<vec3> vertices;
+		std::vector<vec2> texcoord;
+		std::vector<int> indices;
+		vec3 planePos;
+
+		void genPatch(float patchSize, int patchX, int patchY);
+	};
+
+	void genTerrain();
 	void genBuffers();
 	void processInput();
 
 	CameraController* cameraController;
 
-	GLuint vaoID;
+	GLuint bufferHandles[9 * 3];
+	GLuint* vaoIDs;
 	int size;
-	std::vector<vec3> vertices;
-	std::vector<vec2> texcoord;
-	std::vector<unsigned int> indices;
+	int numberOfPatches;
+
+	vec3 planePos;
+	std::vector<Patch> patches;
 
 	GLSLProgram shader;
 	GLFWwindow* window;
@@ -40,7 +51,6 @@ private:
 	glm::mat4 modelViewProjectionMatrix;
 	glm::mat4 modelViewMatrix;
 
-	vec3 planePos;
 	bool wireframe = false;
 
 	int tessLevel = 1;

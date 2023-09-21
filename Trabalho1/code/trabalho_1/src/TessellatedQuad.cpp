@@ -16,11 +16,13 @@ char keyOnce[GLFW_KEY_LAST + 1];
 
 TextureManager* texManager;
 
-TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size)
+TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size, int numberOfPatches)
 {
-	this->size = size;
 	this->window = window;
+	this->size = size;
+	this->numberOfPatches = numberOfPatches;
 	planePos = vec3(0.0f, 0.0f, 0.0f);
+	vaoIDs = new GLuint[patches.size()];
 }
 
 void TessellatedQuad::init()
@@ -28,7 +30,7 @@ void TessellatedQuad::init()
 	cameraController = CameraController::Inst();
 	cameraController->init(window);
 
-	genPlane();
+	genTerrain();
 	genBuffers();
 
 	// init matrices
@@ -85,10 +87,8 @@ void TessellatedQuad::update(double t)
 	modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
 
 	// set var MVP on the shader
-	shader.setUniform("MVP", modelViewProjectionMatrix); //ModelViewProjection
-
+	shader.setUniform("MVP", modelViewProjectionMatrix);
 	shader.setUniform("TessLevel", tessLevel);
-
 	shader.setUniform("displacementmapSampler", 1);
 	shader.setUniform("colorTextureSampler", 0);
 }
@@ -133,60 +133,78 @@ void TessellatedQuad::render()
 	glActiveTexture(GL_TEXTURE1);
 	TextureManager::Inst()->BindTexture(1);
 	
-	glBindVertexArray(vaoID);
-	glPatchParameteri(GL_PATCH_VERTICES, 4);
-	glDrawElements(GL_PATCHES, indices.size(), GL_UNSIGNED_INT, (GLubyte *)NULL);
-	glBindVertexArray(0);
+	for (size_t i = 0; i < patches.size(); i++) {
+		glBindVertexArray(vaoIDs[i]);
+		glPatchParameteri(GL_PATCH_VERTICES, 4);
+		glDrawElements(GL_PATCHES, patches[i].indices.size(), GL_UNSIGNED_INT, (GLubyte*)NULL);
+		glBindVertexArray(0);
+	}
 }
 
 void TessellatedQuad::genBuffers()
 {
-	glGenVertexArrays(1, &vaoID);
-	glBindVertexArray(vaoID);
+	glGenVertexArrays(patches.size(), vaoIDs);
+			
+	glGenBuffers(patches.size() * 3, bufferHandles);
 
-	unsigned int handle[3];
-	glGenBuffers(3, handle);
+	for (size_t i = 0; i < patches.size(); i++) {
+		glBindVertexArray(vaoIDs[i]);
 
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), (GLvoid*)&vertices[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL);
-	glEnableVertexAttribArray(0);  // VertexPosition -> layout 0 in the VS
+		// Vertex buffer
+		glBindBuffer(GL_ARRAY_BUFFER, bufferHandles[i * 3]);
+		glBufferData(GL_ARRAY_BUFFER, patches[i].vertices.size() * sizeof(vec3), (GLvoid*)&patches[i].vertices[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+		glEnableVertexAttribArray(0);  // VertexPosition -> layout 0 in the VS
 
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glBufferData(GL_ARRAY_BUFFER, texcoord.size() * sizeof(vec2), (GLvoid*)&texcoord[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)1, 2, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL);
-	glEnableVertexAttribArray(1);  // TexCoord -> layout 1 in the VS
+		// Texcoord buffer
+		glBindBuffer(GL_ARRAY_BUFFER, bufferHandles[i * 3 + 1]);
+		glBufferData(GL_ARRAY_BUFFER, patches[i].texcoord.size() * sizeof(vec2), (GLvoid*)&patches[i].texcoord[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+		glEnableVertexAttribArray(1);  // TexCoord -> layout 1 in the VS
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[2]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), (GLvoid*)&indices[0], GL_STATIC_DRAW);
+		// Index buffer
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferHandles[i * 3 + 2]);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, patches[i].indices.size() * sizeof(int), (GLvoid*)&patches[i].indices[0], GL_STATIC_DRAW);
 
-	glBindVertexArray(0);
+		glBindVertexArray(0);
+	}
 }
+
 
 void TessellatedQuad::resize(int x, int y)
 {
 
 }
 
-void TessellatedQuad::genPlane()
+void TessellatedQuad::genTerrain()
 {
-	// v0 -- bottom left
-	vertices.push_back(vec3(-size, 0.0f, -size));
-	texcoord.push_back(vec2(0.0f, 0.0f));
+	float patchSize = static_cast<float>(size) / static_cast<float>(numberOfPatches);
 
-	//v1 -- top left
-	vertices.push_back(vec3(-size, 0.0f, size));
-	texcoord.push_back(vec2(0.0f, 3.0f));
+	// Generate terrain patches
+	for (int i = 0; i < numberOfPatches; i++) {
+		for (int j = 0; j < numberOfPatches; j++) {
+			Patch patch;
+			patch.genPatch(patchSize, i, j);
+			patches.push_back(patch);
+		}
+	}
+}
 
-	//v2 -- top right
-	vertices.push_back(vec3(size, 0.0f, size));
-	texcoord.push_back(vec2(2.0f, 3.0f));
 
-	////v3 -- bottom right
-	vertices.push_back(vec3(size, 0.0f, -size));
-	texcoord.push_back(vec2(2.0f, 0.0f));
-	
-	// Quad indices
+void TessellatedQuad::Patch::genPatch(float patchSize, int patchX, int patchY)
+{
+	// Calculate patch position
+	float xOffset = patchX * patchSize;
+	float yOffset = patchY * patchSize;
+	planePos = vec3(xOffset, 0.0f, yOffset + 10);
+
+	for (int i = 0; i < 4; i++) {
+		float x = (i % 2) * patchSize;
+		float y = (i / 2) * patchSize;
+		vertices.push_back(vec3(x, 0.0f, y) + planePos);
+		texcoord.push_back(vec2(x / (2.0f * patchSize), y / (2.0f * patchSize)));
+	}
+		
 	indices.push_back(0);
 	indices.push_back(1);
 	indices.push_back(2);
