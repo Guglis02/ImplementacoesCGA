@@ -222,3 +222,5 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 Trabalho1/.vs/cga_trabalho_1/v17/Browse.VC.db
+*.db
+*.recipe

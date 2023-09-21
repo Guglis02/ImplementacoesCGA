@@ -19,6 +19,7 @@ uniform int TessLevel;
 
 in vec2 vTexCoord[];
 in vec4 vPosition[];
+// in vec2 cameraPosition;
 
 out vec2 tcTexCoord[];
 out vec4 tcPosition[];
@@ -34,11 +35,11 @@ void main()
 	// Vamos modificar o inner e outer apenas para o primeiro vértice do Patch
 	if (ID == 0)
 	{
-		gl_TessLevelOuter[0] = float(TessLevel);
-		gl_TessLevelOuter[1] = float(TessLevel);
-		gl_TessLevelOuter[2] = float(TessLevel);
-		gl_TessLevelOuter[3] = float(TessLevel);
-		gl_TessLevelInner[0] = float(TessLevel);
-		gl_TessLevelInner[1] = float(TessLevel);
+		gl_TessLevelOuter[0] = float(TessLevel) * vPosition[0].z;
+		gl_TessLevelOuter[1] = float(TessLevel) * vPosition[0].z;
+		gl_TessLevelOuter[2] = float(TessLevel) * vPosition[0].z;
+		gl_TessLevelOuter[3] = float(TessLevel) * vPosition[0].z;
+		gl_TessLevelInner[0] = float(TessLevel) * vPosition[0].z;
+		gl_TessLevelInner[1] = float(TessLevel) * vPosition[0].z;
 	}
 }

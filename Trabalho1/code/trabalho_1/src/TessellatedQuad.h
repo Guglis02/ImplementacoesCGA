@@ -11,7 +11,7 @@
 class TessellatedQuad : public Scene
 {
 public:
-	TessellatedQuad(GLFWwindow* window, int size = 1);
+	TessellatedQuad(GLFWwindow* window, int patchSize = 1, int patchAmount = 3);
 
 	// mesh virtual functions
 	void init();
@@ -28,6 +28,7 @@ private:
 
 	GLuint vaoID;
 	int size;
+	int patchAmount;
 	std::vector<vec3> vertices;
 	std::vector<vec2> texcoord;
 	std::vector<unsigned int> indices;

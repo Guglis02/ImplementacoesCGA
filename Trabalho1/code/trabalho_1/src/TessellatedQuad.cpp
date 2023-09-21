@@ -16,10 +16,11 @@ char keyOnce[GLFW_KEY_LAST + 1];
 
 TextureManager* texManager;
 
-TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size)
+TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size, int patchAmount)
 {
-	this->size = size;
 	this->window = window;
+	this->size = size;
+	this->patchAmount = patchAmount;
 	planePos = vec3(0.0f, 0.0f, 0.0f);
 }
 
@@ -170,25 +171,33 @@ void TessellatedQuad::resize(int x, int y)
 
 void TessellatedQuad::genPlane()
 {
-	// v0 -- bottom left
-	vertices.push_back(vec3(-size, 0.0f, -size));
-	texcoord.push_back(vec2(0.0f, 0.0f));
+	for (int i = 0; i < patchAmount; i++)
+	{
+		for (int j = 0; j < patchAmount; j++)
+		{
+			// Inferior esquerdo
+			vertices.push_back(vec3(i * size, 0.0f, j * size));
+			texcoord.push_back(vec2(0.0f, 0.0f));
 
-	//v1 -- top left
-	vertices.push_back(vec3(-size, 0.0f, size));
-	texcoord.push_back(vec2(0.0f, 3.0f));
+			// Superior esquerdo
+			vertices.push_back(vec3(i * size, 0.0f, (j + 1) * size));
+			texcoord.push_back(vec2(0.0f, 1.0f));
 
-	//v2 -- top right
-	vertices.push_back(vec3(size, 0.0f, size));
-	texcoord.push_back(vec2(2.0f, 3.0f));
+			// Superior direito
+			vertices.push_back(vec3((i + 1) * size, 0.0f, (j + 1) * size));
+			texcoord.push_back(vec2(1.0f, 1.0f));
 
-	////v3 -- bottom right
-	vertices.push_back(vec3(size, 0.0f, -size));
-	texcoord.push_back(vec2(2.0f, 0.0f));
+			// Inferior direito
+			vertices.push_back(vec3((i + 1) * size, 0.0f, j * size));
+			texcoord.push_back(vec2(1.0f, 0.0f));
+		}
+	}
 	
-	// Quad indices
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(3);
+	for (int i = 0; i < patchAmount * patchAmount; i++)
+	{
+		indices.push_back(i * 4);
+		indices.push_back(i * 4 + 1);
+		indices.push_back(i * 4 + 2);
+		indices.push_back(i * 4 + 3);
+	}
 }
