@@ -45,4 +45,5 @@ private:
 	bool wireframe = false;
 
 	int tessLevel = 1;
+	int cameraRange;
 };

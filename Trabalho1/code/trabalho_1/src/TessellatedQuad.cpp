@@ -20,6 +20,7 @@ TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size, int patchAmount)
 {
 	this->window = window;
 	this->size = size;
+	this->cameraRange = size * 1.5;
 	this->patchAmount = patchAmount;
 	planePos = vec3(0.0f, 0.0f, 0.0f);
 }
@@ -88,7 +89,8 @@ void TessellatedQuad::update(double t)
 	// set var MVP on the shader
 	shader.setUniform("MVP", modelViewProjectionMatrix); //ModelViewProjection
 
-	shader.setUniform("TessLevel", tessLevel);
+	shader.setUniform("MAX_DISTANCE", cameraRange);
+	shader.setUniform("MAX_TESS_LEVEL", tessLevel);
 	shader.setUniform("CameraPosition", cameraController->getCameraPos());
 
 	shader.setUniform("displacementmapSampler", 1);
@@ -97,12 +99,12 @@ void TessellatedQuad::update(double t)
 
 void TessellatedQuad::processInput()
 {
-	// Tessellation Level
+	// Max Tessellation Level
 	if (glfwGetKeyOnce(window, 'R'))
 	{
 		tessLevel+=10;
-		if (tessLevel > 64)
-			tessLevel = 64;
+		//if (tessLevel > 64)
+		//	tessLevel = 64;
 	}
 	if (glfwGetKeyOnce(window, 'F'))
 	{
@@ -111,7 +113,7 @@ void TessellatedQuad::processInput()
 			tessLevel = 1;
 	}
 
-	// toggle wireframe
+	// Ativa/Desativa Wireframe
 	if (glfwGetKeyOnce(window, 'E')) {
 		wireframe = !wireframe;
 		if (wireframe) {
@@ -176,21 +178,23 @@ void TessellatedQuad::genPlane()
 	{
 		for (int j = 0; j < patchAmount; j++)
 		{
+			float texSlice = 1.0f / patchAmount;
+
 			// Inferior esquerdo
 			vertices.push_back(vec3(i * size, 0.0f, j * size));
-			texcoord.push_back(vec2(0.0f, 0.0f));
+			texcoord.push_back(vec2(i * texSlice, j * texSlice));
 
 			// Superior esquerdo
-			vertices.push_back(vec3(i * size, 0.0f, (j + 1) * size));
-			texcoord.push_back(vec2(0.0f, 1.0f));
+			vertices.push_back(vec3((i + 1) * size, 0.0f, j * size));
+			texcoord.push_back(vec2((i + 1) * texSlice, j * texSlice));
 
 			// Superior direito
 			vertices.push_back(vec3((i + 1) * size, 0.0f, (j + 1) * size));
-			texcoord.push_back(vec2(1.0f, 1.0f));
+			texcoord.push_back(vec2((i + 1) * texSlice, (j + 1) * texSlice));
 
 			// Inferior direito
-			vertices.push_back(vec3((i + 1) * size, 0.0f, j * size));
-			texcoord.push_back(vec2(1.0f, 0.0f));
+			vertices.push_back(vec3(i * size, 0.0f, (j + 1) * size));
+			texcoord.push_back(vec2(i * texSlice, (j + 1) * texSlice));
 		}
 	}
 	

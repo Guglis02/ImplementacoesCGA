@@ -132,12 +132,12 @@ int main(void)
 	initGLEW();
 	initializeGL();
 	
-	tessellatedQuad = new TessellatedQuad(window, 1, 3);
+	tessellatedQuad = new TessellatedQuad(window, 5, 3);
 	tessellatedQuad->init();
 
 	cout << endl << "WASD: Move câmera pelo mapa" << endl;
 	cout << "Mouse Click: Rotaciona câmera" << endl;
-	cout << "R/F: Aumenta/Diminui tessellation level" << endl;
+	cout << "R/F: Aumenta/Diminui tessellation level maximo" << endl;
 	cout << "E: Ativa/Desativa wireframe" << endl;
 
 	mainLoop();

@@ -15,8 +15,12 @@
 
 layout(vertices = 4) out;
 
-uniform int TessLevel;
+const int MIN_TESS_LEVEL = 1;
+uniform int MAX_TESS_LEVEL;
 uniform vec3 CameraPosition;
+
+// A partir de qual distância o TessLevel será o mínimo
+uniform int MAX_DISTANCE;
 
 in vec2 vTexCoord[];
 in vec4 vPosition[];
@@ -25,11 +29,6 @@ out vec2 tcTexCoord[];
 out vec4 tcPosition[];
 
 #define ID gl_InvocationID
-#define MIN_TESS_LEVEL 1
-#define MAX_TESS_LEVEL 64
-
-// A partir de qual distância o TessLevel será o mínimo
-#define MAX_DISTANCE 1.5
 
 // Nivel de tessellation vai ser uma interpolação entre o mínimo e o máximo de acordo com a distancia
 int calcTess(float dist)
@@ -60,9 +59,9 @@ void main()
 		float distB = distance(CameraPosition.xz, bottomSide.xz);
 		
 		gl_TessLevelOuter[0] = calcTess(distB);
-		gl_TessLevelOuter[1] = calcTess(distR);
+		gl_TessLevelOuter[1] = calcTess(distL);
 		gl_TessLevelOuter[2] = calcTess(distT);
-		gl_TessLevelOuter[3] = calcTess(distL);
+		gl_TessLevelOuter[3] = calcTess(distR);
 
 		gl_TessLevelInner[0] = max(calcTess(distT), calcTess(distB));
 		gl_TessLevelInner[1] = max(calcTess(distL), calcTess(distR));

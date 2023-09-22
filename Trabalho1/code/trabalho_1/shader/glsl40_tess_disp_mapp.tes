@@ -51,7 +51,7 @@ void main()
         t2 * u * v;
 
     // Vamos tirar uma amostra da textura e alterar o componente Y do vétice gerado
-    float height = texture(displacementmapSampler, teTexCoord).y * 0.3f;
+    float height = texture(displacementmapSampler, teTexCoord).y * 1.0f;
     gl_Position.y = height;
 
     // Transform to clip coordinates

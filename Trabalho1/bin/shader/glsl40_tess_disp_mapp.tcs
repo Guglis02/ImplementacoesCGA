@@ -15,8 +15,12 @@
 
 layout(vertices = 4) out;
 
-uniform int TessLevel;
+const int MIN_TESS_LEVEL = 1;
+uniform int MAX_TESS_LEVEL;
 uniform vec3 CameraPosition;
+
+// A partir de qual distância o TessLevel será o mínimo
+uniform int MAX_DISTANCE;
 
 in vec2 vTexCoord[];
 in vec4 vPosition[];
@@ -25,6 +29,12 @@ out vec2 tcTexCoord[];
 out vec4 tcPosition[];
 
 #define ID gl_InvocationID
+
+// Nivel de tessellation vai ser uma interpolação entre o mínimo e o máximo de acordo com a distancia
+int calcTess(float dist)
+{
+	return int(mix(MAX_TESS_LEVEL, MIN_TESS_LEVEL, clamp(dist / MAX_DISTANCE, 0.0, 1.0)));
+}
 
 void main()
 {
@@ -35,11 +45,25 @@ void main()
 	// Vamos modificar o inner e outer apenas para o primeiro vértice do Patch
 	if (ID == 0)
 	{
-		gl_TessLevelOuter[0] = float(TessLevel) * vPosition[0].z;
-		gl_TessLevelOuter[1] = float(TessLevel) * vPosition[0].z;
-		gl_TessLevelOuter[2] = float(TessLevel) * vPosition[0].z;
-		gl_TessLevelOuter[3] = float(TessLevel) * vPosition[0].z;
-		gl_TessLevelInner[0] = float(TessLevel) * vPosition[0].z;
-		gl_TessLevelInner[1] = float(TessLevel) * vPosition[0].z;
+		// Calcula as 4 arestas do patch
+		vec4 leftSide = vPosition[0] + (vPosition[1] - vPosition[0]) * 0.5;
+		vec4 topSide = vPosition[1] + (vPosition[2] - vPosition[1]) * 0.5;
+		vec4 rightSide = vPosition[3] + (vPosition[2] - vPosition[3]) * 0.5;
+		vec4 bottomSide = vPosition[0] + (vPosition[3] - vPosition[0]) * 0.5;
+		
+		// Calcula 4 distâncias, uma para cada aresta do Patch
+		// isso é feito para garantir que o TessLevel seja o mesmo para todas as arestas vizinhas
+		float distL = distance(CameraPosition.xz, leftSide.xz);
+		float distT = distance(CameraPosition.xz, topSide.xz);
+		float distR = distance(CameraPosition.xz, rightSide.xz);
+		float distB = distance(CameraPosition.xz, bottomSide.xz);
+		
+		gl_TessLevelOuter[0] = calcTess(distB);
+		gl_TessLevelOuter[1] = calcTess(distL);
+		gl_TessLevelOuter[2] = calcTess(distT);
+		gl_TessLevelOuter[3] = calcTess(distR);
+
+		gl_TessLevelInner[0] = max(calcTess(distT), calcTess(distB));
+		gl_TessLevelInner[1] = max(calcTess(distL), calcTess(distR));
 	}
 }
