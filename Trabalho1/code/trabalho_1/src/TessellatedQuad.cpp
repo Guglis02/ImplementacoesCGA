@@ -89,6 +89,7 @@ void TessellatedQuad::update(double t)
 	shader.setUniform("MVP", modelViewProjectionMatrix); //ModelViewProjection
 
 	shader.setUniform("TessLevel", tessLevel);
+	shader.setUniform("CameraPosition", cameraController->getCameraPos());
 
 	shader.setUniform("displacementmapSampler", 1);
 	shader.setUniform("colorTextureSampler", 0);

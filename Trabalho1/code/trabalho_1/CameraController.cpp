@@ -39,6 +39,11 @@ glm::mat4 CameraController::getViewMatrix()
         cameraUp);
 }
 
+glm::vec3 CameraController::getCameraPos()
+{
+    return cameraPos;
+}
+
 void CameraController::processInput()
 {
     processKeyboard();

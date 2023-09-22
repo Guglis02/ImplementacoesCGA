@@ -16,6 +16,7 @@ public:
 	void processInput();
 
 	glm::mat4 getViewMatrix();
+	glm::vec3 getCameraPos();
 private:
 	float const cameraSpeed = 3.0f;
 	float const mouseSensitivity = 0.5f;
