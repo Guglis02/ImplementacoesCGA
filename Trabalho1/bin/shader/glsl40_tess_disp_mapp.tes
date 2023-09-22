@@ -18,8 +18,15 @@ in vec2 tcTexCoord[];
 
 out vec2 teTexCoord;
 
+in vec3 tcNormal[];
+in vec3 tcLightDir[];
+
+out vec3 teNormal;
+
 void main()
 {
+    teNormal = tcNormal[0];
+
     // Coordenadas geradas pela GPU
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
@@ -51,7 +58,7 @@ void main()
         t2 * u * v;
 
     // Vamos tirar uma amostra da textura e alterar o componente Y do vétice gerado
-    float height = texture(displacementmapSampler, teTexCoord).y * 0.3f;
+    float height = texture(displacementmapSampler, teTexCoord).y * 1.0f;
     gl_Position.y = height;
 
     // Transform to clip coordinates

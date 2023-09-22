@@ -13,8 +13,17 @@ layout(location = 1) in vec2 TexCoord;
 out vec2 vTexCoord;
 out vec4 vPosition;
 
+uniform mat3 NormalMatrix;
+
+uniform vec3 lightSource1;
+uniform vec3 lightSource2;
+
+out vec3 vNormal;
+
 void main()
 {
+	vNormal = NormalMatrix * vPosition.xyz;
+
 	vTexCoord = TexCoord;
 	vPosition = vec4(VertexPosition, 1.0);
 }

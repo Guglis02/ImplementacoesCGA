@@ -135,8 +135,8 @@ int main(void)
 	tessellatedQuad = new TessellatedQuad(window, 5, 3);
 	tessellatedQuad->init();
 
-	cout << endl << "WASD: Move câmera pelo mapa" << endl;
-	cout << "Mouse Click: Rotaciona câmera" << endl;
+	cout << endl << "WASD: Move camera pelo mapa" << endl;
+	cout << "Mouse Click: Rotaciona camera" << endl;
 	cout << "R/F: Aumenta/Diminui tessellation level maximo" << endl;
 	cout << "E: Ativa/Desativa wireframe" << endl;
 

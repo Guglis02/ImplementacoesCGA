@@ -9,10 +9,20 @@
 #version 400
 
 uniform sampler2D colorTextureSampler;
+uniform vec3 LightDir;
 
 in vec2 teTexCoord;
+in vec3 teNormal;
+
 
 void main()
 {
-	gl_FragColor = texture2D(colorTextureSampler, teTexCoord);
+	float intensity;
+	vec3 Color = vec3(1.0f, 0.0f, 0.0f);
+	vec4 color;
+
+	intensity = max(dot(LightDir, teNormal), 1.0); 
+	
+	color = vec4(Color,1.0) * intensity;
+	gl_FragColor = color;
 }

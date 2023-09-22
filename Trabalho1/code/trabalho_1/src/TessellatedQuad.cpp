@@ -4,6 +4,7 @@
 #include <iostream>
 #include "TextureManager.h"
 #include "GLUtils.h"
+#include <FpsController.h>
 
 using namespace std;
 
@@ -74,10 +75,32 @@ void TessellatedQuad::init()
 		cout << "Failed to load texture." << endl;
 }
 
+float ang = 0;
+
+void TessellatedQuad::updateLight()
+{
+	float x, z;
+	x = size * patchAmount * cos(ang);
+	z = size * patchAmount * sin(ang);
+
+	//shader.setUniform("LightPosition1", vec3(x, 1.0f, z));
+	shader.setUniform("LightPosition1", cameraController->getCameraPos());
+
+	shader.setUniform("LightDir", normalize(vec3(x, 1.0f, z) - vec3(0, 0, 0)));
+
+	x = size * patchAmount * cos(ang + 3.14f);
+	z = size * patchAmount * sin(ang + 3.14f);
+
+	shader.setUniform("LightPosition2", vec3(x, 10.0f, z));
+
+	ang += FpsController::getInstance().normalize(0.01);
+}
+
 void TessellatedQuad::update(double t)
 {
 	processInput();
 	cameraController->processInput();
+	updateLight();
 
 	//// matrices setup
 	modelMatrix = mat4(); // identity
@@ -85,6 +108,9 @@ void TessellatedQuad::update(double t)
 	
 	modelViewMatrix = cameraController->getViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
+
+	glm::mat3 nm = glm::mat3(glm::inverse(glm::transpose(modelViewMatrix)));
+	shader.setUniform("NormalMatrix", nm); // Normal Matrix
 
 	// set var MVP on the shader
 	shader.setUniform("MVP", modelViewProjectionMatrix); //ModelViewProjection

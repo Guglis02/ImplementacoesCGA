@@ -23,6 +23,7 @@ private:
 	void genPlane();
 	void genBuffers();
 	void processInput();
+	void updateLight();
 
 	CameraController* cameraController;
 

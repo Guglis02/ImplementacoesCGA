@@ -28,6 +28,9 @@ in vec4 vPosition[];
 out vec2 tcTexCoord[];
 out vec4 tcPosition[];
 
+in vec3 vNormal[];
+out vec3 tcNormal[];
+
 #define ID gl_InvocationID
 
 // Nivel de tessellation vai ser uma interpolação entre o mínimo e o máximo de acordo com a distancia
@@ -38,9 +41,10 @@ int calcTess(float dist)
 
 void main()
 {
-	// Precisamos passar adiante os vértices e suas informações
+	// Precisamos passar adiante valores
 	tcTexCoord[ID] = vTexCoord[ID];
 	tcPosition[ID] = vPosition[ID];
+	tcNormal[ID] = vNormal[ID];
 
 	// Vamos modificar o inner e outer apenas para o primeiro vértice do Patch
 	if (ID == 0)

@@ -18,8 +18,15 @@ in vec2 tcTexCoord[];
 
 out vec2 teTexCoord;
 
+in vec3 tcNormal[];
+in vec3 tcLightDir[];
+
+out vec3 teNormal;
+
 void main()
 {
+    teNormal = tcNormal[0];
+
     // Coordenadas geradas pela GPU
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
