@@ -23,6 +23,7 @@ private:
 	void genPlane();
 	void genBuffers();
 	void processInput();
+	vec3 calculateLightPos(float ang);
 	void updateLight();
 
 	CameraController* cameraController;

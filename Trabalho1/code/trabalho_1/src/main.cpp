@@ -132,7 +132,7 @@ int main(void)
 	initGLEW();
 	initializeGL();
 	
-	tessellatedQuad = new TessellatedQuad(window, 5, 3);
+	tessellatedQuad = new TessellatedQuad(window, 5, 9);
 	tessellatedQuad->init();
 
 	cout << endl << "WASD: Move camera pelo mapa" << endl;

@@ -4,7 +4,7 @@
 
 layout(vertices = 4) out;
 
-const int MIN_TESS_LEVEL = 1;
+const int MIN_TESS_LEVEL = 5;
 uniform int MAX_TESS_LEVEL;
 uniform vec3 CameraPosition;
 

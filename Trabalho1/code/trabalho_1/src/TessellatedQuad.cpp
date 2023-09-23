@@ -78,15 +78,29 @@ void TessellatedQuad::init()
 
 float ang = 0;
 
-void TessellatedQuad::updateLight()
+vec3 TessellatedQuad::calculateLightPos(float ang)
 {
-	float x, z;
+	float x, y, z;
+	vec3 center = vec3(patchAmount * size * 0.5f, 0, patchAmount * size * 0.5f);
+
 	x = size * patchAmount * cos(ang);
+	y = -5.0f;
 	z = size * patchAmount * sin(ang);
 
-	shader.setUniform("LightPos", cameraController->getCameraPos());
-	cout << "LightPos: " << cameraController->getCameraPos().x << " " << cameraController->getCameraPos().y << " " << cameraController->getCameraPos().z << endl;
-	ang += FpsController::getInstance().normalize(0.01);
+	return center + vec3(x, y, z);
+}
+
+void TessellatedQuad::updateLight()
+{
+	ang += FpsController::getInstance().normalize(1.0f);
+
+	vec3 lightPos = calculateLightPos(ang);
+	cout << "Light pos 1: " << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
+	shader.setUniform("LightPos1", lightPos);
+
+	lightPos = calculateLightPos(ang + 3.14f);
+	cout << "Light pos 2: " << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
+	shader.setUniform("LightPos2", lightPos);
 }
 
 void TessellatedQuad::update(double t)
