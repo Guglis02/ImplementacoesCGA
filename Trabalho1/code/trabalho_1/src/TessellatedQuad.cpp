@@ -83,8 +83,8 @@ vec3 TessellatedQuad::calculateLightPos(float ang)
 	float x, y, z;
 	vec3 center = vec3(patchAmount * size * 0.5f, 0, patchAmount * size * 0.5f);
 
-	x = size * patchAmount * cos(ang);
-	y = -5.0f;
+	x = 0.0;
+	y = size * patchAmount * cos(ang);
 	z = size * patchAmount * sin(ang);
 
 	return center + vec3(x, y, z);
