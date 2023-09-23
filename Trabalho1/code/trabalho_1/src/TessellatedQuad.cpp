@@ -84,10 +84,7 @@ void TessellatedQuad::updateLight()
 	x = size * patchAmount * cos(ang);
 	z = size * patchAmount * sin(ang);
 
-	//shader.setUniform("LightPosition1", vec3(x, 1.0f, z));
-	shader.setUniform("LightPosition1", cameraController->getCameraPos());
-
-	shader.setUniform("LightDir", normalize(vec3(x, 1.0f, z) - vec3(0, 0, 0)));
+	shader.setUniform("LightPos", cameraController->getCameraPos());
 	ang += FpsController::getInstance().normalize(0.01);
 }
 
