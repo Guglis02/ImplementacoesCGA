@@ -95,11 +95,11 @@ void TessellatedQuad::updateLight()
 	ang += FpsController::getInstance().normalize(1.0f);
 
 	vec3 lightPos = calculateLightPos(ang);
-	cout << "Light pos 1: " << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
+	//cout << "Light pos 1: " << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
 	shader.setUniform("LightPos1", lightPos);
 
 	lightPos = calculateLightPos(ang + 3.14f);
-	cout << "Light pos 2: " << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
+	//cout << "Light pos 2: " << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
 	shader.setUniform("LightPos2", lightPos);
 }
 
@@ -115,6 +115,8 @@ void TessellatedQuad::update(double t)
 	
 	modelViewMatrix = cameraController->getViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
+
+	shader.setUniform("time", (float)glfwGetTime());
 
 	// set var MVP on the shader
 	shader.setUniform("MVP", modelViewProjectionMatrix); //ModelViewProjection
@@ -133,8 +135,6 @@ void TessellatedQuad::processInput()
 	if (glfwGetKeyOnce(window, 'R'))
 	{
 		tessLevel+=10;
-		//if (tessLevel > 64)
-		//	tessLevel = 64;
 	}
 	if (glfwGetKeyOnce(window, 'F'))
 	{
