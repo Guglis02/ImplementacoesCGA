@@ -224,3 +224,6 @@ $RECYCLE.BIN/
 Trabalho1/.vs/cga_trabalho_1/v17/Browse.VC.db
 *.db
 *.recipe
+*.db
+*.lock
+*.vsidx
