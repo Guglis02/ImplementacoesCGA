@@ -21,24 +21,8 @@ void main()
 	vec3 Color = vec3(1.0f, 0.0f, 0.0f);
 	vec4 color;
 
-	intensity = max(dot(teLightDir, teNormal), 0.0); 
+	intensity = max(dot(LightDir, teNormal), 1.0); 
 	
-	if(intensity > 1)
-	{
-		color = vec4(1.0, 1.0, 1.0, 1.0);
-	}
-
-	//color = texture(colorTextureSampler, teTexCoord) * vec4(intensity, intensity, intensity, 1.0);
-	/*
-	if (intensity > 0.98)
-		color = vec4(Color,1.0) * vec4(0.9,0.9,0.9,1.0);
-	else if (intensity > 0.5)
-		color = vec4(Color,1.0) * vec4(0.4,0.4,0.4,1.0);	
-	else if (intensity > 0.25)
-		color = vec4(Color,1.0) * vec4(0.2,0.2,0.2,1.0);
-	else
-		color = vec4(Color,1.0) * vec4(0.1,0.1,0.1,1.0);	
-		*/
-	//color = vec4(Color,1.0) * intensity;
+	color = vec4(Color,1.0) * intensity;
 	gl_FragColor = color;
 }
