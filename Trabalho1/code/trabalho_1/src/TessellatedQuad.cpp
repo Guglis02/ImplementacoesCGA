@@ -21,7 +21,7 @@ TessellatedQuad::TessellatedQuad(GLFWwindow* window, int size, int patchAmount)
 {
 	this->window = window;
 	this->size = size;
-	this->cameraRange = size * 1.5;
+	this->cameraRange = size * 4;
 	this->patchAmount = patchAmount;
 	planePos = vec3(0.0f, 0.0f, 0.0f);
 }
@@ -44,10 +44,11 @@ void TessellatedQuad::init()
 
 	// load shaders
 	try {
-		shader.compileShader("shader/glsl40_tess_disp_mapp.vert", GLSLShader::VERTEX);
-		shader.compileShader("shader/glsl40_tess_disp_mapp.tcs", GLSLShader::TESS_CONTROL);
-		shader.compileShader("shader/glsl40_tess_disp_mapp.tes", GLSLShader::TESS_EVALUATION);
-		shader.compileShader("shader/glsl40_tess_disp_mapp.frag", GLSLShader::FRAGMENT);
+		shader.compileShader("shader/trabalho_1.vert", GLSLShader::VERTEX);
+		shader.compileShader("shader/trabalho_1.tcs", GLSLShader::TESS_CONTROL);
+		shader.compileShader("shader/trabalho_1.tes", GLSLShader::TESS_EVALUATION);
+		shader.compileShader("shader/trabalho_1.frag", GLSLShader::FRAGMENT);
+		shader.compileShader("shader/trabalho_1.geom", GLSLShader::GEOMETRY);
 
 		shader.link();
 		shader.use();
@@ -83,16 +84,7 @@ void TessellatedQuad::updateLight()
 	x = size * patchAmount * cos(ang);
 	z = size * patchAmount * sin(ang);
 
-	//shader.setUniform("LightPosition1", vec3(x, 1.0f, z));
-	shader.setUniform("LightPosition1", cameraController->getCameraPos());
-
-	shader.setUniform("LightDir", normalize(vec3(x, 1.0f, z) - vec3(0, 0, 0)));
-
-	x = size * patchAmount * cos(ang + 3.14f);
-	z = size * patchAmount * sin(ang + 3.14f);
-
-	shader.setUniform("LightPosition2", vec3(x, 10.0f, z));
-
+	shader.setUniform("LightPos", cameraController->getCameraPos());
 	ang += FpsController::getInstance().normalize(0.01);
 }
 
@@ -108,9 +100,6 @@ void TessellatedQuad::update(double t)
 	
 	modelViewMatrix = cameraController->getViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
-
-	glm::mat3 nm = glm::mat3(glm::inverse(glm::transpose(modelViewMatrix)));
-	shader.setUniform("NormalMatrix", nm); // Normal Matrix
 
 	// set var MVP on the shader
 	shader.setUniform("MVP", modelViewProjectionMatrix); //ModelViewProjection

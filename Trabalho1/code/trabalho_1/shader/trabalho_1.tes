@@ -1,9 +1,4 @@
-// Tessellation Control Shader
-//
-// Este estágio tem acesso a todos os vértices do Patch. Eles serão então utilizados para
-// calcular a posição do novo vértice gerado pela GPU através de uma interpolação linear.
-//
-// Abril 2016 - Alex Frasson - afrasson@inf.ufsm.br
+// Tessellation Evaluation Shader
 
 #version 400
 
@@ -18,15 +13,8 @@ in vec2 tcTexCoord[];
 
 out vec2 teTexCoord;
 
-in vec3 tcNormal[];
-in vec3 tcLightDir[];
-
-out vec3 teNormal;
-
 void main()
 {
-    teNormal = tcNormal[0];
-
     // Coordenadas geradas pela GPU
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;

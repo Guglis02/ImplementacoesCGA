@@ -34,12 +34,13 @@
     <ClInclude Include="src\TessellatedQuad.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\glsl40_tess_disp_mapp.frag">
+    <None Include="shader\trabalho_1.frag">
       <FileType>Document</FileType>
     </None>
-    <None Include="shader\glsl40_tess_disp_mapp.tcs" />
-    <None Include="shader\glsl40_tess_disp_mapp.tes" />
-    <None Include="shader\glsl40_tess_disp_mapp.vert">
+    <None Include="shader\trabalho_1.geom" />
+    <None Include="shader\trabalho_1.tcs" />
+    <None Include="shader\trabalho_1.tes" />
+    <None Include="shader\trabalho_1.vert">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

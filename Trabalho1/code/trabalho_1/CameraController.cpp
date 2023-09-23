@@ -25,7 +25,7 @@ CameraController::CameraController()
 void CameraController::init(GLFWwindow* window)
 {
 	this->window = window;
-    this->cameraPos = vec3(0.0f, 2.0f, 0.0f);
+    this->cameraPos = vec3(0.0f, 5.0f, 0.0f);
     this->cameraDir = vec3(1.0f, 0.0f, 0.0f);
 }
 

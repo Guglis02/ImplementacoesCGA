@@ -29,10 +29,7 @@ out vec2 tcTexCoord[];
 out vec4 tcPosition[];
 
 in vec3 vNormal[];
-in vec3 vLightDir[];
-
 out vec3 tcNormal[];
-out vec3 tcLightDir[];
 
 #define ID gl_InvocationID
 
@@ -70,7 +67,7 @@ void main()
 		gl_TessLevelOuter[2] = calcTess(distT);
 		gl_TessLevelOuter[3] = calcTess(distR);
 
-		gl_TessLevelInner[0] = max(calcTess(distT), calcTess(distB));
-		gl_TessLevelInner[1] = max(calcTess(distL), calcTess(distR));
+		gl_TessLevelInner[0] = max(calcTess(distL), calcTess(distR));
+		gl_TessLevelInner[1] = max(calcTess(distT), calcTess(distB));
 	}
 }

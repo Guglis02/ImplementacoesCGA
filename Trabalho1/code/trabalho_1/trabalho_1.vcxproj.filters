@@ -28,16 +28,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\glsl40_tess_disp_mapp.frag">
+    <None Include="shader\trabalho_1.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader\glsl40_tess_disp_mapp.tcs">
+    <None Include="shader\trabalho_1.tcs">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader\glsl40_tess_disp_mapp.tes">
+    <None Include="shader\trabalho_1.tes">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader\glsl40_tess_disp_mapp.vert">
+    <None Include="shader\trabalho_1.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader\trabalho_1.geom">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
