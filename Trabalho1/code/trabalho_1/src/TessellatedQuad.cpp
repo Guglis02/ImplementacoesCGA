@@ -71,8 +71,8 @@ void TessellatedQuad::init()
 	
 	// Load our displacement texture with Id 1
 	glActiveTexture(GL_TEXTURE1);	
-	//if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_DISP.png", 1))
-	if (!texManager->LoadTexture("..\\..\\resources\\inter_disp.png", 1))
+	if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_DISP.png", 1))
+	//if (!texManager->LoadTexture("..\\..\\resources\\inter_disp.png", 1))
 		cout << "Failed to load texture." << endl;
 }
 
@@ -85,6 +85,7 @@ void TessellatedQuad::updateLight()
 	z = size * patchAmount * sin(ang);
 
 	shader.setUniform("LightPos", cameraController->getCameraPos());
+	cout << "LightPos: " << cameraController->getCameraPos().x << " " << cameraController->getCameraPos().y << " " << cameraController->getCameraPos().z << endl;
 	ang += FpsController::getInstance().normalize(0.01);
 }
 

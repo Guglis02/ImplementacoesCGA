@@ -20,7 +20,7 @@ public:
 private:
 	float const cameraSpeed = 3.0f;
 	float const mouseSensitivity = 0.5f;
-	vec3 const cameraUp = vec3(0.0f, 1.0f, 0.0f);
+	vec3 const cameraUp = vec3(0.0f, -1.0f, 0.0f);
 
 	vec3 cameraPos;
 	vec3 cameraDir;

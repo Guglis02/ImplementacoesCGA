@@ -25,7 +25,7 @@ CameraController::CameraController()
 void CameraController::init(GLFWwindow* window)
 {
 	this->window = window;
-    this->cameraPos = vec3(0.0f, 5.0f, 0.0f);
+    this->cameraPos = vec3(0.0f, -5.0f, 0.0f);
     this->cameraDir = vec3(1.0f, 0.0f, 0.0f);
 }
 
@@ -63,8 +63,8 @@ void CameraController::processMouse()
         xOffset *= mouseSensitivity;
         yOffset *= mouseSensitivity;
 
-        yaw += xOffset;
-        pitch += yOffset;
+        yaw -= xOffset;
+        pitch -= yOffset;
 
         cameraDir.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         cameraDir.y = sin(glm::radians(pitch));
@@ -84,11 +84,13 @@ void CameraController::processKeyboard()
     {
         cameraPos.x += normSpeed * cameraDir.x;
         cameraPos.z += normSpeed * cameraDir.z;
+        //cameraPos += normSpeed * cameraDir;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
         cameraPos.x -= normSpeed * cameraDir.x;
         cameraPos.z -= normSpeed * cameraDir.z;
+        //cameraPos -= normSpeed * cameraDir;
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
