@@ -6,13 +6,26 @@
 #include <vector>
 #include "glslprogram.h"
 
+/// <summary>
+/// Classe responsável por controlar a câmera.
+/// </summary>
 class CameraController
 {
 public:
+	/// <summary>
+	/// Singleton.
+	/// </summary>
 	static CameraController* Inst();
 	CameraController();
-	
+
+	/// <summary>
+	/// Inicializa variáveis da camera.
+	/// </summary>
 	void init(GLFWwindow* window);
+
+	/// <summary>
+	/// Processa input do teclado e mouse.
+	/// </summary>
 	void processInput();
 
 	glm::mat4 getViewMatrix();

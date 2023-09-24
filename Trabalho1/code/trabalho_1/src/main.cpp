@@ -1,11 +1,14 @@
-// Basic Tessellation Demo
+// Trabalho 1 – Shader
+// 
+// Programa em C++, utilizando a API OpenGL 4.x, para simular um terreno 
+// formado por N² patches, dispostos em um grid NxN. Desenvolvido usando
+// como base a demo glsl40_tessellation_displacement_mapping.
+// 
+// Use WASD para mover a camera pelo mapa e mouse para rotacionar a camera.
+// Use R/F para aumentar/diminuir o tessellation level máximo.
+// Use E para ativar/desativar wireframe.
 //
-// Este programa é uma demonstrção da utilização de Tessellation em OpenGL.
-// Um quadrado é enviado para GPU e subdividido em tempo real. O usuário pode
-// controlar o número de subdivisões utilizando as teclas 'Q', 'A', 'W', 'S', 
-//'E', 'D', 'R', 'F', 'T' e 'G'.
-//
-// Abril 2016 - Alex Frasson - afrasson@inf.ufsm.br
+// Setembro 2023 - Gustavo Machado de Freitas - gmfreitas@inf.ufsm.br
 
 //Include GLEW - always first 
 #include "GL/glew.h"
@@ -26,7 +29,7 @@
 
 using namespace std;
 
-Scene *tessellatedQuad;
+Scene* tessellatedQuad;
 GLFWwindow* window;
 
 void mainLoop()
@@ -131,7 +134,7 @@ int main(void)
 	initCallbacks();
 	initGLEW();
 	initializeGL();
-	
+
 	tessellatedQuad = new TessellatedQuad(window, 5, 9);
 	tessellatedQuad->init();
 

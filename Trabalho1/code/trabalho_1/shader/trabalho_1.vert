@@ -1,4 +1,6 @@
 // Vertex Shader
+// 
+// Aqui, o vertex shader apenas passa os dados para o tcs.
 
 #version 400
 

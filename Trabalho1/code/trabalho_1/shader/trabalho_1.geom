@@ -1,4 +1,6 @@
 // Geometry Shader
+//
+// Calcula as normais dos triangulos, e passa os triangulos para o fragment shader.
 
 #version 400
 
@@ -19,8 +21,11 @@ void main()
 
     vec3 edge1 = v1 - v0;
     vec3 edge2 = v2 - v0;
+    
+    // Calcula normal do triangulo e passa pro fragment shader.
     Normal = normalize(cross(edge1, edge2));
 
+    // Passa a posicao do fragmento para o fragment shader.
     gsFragPos = (v0 + v1 + v2) / 3.0f;
 
     for (int i = 0; i < 3; i++)

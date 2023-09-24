@@ -8,7 +8,7 @@
 
 using namespace std;
 
-//add to glfwGetKey that gets the pressed key only once (not several times)
+// Pega a tecla pressionada apenas uma vez por clique
 char keyOnce[GLFW_KEY_LAST + 1];
 #define glfwGetKeyOnce(WINDOW, KEY)             \
     (glfwGetKey(WINDOW, KEY) ?              \
@@ -36,11 +36,11 @@ void TessellatedQuad::init()
 
 	// init matrices
 	modelMatrix = glm::mat4(1.0f);
-	
+
 	int w, h;
 	glfwGetFramebufferSize(window, &w, &h);
 
-	projectionMatrix = glm::perspective(glm::radians(75.0f), (float)w/(float)h, 0.1f, 100.0f);
+	projectionMatrix = glm::perspective(glm::radians(75.0f), (float)w / (float)h, 0.1f, 100.0f);
 
 	// load shaders
 	try {
@@ -53,13 +53,13 @@ void TessellatedQuad::init()
 		shader.link();
 		shader.use();
 	}
-	catch (GLSLProgramException &e) {
+	catch (GLSLProgramException& e) {
 		cerr << e.what() << endl;
 		system("pause");
 		exit(EXIT_FAILURE);
 	}
 	shader.printActiveAttribs();
-	
+
 	// Get a TextureManager's instance
 	texManager = TextureManager::Inst();
 
@@ -68,11 +68,11 @@ void TessellatedQuad::init()
 	//if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_COLOR.png", 0))
 	if (!texManager->LoadTexture("..\\..\\resources\\inter_color.png", 0))
 		cout << "Failed to load texture." << endl;
-	
+
 	// Load our displacement texture with Id 1
-	glActiveTexture(GL_TEXTURE1);	
+	glActiveTexture(GL_TEXTURE1);
 	if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_DISP.png", 1))
-	//if (!texManager->LoadTexture("..\\..\\resources\\inter_disp.png", 1))
+	//if (!texManager->LoadTexture("..\\..\\resources\\tecido_disp.png", 1))
 		cout << "Failed to load texture." << endl;
 }
 
@@ -112,7 +112,7 @@ void TessellatedQuad::update(double t)
 	//// matrices setup
 	modelMatrix = mat4(); // identity
 	modelMatrix = glm::translate(modelMatrix, planePos); // translate back
-	
+
 	modelViewMatrix = cameraController->getViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
 
@@ -122,7 +122,7 @@ void TessellatedQuad::update(double t)
 	shader.setUniform("MVP", modelViewProjectionMatrix); //ModelViewProjection
 
 	shader.setUniform("MAX_DISTANCE", cameraRange);
-	shader.setUniform("MAX_TESS_LEVEL", tessLevel);
+	shader.setUniform("MAX_TESS_LEVEL", maxTessLevel);
 	shader.setUniform("CameraPosition", cameraController->getCameraPos());
 
 	shader.setUniform("displacementmapSampler", 1);
@@ -131,16 +131,16 @@ void TessellatedQuad::update(double t)
 
 void TessellatedQuad::processInput()
 {
-	// Max Tessellation Level
+	// Modifica valor máximo de tessellation
 	if (glfwGetKeyOnce(window, 'R'))
 	{
-		tessLevel+=10;
+		maxTessLevel += 10;
 	}
 	if (glfwGetKeyOnce(window, 'F'))
 	{
-		tessLevel-=10;
-		if (tessLevel < 1)
-			tessLevel = 1;
+		maxTessLevel -= 10;
+		if (maxTessLevel < 1)
+			maxTessLevel = 1;
 	}
 
 	// Ativa/Desativa Wireframe
@@ -158,7 +158,7 @@ void TessellatedQuad::processInput()
 void TessellatedQuad::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	//// Bind both textures
 	//// Color
 	glActiveTexture(GL_TEXTURE0);
@@ -166,10 +166,10 @@ void TessellatedQuad::render()
 	//// Displacement
 	glActiveTexture(GL_TEXTURE1);
 	TextureManager::Inst()->BindTexture(1);
-	
+
 	glBindVertexArray(vaoID);
 	glPatchParameteri(GL_PATCH_VERTICES, 4);
-	glDrawElements(GL_PATCHES, indices.size(), GL_UNSIGNED_INT, (GLubyte *)NULL);
+	glDrawElements(GL_PATCHES, indices.size(), GL_UNSIGNED_INT, (GLubyte*)NULL);
 	glBindVertexArray(0);
 }
 
@@ -183,12 +183,12 @@ void TessellatedQuad::genBuffers()
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), (GLvoid*)&vertices[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL);
+	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 	glEnableVertexAttribArray(0);  // VertexPosition -> layout 0 in the VS
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
 	glBufferData(GL_ARRAY_BUFFER, texcoord.size() * sizeof(vec2), (GLvoid*)&texcoord[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)1, 2, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL);
+	glVertexAttribPointer((GLuint)1, 2, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 	glEnableVertexAttribArray(1);  // TexCoord -> layout 1 in the VS
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[2]);
@@ -227,7 +227,7 @@ void TessellatedQuad::genPlane()
 			texcoord.push_back(vec2(i * texSlice, (j + 1) * texSlice));
 		}
 	}
-	
+
 	for (int i = 0; i < patchAmount * patchAmount; i++)
 	{
 		indices.push_back(i * 4);

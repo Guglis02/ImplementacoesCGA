@@ -1,11 +1,16 @@
 // Tessellation Control Shader
+//
+// Executa o calculo dos niveis de tesselation e passa os vértices para o TES.
 
 #version 400
 
 layout(vertices = 4) out;
 
+// Nível de tessellation mínimo e máximo
 const int MIN_TESS_LEVEL = 5;
 uniform int MAX_TESS_LEVEL;
+
+// Posição da câmera
 uniform vec3 CameraPosition;
 
 // A partir de qual distância o TessLevel será o mínimo

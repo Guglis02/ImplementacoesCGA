@@ -1,4 +1,6 @@
 // Tessellation Evaluation Shader
+//
+// Distribui os novos vértices gerados pelo Tessellation Control Shader.
 
 #version 400
 
@@ -45,9 +47,9 @@ void main()
         t3 * v * (1 - u) +
         t2 * u * v;
 
-
     float yOffset = 0.0;
 
+    // Soma de senos para gerar um efeito de onda
     const float frequency1 = 10.0;
     const float amplitude1 = 1;
 
@@ -59,9 +61,9 @@ void main()
         yOffset += sin(teTexCoord.y * frequency2 + time * 2.0 + float(i) * 3.14159265359) * amplitude2 / float(i);
     }
 
-    // Apply the Y displacement
+    // Aplica o deslocamento de altura
     gl_Position.y = p0.y + yOffset + texture(displacementmapSampler, teTexCoord).y * 1.0f;
 
-    // Transform to clip coordinates
+    // Transforma posições para clip space
     gl_Position = MVP * gl_Position;
 }

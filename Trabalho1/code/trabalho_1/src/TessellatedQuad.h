@@ -11,19 +11,44 @@
 class TessellatedQuad : public Scene
 {
 public:
+	/// <summary>
+	/// Classe responsável por gerar e controlar interações com o terreno.
+	/// </summary>
+	/// <param name="window">Janela da aplicação</param>
+	/// <param name="patchSize">Tamanho de cada patch</param>
+	/// <param name="patchAmount">Quantidade de linhas/colunas de patches 
+	/// (na prática, o terreno terá este número elevado ao quadrado de patches)</param>
 	TessellatedQuad(GLFWwindow* window, int patchSize = 1, int patchAmount = 3);
 
-	// mesh virtual functions
+	// Mesh virtual functions
 	void init();
 	void update(double t);
 	void render();
 	void resize(int, int);
-
 private:
+	/// <summary>
+	/// Gera os patches do terreno.
+	/// </summary>
 	void genPlane();
+
+	/// <summary>
+	/// Gera os buffers de vértices e índices.
+	/// </summary>
 	void genBuffers();
+
+	/// <summary>
+	/// Trata as interações com o terreno.
+	/// </summary>
 	void processInput();
+
+	/// <summary>
+	/// Calcula a posição da luz em função do ângulo, tomando como centro de rotação o centro do plano.
+	/// </summary>
 	vec3 calculateLightPos(float ang);
+
+	/// <summary>
+	/// Atualiza a posição das fontes de luz no shader.
+	/// </summary>
 	void updateLight();
 
 	CameraController* cameraController;
@@ -46,6 +71,6 @@ private:
 	vec3 planePos;
 	bool wireframe = false;
 
-	int tessLevel = 1;
+	int maxTessLevel = 5;
 	int cameraRange;
 };

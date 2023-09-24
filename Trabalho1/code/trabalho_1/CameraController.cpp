@@ -15,91 +15,91 @@ CameraController* CameraController::Inst()
 
 CameraController::CameraController()
 {
-    window = nullptr;
-    lastX = 0.0f;
-    lastY = 0.0f;
-    yaw = 0.0f;
-    pitch = 0.0f;
+	window = nullptr;
+	lastX = 0.0f;
+	lastY = 0.0f;
+	yaw = 0.0f;
+	pitch = 0.0f;
 }
 
 void CameraController::init(GLFWwindow* window)
 {
 	this->window = window;
-    this->cameraPos = vec3(0.0f, -5.0f, 0.0f);
-    this->cameraDir = vec3(1.0f, 0.0f, 0.0f);
+	this->cameraPos = vec3(0.0f, -5.0f, 0.0f);
+	this->cameraDir = vec3(1.0f, 0.0f, 0.0f);
 }
 
 glm::mat4 CameraController::getViewMatrix()
 {
-    //std::cout << "Camera pos: " << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << std::endl;
-    //std::cout << "Camera dir: " << cameraDir.x << " " << cameraDir.y << " " << cameraDir.z << std::endl;
-    return glm::lookAt(
-        cameraPos,
-        cameraPos + cameraDir,
-        cameraUp);
+	//std::cout << "Camera pos: " << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << std::endl;
+	//std::cout << "Camera dir: " << cameraDir.x << " " << cameraDir.y << " " << cameraDir.z << std::endl;
+	return glm::lookAt(
+		cameraPos,
+		cameraPos + cameraDir,
+		cameraUp);
 }
 
 glm::vec3 CameraController::getCameraPos()
 {
-    return cameraPos;
+	return cameraPos;
 }
 
 void CameraController::processInput()
 {
-    processKeyboard();
-    processMouse();
+	processKeyboard();
+	processMouse();
 }
 
 void CameraController::processMouse()
 {
-    double mouseX, mouseY;
-    glfwGetCursorPos(window, &mouseX, &mouseY);
-    
-    if (glfwGetMouseButton(window, 0) == GLFW_PRESS)
-    {
-        float xOffset = mouseX - lastX;
-        float yOffset = lastY - mouseY;
+	double mouseX, mouseY;
+	glfwGetCursorPos(window, &mouseX, &mouseY);
 
-        xOffset *= mouseSensitivity;
-        yOffset *= mouseSensitivity;
+	if (glfwGetMouseButton(window, 0) == GLFW_PRESS)
+	{
+		float xOffset = mouseX - lastX;
+		float yOffset = lastY - mouseY;
 
-        yaw -= xOffset;
-        pitch -= yOffset;
+		xOffset *= mouseSensitivity;
+		yOffset *= mouseSensitivity;
 
-        cameraDir.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        cameraDir.y = sin(glm::radians(pitch));
-        cameraDir.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        cameraDir = glm::normalize(cameraDir);
-    }
+		yaw -= xOffset;
+		pitch -= yOffset;
 
-    lastX = mouseX;
-    lastY = mouseY;
+		cameraDir.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		cameraDir.y = sin(glm::radians(pitch));
+		cameraDir.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		cameraDir = glm::normalize(cameraDir);
+	}
+
+	lastX = mouseX;
+	lastY = mouseY;
 }
 
 void CameraController::processKeyboard()
 {
-    float normSpeed = FpsController::getInstance().normalize(cameraSpeed);
+	float normSpeed = FpsController::getInstance().normalize(cameraSpeed);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        cameraPos.x += normSpeed * cameraDir.x;
-        cameraPos.z += normSpeed * cameraDir.z;
-        //cameraPos += normSpeed * cameraDir;
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        cameraPos.x -= normSpeed * cameraDir.x;
-        cameraPos.z -= normSpeed * cameraDir.z;
-        //cameraPos -= normSpeed * cameraDir;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        cameraPos -= normSpeed * glm::normalize(glm::cross(cameraDir, cameraUp));
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        cameraPos += normSpeed * glm::normalize(glm::cross(cameraDir, cameraUp));
-    }
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		cameraPos.x += normSpeed * cameraDir.x;
+		cameraPos.z += normSpeed * cameraDir.z;
+		//cameraPos += normSpeed * cameraDir;
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		cameraPos.x -= normSpeed * cameraDir.x;
+		cameraPos.z -= normSpeed * cameraDir.z;
+		//cameraPos -= normSpeed * cameraDir;
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		cameraPos -= normSpeed * glm::normalize(glm::cross(cameraDir, cameraUp));
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		cameraPos += normSpeed * glm::normalize(glm::cross(cameraDir, cameraUp));
+	}
 }
 
 
