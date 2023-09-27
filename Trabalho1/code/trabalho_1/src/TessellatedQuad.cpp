@@ -34,6 +34,8 @@ void TessellatedQuad::init()
 	genPlane();
 	genBuffers();
 
+	planeCenter = vec3(patchAmount * size * 0.5f, 0, patchAmount * size * 0.5f);
+
 	// init matrices
 	modelMatrix = glm::mat4(1.0f);
 
@@ -81,13 +83,12 @@ float ang = 0;
 vec3 TessellatedQuad::calculateLightPos(float ang)
 {
 	float x, y, z;
-	vec3 center = vec3(patchAmount * size * 0.5f, 0, patchAmount * size * 0.5f);
 
 	x = 0.0;
 	y = size * patchAmount * cos(ang);
 	z = size * patchAmount * sin(ang);
 
-	return center + vec3(x, y, z);
+	return planeCenter + vec3(x, y, z);
 }
 
 void TessellatedQuad::updateLight()
@@ -125,6 +126,9 @@ void TessellatedQuad::update(double t)
 	shader.setUniform("MAX_TESS_LEVEL", maxTessLevel);
 	shader.setUniform("CameraPosition", cameraController->getCameraPos());
 
+	shader.setUniform("TerrainCenter", planeCenter);
+	shader.setUniform("TessellateMiddleOnly", tessellateMiddle);
+
 	shader.setUniform("displacementmapSampler", 1);
 	shader.setUniform("colorTextureSampler", 0);
 }
@@ -141,6 +145,12 @@ void TessellatedQuad::processInput()
 		maxTessLevel -= 10;
 		if (maxTessLevel < 1)
 			maxTessLevel = 1;
+	}
+
+	// Ativa/Desativa tessellation no centro do plano
+	if (glfwGetKeyOnce(window, 'T'))
+	{
+		tessellateMiddle = !tessellateMiddle;
 	}
 
 	// Ativa/Desativa Wireframe

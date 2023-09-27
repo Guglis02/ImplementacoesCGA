@@ -69,7 +69,9 @@ private:
 	glm::mat4 modelViewMatrix;
 
 	vec3 planePos;
+	vec3 planeCenter;
 	bool wireframe = false;
+	bool tessellateMiddle = false;
 
 	int maxTessLevel = 5;
 	int cameraRange;

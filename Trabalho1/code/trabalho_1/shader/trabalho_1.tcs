@@ -13,6 +13,10 @@ uniform int MAX_TESS_LEVEL;
 // Posição da câmera
 uniform vec3 CameraPosition;
 
+// Posição do centro do terreno
+uniform vec3 TerrainCenter;
+uniform bool TessellateMiddleOnly;
+
 // A partir de qual distância o TessLevel será o mínimo
 uniform int MAX_DISTANCE;
 
@@ -30,6 +34,32 @@ int calcTess(float dist)
 	return int(mix(MAX_TESS_LEVEL, MIN_TESS_LEVEL, clamp(dist / MAX_DISTANCE, 0.0, 1.0)));
 }
 
+// Aplica tessellation apenas no patch central
+void TessellateMiddle()
+{
+	vec4 center = (vPosition[0] + vPosition[1] + vPosition[2] + vPosition[3]) * 0.25;
+	
+	if (center.xz != TerrainCenter.xz)
+	{
+		gl_TessLevelOuter[0] = MIN_TESS_LEVEL;
+		gl_TessLevelOuter[1] = MIN_TESS_LEVEL;
+		gl_TessLevelOuter[2] = MIN_TESS_LEVEL;
+		gl_TessLevelOuter[3] = MIN_TESS_LEVEL;
+
+		gl_TessLevelInner[0] = MIN_TESS_LEVEL;
+		gl_TessLevelInner[1] = MIN_TESS_LEVEL;
+		return;
+	}
+
+	gl_TessLevelOuter[0] = MAX_TESS_LEVEL;
+	gl_TessLevelOuter[1] = MAX_TESS_LEVEL;
+	gl_TessLevelOuter[2] = MAX_TESS_LEVEL;
+	gl_TessLevelOuter[3] = MAX_TESS_LEVEL;
+
+	gl_TessLevelInner[0] = MAX_TESS_LEVEL;
+	gl_TessLevelInner[1] = MAX_TESS_LEVEL;
+}
+
 void main()
 {
 	// Precisamos passar adiante valores
@@ -39,25 +69,32 @@ void main()
 	// Vamos modificar o inner e outer apenas para o primeiro vértice do Patch
 	if (ID == 0)
 	{
-		// Calcula as 4 arestas do patch
-		vec4 leftSide = vPosition[0] + (vPosition[1] - vPosition[0]) * 0.5;
-		vec4 topSide = vPosition[1] + (vPosition[2] - vPosition[1]) * 0.5;
-		vec4 rightSide = vPosition[3] + (vPosition[2] - vPosition[3]) * 0.5;
-		vec4 bottomSide = vPosition[0] + (vPosition[3] - vPosition[0]) * 0.5;
+		if (TessellateMiddleOnly)
+		{
+			TessellateMiddle();
+		}
+		else
+		{
+			// Calcula as 4 arestas do patch
+			vec4 leftSide = vPosition[0] + (vPosition[1] - vPosition[0]) * 0.5;
+			vec4 topSide = vPosition[1] + (vPosition[2] - vPosition[1]) * 0.5;
+			vec4 rightSide = vPosition[3] + (vPosition[2] - vPosition[3]) * 0.5;
+			vec4 bottomSide = vPosition[0] + (vPosition[3] - vPosition[0]) * 0.5;
 		
-		// Calcula 4 distâncias, uma para cada aresta do Patch
-		// isso é feito para garantir que o TessLevel seja o mesmo para todas as arestas vizinhas
-		float distL = distance(CameraPosition.xz, leftSide.xz);
-		float distT = distance(CameraPosition.xz, topSide.xz);
-		float distR = distance(CameraPosition.xz, rightSide.xz);
-		float distB = distance(CameraPosition.xz, bottomSide.xz);
+			// Calcula 4 distâncias, uma para cada aresta do Patch
+			// isso é feito para garantir que o TessLevel seja o mesmo para todas as arestas vizinhas
+			float distL = distance(CameraPosition.xz, leftSide.xz);
+			float distT = distance(CameraPosition.xz, topSide.xz);
+			float distR = distance(CameraPosition.xz, rightSide.xz);
+			float distB = distance(CameraPosition.xz, bottomSide.xz);
 		
-		gl_TessLevelOuter[0] = calcTess(distB);
-		gl_TessLevelOuter[1] = calcTess(distL);
-		gl_TessLevelOuter[2] = calcTess(distT);
-		gl_TessLevelOuter[3] = calcTess(distR);
+			gl_TessLevelOuter[0] = calcTess(distB);
+			gl_TessLevelOuter[1] = calcTess(distL);
+			gl_TessLevelOuter[2] = calcTess(distT);
+			gl_TessLevelOuter[3] = calcTess(distR);
 
-		gl_TessLevelInner[0] = max(calcTess(distL), calcTess(distR));
-		gl_TessLevelInner[1] = max(calcTess(distT), calcTess(distB));
+			gl_TessLevelInner[0] = max(calcTess(distL), calcTess(distR));
+			gl_TessLevelInner[1] = max(calcTess(distT), calcTess(distB));
+		}
 	}
 }
