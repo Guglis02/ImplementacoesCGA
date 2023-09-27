@@ -34,30 +34,15 @@ int calcTess(float dist)
 	return int(mix(MAX_TESS_LEVEL, MIN_TESS_LEVEL, clamp(dist / MAX_DISTANCE, 0.0, 1.0)));
 }
 
-// Aplica tessellation apenas no patch central
-void TessellateMiddle()
+void setTess(float tessLevel)
 {
-	vec4 center = (vPosition[0] + vPosition[1] + vPosition[2] + vPosition[3]) * 0.25;
-	
-	if (center.xz != TerrainCenter.xz)
-	{
-		gl_TessLevelOuter[0] = MIN_TESS_LEVEL;
-		gl_TessLevelOuter[1] = MIN_TESS_LEVEL;
-		gl_TessLevelOuter[2] = MIN_TESS_LEVEL;
-		gl_TessLevelOuter[3] = MIN_TESS_LEVEL;
+		gl_TessLevelOuter[0] = tessLevel;
+		gl_TessLevelOuter[1] = tessLevel;
+		gl_TessLevelOuter[2] = tessLevel;
+		gl_TessLevelOuter[3] = tessLevel;
 
-		gl_TessLevelInner[0] = MIN_TESS_LEVEL;
-		gl_TessLevelInner[1] = MIN_TESS_LEVEL;
-		return;
-	}
-
-	gl_TessLevelOuter[0] = MAX_TESS_LEVEL;
-	gl_TessLevelOuter[1] = MAX_TESS_LEVEL;
-	gl_TessLevelOuter[2] = MAX_TESS_LEVEL;
-	gl_TessLevelOuter[3] = MAX_TESS_LEVEL;
-
-	gl_TessLevelInner[0] = MAX_TESS_LEVEL;
-	gl_TessLevelInner[1] = MAX_TESS_LEVEL;
+		gl_TessLevelInner[0] = tessLevel;
+		gl_TessLevelInner[1] = tessLevel;
 }
 
 void main()
@@ -71,7 +56,15 @@ void main()
 	{
 		if (TessellateMiddleOnly)
 		{
-			TessellateMiddle();
+			vec4 center = (vPosition[0] + vPosition[1] + vPosition[2] + vPosition[3]) * 0.25;
+	
+			if (center.xz != TerrainCenter.xz)
+			{
+				setTess(MIN_TESS_LEVEL);
+				return;
+			}
+
+			setTess(MAX_TESS_LEVEL);
 		}
 		else
 		{
