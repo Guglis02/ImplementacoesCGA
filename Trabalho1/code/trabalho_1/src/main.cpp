@@ -7,6 +7,7 @@
 // Use WASD para mover a camera pelo mapa e mouse para rotacionar a camera.
 // Use R/F para aumentar/diminuir o tessellation level máximo.
 // Use E para ativar/desativar wireframe.
+// Use T para ativar/desativar tessellation no centro do plano.
 //
 // Setembro 2023 - Gustavo Machado de Freitas - gmfreitas@inf.ufsm.br
 
@@ -142,6 +143,7 @@ int main(void)
 	cout << "Mouse Click: Rotaciona camera" << endl;
 	cout << "R/F: Aumenta/Diminui tessellation level maximo" << endl;
 	cout << "E: Ativa/Desativa wireframe" << endl;
+	cout << "T: Ativa/Desativa tessellation no centro do plano" << endl;
 
 	mainLoop();
 
