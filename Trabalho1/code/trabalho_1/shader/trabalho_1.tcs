@@ -7,15 +7,16 @@
 layout(vertices = 4) out;
 
 // Nível de tessellation mínimo e máximo
-const int MIN_TESS_LEVEL = 5;
+const int MIN_TESS_LEVEL = 1;
 uniform int MAX_TESS_LEVEL;
 
 // Posição da câmera
 uniform vec3 CameraPosition;
+uniform bool TessellateByDistance;
 
 // Posição do centro do terreno
 uniform vec3 TerrainCenter;
-uniform bool TessellateMiddleOnly;
+uniform bool TessellateMiddle;
 
 // A partir de qual distância o TessLevel será o mínimo
 uniform int MAX_DISTANCE;
@@ -54,19 +55,20 @@ void main()
 	// Vamos modificar o inner e outer apenas para o primeiro vértice do Patch
 	if (ID == 0)
 	{
-		if (TessellateMiddleOnly)
+		setTess(MIN_TESS_LEVEL);
+
+		if (TessellateMiddle)
 		{
 			vec4 center = (vPosition[0] + vPosition[1] + vPosition[2] + vPosition[3]) * 0.25;
 	
-			if (center.xz != TerrainCenter.xz)
+			if (center.xz == TerrainCenter.xz)
 			{
-				setTess(MIN_TESS_LEVEL);
+				setTess(MAX_TESS_LEVEL);
 				return;
 			}
-
-			setTess(MAX_TESS_LEVEL);
 		}
-		else
+
+		if (TessellateByDistance)
 		{
 			// Calcula as 4 arestas do patch
 			vec4 leftSide = vPosition[0] + (vPosition[1] - vPosition[0]) * 0.5;

@@ -72,6 +72,7 @@ private:
 	vec3 planeCenter;
 	bool wireframe = false;
 	bool tessellateMiddle = false;
+	bool tessellateByDistance = false;
 
 	int maxTessLevel = 5;
 	int cameraRange;

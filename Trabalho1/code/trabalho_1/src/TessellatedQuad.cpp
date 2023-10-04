@@ -67,14 +67,12 @@ void TessellatedQuad::init()
 
 	// Load our color texture with Id 0
 	glActiveTexture(GL_TEXTURE0);
-	//if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_COLOR.png", 0))
 	if (!texManager->LoadTexture("..\\..\\resources\\inter_color.png", 0))
 		cout << "Failed to load texture." << endl;
 
 	// Load our displacement texture with Id 1
 	glActiveTexture(GL_TEXTURE1);
-	if (!texManager->LoadTexture("..\\..\\resources\\old_bricks_sharp_diff_DISP.png", 1))
-	//if (!texManager->LoadTexture("..\\..\\resources\\tecido_disp.png", 1))
+	if (!texManager->LoadTexture("..\\..\\resources\\tecido_disp.png", 1))
 		cout << "Failed to load texture." << endl;
 }
 
@@ -125,9 +123,10 @@ void TessellatedQuad::update(double t)
 	shader.setUniform("MAX_DISTANCE", cameraRange);
 	shader.setUniform("MAX_TESS_LEVEL", maxTessLevel);
 	shader.setUniform("CameraPosition", cameraController->getCameraPos());
+	shader.setUniform("TessellateByDistance", tessellateByDistance);
 
 	shader.setUniform("TerrainCenter", planeCenter);
-	shader.setUniform("TessellateMiddleOnly", tessellateMiddle);
+	shader.setUniform("TessellateMiddle", tessellateMiddle);
 
 	shader.setUniform("displacementmapSampler", 1);
 	shader.setUniform("colorTextureSampler", 0);
@@ -151,6 +150,12 @@ void TessellatedQuad::processInput()
 	if (glfwGetKeyOnce(window, 'T'))
 	{
 		tessellateMiddle = !tessellateMiddle;
+	}
+
+	// Ativa/Desativa tessellation por distância da câmera
+	if (glfwGetKeyOnce(window, 'C'))
+	{
+		tessellateByDistance = !tessellateByDistance;
 	}
 
 	// Ativa/Desativa Wireframe

@@ -10,6 +10,7 @@
 // Use R/F para aumentar/diminuir o tessellation level máximo.
 // Use E para ativar/desativar wireframe.
 // Use T para ativar/desativar tessellation no centro do plano.
+// Use C para ativar/desativar tessellation por distancia da camera.
 
 O que foi implementado:
 

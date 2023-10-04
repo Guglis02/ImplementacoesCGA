@@ -1,13 +1,14 @@
-// Trabalho 1 – Shader
+// Trabalho 1 - Shader
 // 
 // Programa em C++, utilizando a API OpenGL 4.x, para simular um terreno 
-// formado por N² patches, dispostos em um grid NxN. Desenvolvido usando
+// formado por N^2 patches, dispostos em um grid NxN. Desenvolvido usando
 // como base a demo glsl40_tessellation_displacement_mapping.
 // 
 // Use WASD para mover a camera pelo mapa e mouse para rotacionar a camera.
-// Use R/F para aumentar/diminuir o tessellation level máximo.
+// Use R/F para aumentar/diminuir o tessellation level maximo.
 // Use E para ativar/desativar wireframe.
 // Use T para ativar/desativar tessellation no centro do plano.
+// Use C para ativar/desativar tessellation por distancia da camera.
 //
 // Setembro 2023 - Gustavo Machado de Freitas - gmfreitas@inf.ufsm.br
 
@@ -140,10 +141,11 @@ int main(void)
 	tessellatedQuad->init();
 
 	cout << endl << "WASD: Move camera pelo mapa" << endl;
-	cout << "Mouse Click: Rotaciona camera" << endl;
+	cout << "Mouse Drag: Rotaciona camera" << endl;
 	cout << "R/F: Aumenta/Diminui tessellation level maximo" << endl;
 	cout << "E: Ativa/Desativa wireframe" << endl;
 	cout << "T: Ativa/Desativa tessellation no centro do plano" << endl;
+	cout << "C: Ativa/Desativa tessellation por distancia da camera" << endl;
 
 	mainLoop();
 
