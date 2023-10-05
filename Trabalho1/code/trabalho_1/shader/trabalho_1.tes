@@ -62,7 +62,7 @@ void main()
     }
 
     // Aplica o deslocamento de altura
-    gl_Position.y = p0.y + yOffset + texture(displacementmapSampler, teTexCoord).y * 1.0f;
+    gl_Position.y = p0.y + yOffset + texture(displacementmapSampler, teTexCoord).y * 0.2f;
 
     // Transforma posições para clip space
     gl_Position = MVP * gl_Position;
