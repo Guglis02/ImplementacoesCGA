@@ -1,0 +1,54 @@
+{
+    "name": "DefaultControl",
+    "maps": [
+        {
+            "name": "MouseMap",
+            "id": "76d6d188-adf5-42e8-bdb3-488e26d187c0",
+            "actions": [
+                {
+                    "name": "CameraZoom",
+                    "type": "Value",
+                    "id": "9d4f2944-7e83-44a8-8c14-0ac74485985d",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ZoomPoint",
+                    "type": "Value",
+                    "id": "5ff7e6d7-bd76-462b-b6d1-d893d82eacf1",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ad67e29d-0c8d-4c18-a0ce-74c81e08ee32",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "61e986f3-90ac-4f6f-a037-8420f14185cc",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomPoint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
