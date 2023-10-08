@@ -3,18 +3,24 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class LineController : MonoBehaviour
+public class ElementsController : MonoBehaviour
 {
     [SerializeField] private int numberOfPoints = 200;
     [SerializeField] private float splineWidth = 0.1f;
     [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private Transform planeTransform;
-        
+    [SerializeField] private Transform planeTransform; 
+    
+    [SerializeField] private Circle circlePrefab;
+    [SerializeField] private int numberOfCircles = 200;
+    [SerializeField] private float circleRadius = 0.1f;
+
     private float planeWidth = 20f;
     private float planeHeight = 10f;
 
     private List<Vector3> controlPoints = new List<Vector3>();
     private List<Vector3> linePoints = new List<Vector3>();
+
+    private List<Circle> circles = new List<Circle>();
 
     private void Start()
     {
@@ -25,9 +31,19 @@ public class LineController : MonoBehaviour
         planeHeight = planeTransform.localScale.y;
     }
 
-    private void Update()
+    public void GenerateCircles()
     {
-        RenderSpline();
+        for (int i = 0; i < numberOfCircles; i++)
+        {
+            float x = Random.Range(-planeWidth * 0.5f, planeWidth * 0.5f);
+            float y = Random.Range(-planeHeight * 0.5f, planeHeight * 0.5f);
+
+            Vector3 point = new Vector3(x, y, 0f);
+
+            Circle circle = Instantiate(circlePrefab, point, Quaternion.identity);
+            circle.Initialize(circleRadius);
+            circles.Add(circle);
+        }
     }
 
     public void GenerateControlPoints()
@@ -41,12 +57,6 @@ public class LineController : MonoBehaviour
             float y = Random.Range(-planeHeight * 0.5f, planeHeight * 0.5f);
 
             Vector3 point = new Vector3(x, y, 0f);
-
-            // Suavização dos pontos de controle
-            if (i > 0)
-            {
-                point = (point + controlPoints.Last()) * 0.5f;
-            }
 
             controlPoints.Add(point);
         }
@@ -66,6 +76,8 @@ public class LineController : MonoBehaviour
                 linePoints.Add(p);
             }
         }
+
+        RenderSpline();
     }
 
     private Vector3 BSpline3(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, float t)
