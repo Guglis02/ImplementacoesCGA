@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Circle : MonoBehaviour
 {
+    public float radius = 1;
+
     public void Initialize(float radius)
     {
-        GetComponent<SpriteRenderer>().size = new Vector2(radius, radius);
+        this.radius = radius;
+        float scale = radius * 2;
+        transform.localScale = new Vector3(scale, scale, 1);
     }
 
     public void Collide(bool value)

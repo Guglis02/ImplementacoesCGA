@@ -1,12 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using static UnityEngine.Rendering.DebugUI;
-using System.Buffers.Text;
-using Unity.VisualScripting;
-using UnityEditor.Presets;
 
 public class CameraZoomController : MonoBehaviour
 {
@@ -20,7 +13,7 @@ public class CameraZoomController : MonoBehaviour
 
     private void Start()
     {
-        camera = GetComponent<Camera>();    
+        camera = GetComponent<Camera>();
         initialZoom = camera.orthographicSize;
     }
 
@@ -29,7 +22,7 @@ public class CameraZoomController : MonoBehaviour
         float scroll = Mathf.Clamp(value.ReadValue<float>(), -1, 1);
         Vector3 mousePos = camera.ScreenToWorldPoint(lastMousePos);
         camera.orthographicSize -= scroll;
-        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, 1f, initialZoom); 
+        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, 1f, initialZoom);
         Vector3 newMousePos = camera.ScreenToWorldPoint(lastMousePos);
         Vector3 deltaPos = newMousePos - mousePos;
         camera.transform.position -= deltaPos;
