@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4254700738803090083}
   - component: {fileID: 877253822884703577}
   - component: {fileID: 6689600549986999074}
+  - component: {fileID: 3788675764384056054}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -97,3 +98,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 506dcc0e4c327a04bb64be99fb15a292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3788675764384056054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5393873208731103946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 96b18db557a4a504788a9922728fd2a3, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9d4f2944-7e83-44a8-8c14-0ac74485985d
+    m_ActionName: MouseMap/CameraZoom[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6689600549986999074}
+        m_TargetAssemblyTypeName: Circle, Assembly-CSharp
+        m_MethodName: OnMousePosition
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5ff7e6d7-bd76-462b-b6d1-d893d82eacf1
+    m_ActionName: MouseMap/ZoomPoint[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2e579365-40f6-4a62-9bb0-0b285ed44743
+    m_ActionName: MouseMap/MouseClick[/Mouse/leftButton]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: MouseMap
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
