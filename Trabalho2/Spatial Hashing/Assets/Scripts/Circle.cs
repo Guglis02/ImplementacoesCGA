@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class Circle : MonoBehaviour
 {
-    public float radius = 1;
+    private float m_radius = 1;
+
+    public float Radius => m_radius;
 
     public void Initialize(float radius)
     {
-        this.radius = radius;
+        this.m_radius = radius;
         float scale = radius * 2;
         transform.localScale = new Vector3(scale, scale, 1);
     }

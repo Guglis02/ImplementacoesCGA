@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-internal static class ElementsControllerHelpers
+static class UtilitaryMethods
 {
     public static Vector3 BSpline3(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, float t)
     {
@@ -12,6 +12,11 @@ internal static class ElementsControllerHelpers
             + p2 * asixth * (3 * tcube - 6 * tsquare + 4)
             + p3 * asixth * (-3 * tcube + 3 * tsquare + 3 * t + 1)
             + p4 * asixth * tcube;
+    }
+
+    public static bool LineCircleIntersection(Line line, Circle circle)
+    {
+        return LineCircleIntersection(line.Start, line.End, circle.transform.position, circle.Radius);
     }
 
     public static bool LineCircleIntersection(Vector2 lineStart, Vector2 lineEnd, Vector2 circleCenter, float circleRadius)

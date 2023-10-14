@@ -52,4 +52,20 @@ public class TimeTracker : MonoBehaviour
         spacialHashingTimeLabel.text = "Spacial Hashing: " + time + "s";
         UpdateColors();
     }
+
+    public void AddSpatialHashTime(float time)
+    {
+        spacialHashingTime += time;
+        spacialHashingTimeLabel.text = "Spacial Hashing: " + spacialHashingTime + "s";
+        UpdateColors();
+    }
+
+    public void Reset()
+    {
+        bruteForceTime = 0;
+        spacialHashingTime = 0;
+        bruteForceTimeLabel.text = "Brute Force: 0s";
+        spacialHashingTimeLabel.text = "Spacial Hashing: 0s";
+        UpdateColors();
+    }
 }
