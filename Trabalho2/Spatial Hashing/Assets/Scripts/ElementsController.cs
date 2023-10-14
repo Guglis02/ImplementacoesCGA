@@ -13,8 +13,8 @@ public class ElementsController : MonoBehaviour
     private float planeWidth;
     private float planeHeight;
 
-    private List<Line> lines = new List<Line>();
-    private List<Circle> circles = new List<Circle>();
+    private readonly List<Line> lines = new();
+    private readonly List<Circle> circles = new();
 
     private void Start()
     {
