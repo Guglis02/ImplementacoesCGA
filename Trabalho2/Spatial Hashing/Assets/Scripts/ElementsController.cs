@@ -16,13 +16,18 @@ public class ElementsController : MonoBehaviour
     private readonly List<Line> lines = new();
     private readonly List<Circle> circles = new();
 
+    private SpatialHash spatialHash;
+
     private void Start()
     {
         planeWidth = planeTransform.localScale.x;
         planeHeight = planeTransform.localScale.y;
+
+        spatialHash = new SpatialHash((int)planeWidth, (int)planeHeight);
     }
 
-    public void CheckCollisions()
+    #region Collisions
+    public void CheckCollisionsBruteForce()
     {
         float time = Time.realtimeSinceStartup;
 
@@ -30,11 +35,7 @@ public class ElementsController : MonoBehaviour
         {
             foreach (Line line in lines)
             {
-                if (ElementsControllerHelpers.LineCircleIntersection(
-                    line.points.First(), 
-                    line.points.Last(), 
-                    circle.transform.position, 
-                    circle.radius))
+                if (UtilitaryMethods.LineCircleIntersection(line, circle))
                 {
                     circle.Collide(true);
                     break;
@@ -48,7 +49,40 @@ public class ElementsController : MonoBehaviour
         timeTracker.SetBruteForceTime(Time.realtimeSinceStartup - time);
     }
 
+    public void CheckCollisionsSpatialHashing()
+    {
+        float time = Time.realtimeSinceStartup;
+
+        foreach (Circle circle in circles)
+        {
+            spatialHash.CheckHashIntersection(circle);
+        }
+
+        Debug.Log("Tempo com hash: " + (Time.realtimeSinceStartup - time));
+        timeTracker.AddSpatialHashTime(Time.realtimeSinceStartup - time);
+    }
+
+    public void ResetCollisions()
+    {
+        foreach (Circle circle in circles)
+        {
+            circle.Collide(false);
+        }
+
+        timeTracker.Reset();
+    }
+
+    #endregion
+
     #region Generate Elements
+    public void GenerateSpatialHashTable()
+    {
+        float time = Time.realtimeSinceStartup;
+        spatialHash.SetLines(lines);
+        Debug.Log("Tempo para criar tabela hash: " + (Time.realtimeSinceStartup - time));
+        timeTracker.SetSpacialHashingTime(Time.realtimeSinceStartup - time);
+    }
+
     public void GenerateCircles()
     {
         foreach (Circle circle in circles)
@@ -110,8 +144,8 @@ public class ElementsController : MonoBehaviour
             {
                 List<Vector3> segmentPoints = new List<Vector3>();
 
-                Vector3 p1 = ElementsControllerHelpers.BSpline3(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3], t);
-                Vector3 p2 = ElementsControllerHelpers.BSpline3(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3], t + stepSize);
+                Vector3 p1 = UtilitaryMethods.BSpline3(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3], t);
+                Vector3 p2 = UtilitaryMethods.BSpline3(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3], t + stepSize);
                 segmentPoints.Add(p1);
                 segmentPoints.Add(p2);
 
