@@ -6,6 +6,9 @@ public class TimeTracker : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bruteForceTimeLabel;
     [SerializeField] private TextMeshProUGUI spacialHashingTimeLabel;
 
+    public float BruteForceTime => bruteForceTime;
+    public float SpacialHashingTime => spacialHashingTime;
+
     private float bruteForceTime = 0;
     private float spacialHashingTime = 0;
 
