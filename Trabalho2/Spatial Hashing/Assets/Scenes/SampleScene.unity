@@ -266,7 +266,7 @@ Transform:
   m_GameObject: {fileID: 454255246}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 180, y: 100, z: 0}
   m_LocalScale: {x: 360, y: 200, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -396,7 +396,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 180, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -744,6 +744,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2113761073}
     m_Modifications:
+    - target: {fileID: 275436298219374027, guid: 1b1703d5e8fcb4040b7cd8444e9a8bc4, type: 3}
+      propertyPath: m_Color.a
+      value: 0.8666667
+      objectReference: {fileID: 0}
     - target: {fileID: 1035197949503573635, guid: 1b1703d5e8fcb4040b7cd8444e9a8bc4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1025,10 +1029,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 227082129}
-    - target: {fileID: 2783990747647741082, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CheckCollisionsSpatialHashing
-      objectReference: {fileID: 0}
     - target: {fileID: 3036535823007839207, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1129,14 +1129,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 227082129}
-    - target: {fileID: 4360631918949334378, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: GenerateSpatialHashTable
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360631918949334378, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ElementsController, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 4471889141478843272, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1289,10 +1281,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 227082129}
-    - target: {fileID: 5748532253944632824, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ResetCollisions
-      objectReference: {fileID: 0}
     - target: {fileID: 7366674446024574723, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1377,10 +1365,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 227082129}
-    - target: {fileID: 8070736400443044131, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CheckCollisionsBruteForce
-      objectReference: {fileID: 0}
     - target: {fileID: 8358972341219188310, guid: 360bd7611f267c5418f5e746e26447b9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
