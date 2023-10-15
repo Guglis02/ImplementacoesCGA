@@ -26,6 +26,11 @@ public class ElementsController : MonoBehaviour
         spatialHash = new SpatialHash((int)planeWidth, (int)planeHeight);
     }
 
+    private void Update()
+    {
+        spatialHash.DebugRenderCells();
+    }
+
     #region Collisions
     public void CheckCollisionsBruteForce()
     {
@@ -40,8 +45,6 @@ public class ElementsController : MonoBehaviour
                     circle.Collide(true);
                     break;
                 }
-
-                circle.Collide(false);
             }
         }
 
@@ -68,8 +71,6 @@ public class ElementsController : MonoBehaviour
         {
             circle.Collide(false);
         }
-
-        timeTracker.Reset();
     }
 
     #endregion
@@ -95,8 +96,8 @@ public class ElementsController : MonoBehaviour
 
         for (int i = 0; i < numberOfCircles; i++)
         {
-            float x = Random.Range(-planeWidth * 0.5f, planeWidth * 0.5f);
-            float y = Random.Range(-planeHeight * 0.5f, planeHeight * 0.5f);
+            float x = Random.Range(0.0f, planeWidth);
+            float y = Random.Range(0.0f, planeHeight);
 
             Vector3 point = new Vector3(x, y, 0f);
 
@@ -107,6 +108,8 @@ public class ElementsController : MonoBehaviour
             circle.Initialize(circleRadius);
             circles.Add(circle);
         }
+
+        timeTracker.Reset();
     }
 
     public void GenerateControlPoints()
@@ -117,8 +120,8 @@ public class ElementsController : MonoBehaviour
 
         for (int i = 0; i < numberOfPoints - 1; i++)
         {
-            float x = Random.Range(-planeWidth * 0.5f, planeWidth * 0.5f);
-            float y = Random.Range(-planeHeight * 0.5f, planeHeight * 0.5f);
+            float x = Random.Range(0.0f, planeWidth);
+            float y = Random.Range(0.0f, planeHeight);
 
             Vector3 point = new Vector3(x, y, 0f);
 
@@ -126,6 +129,8 @@ public class ElementsController : MonoBehaviour
         }
 
         EvaluateLinePoints(controlPoints);
+
+        timeTracker.Reset();
     }
 
     private void EvaluateLinePoints(List<Vector3> controlPoints)

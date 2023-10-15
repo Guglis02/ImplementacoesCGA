@@ -5,19 +5,21 @@ using UnityEngine;
 public class SpatialHash
 {
     private Vector2 cellDimension;
+    private int cellAmount;
     private int horizontalCells = 5;
     private int verticalCells = 5;
 
     private List<Line> lines = new List<Line>();
-    private List<int> used = new List<int>();
-    private List<int> initial = new List<int>();
-    private List<int> final = new List<int>();
-    private List<int> objectIndex = new List<int>();
-    private List<Line> hashTable = new List<Line>();
+    private int[] used;
+    private int[] initial;
+    private int[] final;
+    private int[] objectIndex;
+    private Line[] hashTable;
 
     public SpatialHash(int planeWidth, int planeHeight)
     {
         this.cellDimension = new Vector2(planeWidth / horizontalCells, planeHeight / verticalCells);
+        this.cellAmount = horizontalCells * verticalCells;
     }
 
     public void SetLines(List<Line> lines)
@@ -31,31 +33,46 @@ public class SpatialHash
     {
         int cellIndex = HashFunction(circle.transform.position);
 
-        if (cellIndex >= 0 && cellIndex < hashTable.Count)
+        if (used[cellIndex] == 0)
         {
-            for (int i = initial[cellIndex]; i < final[cellIndex]; i++)
-            {
-                Line line = hashTable[i];
-
-                if (UtilitaryMethods.LineCircleIntersection(line, circle))
-                {
-                    circle.Collide(true);
-                }
-            }
+            return;
         }
 
-        circle.Collide(false);
+        for (int i = initial[cellIndex]; i < initial[cellIndex] + used[cellIndex]; i++)
+        {
+            Line line = hashTable[i];
+
+            if (UtilitaryMethods.LineCircleIntersection(line, circle))
+            {
+                circle.Collide(true);
+                return;
+            }
+        }
     }
 
     private int HashFunction(Vector2 point)
     {
         Vector2 pointInGrid = point / cellDimension;
 
-        return (int)pointInGrid.x + (int)pointInGrid.y * horizontalCells;
+        int x = (int)Mathf.Clamp(pointInGrid.x, 0, horizontalCells - 1);
+        int y = (int)Mathf.Clamp(pointInGrid.y, 0, verticalCells - 1);
+
+        return x + y * horizontalCells;
     }
+
     private void StartHashTable()
     {
-        throw new NotImplementedException();
+        int numLines = lines.Count;
+        used = new int[cellAmount];
+        initial = new int[cellAmount];
+        final = new int[cellAmount];
+        objectIndex = new int[numLines];
+        hashTable = new Line[numLines];
+
+        for (int i = 0; i < cellAmount; i++)
+        {
+            used[i] = 0;
+        }
     }
 
     public void SpatialHashingUpdate()
@@ -64,18 +81,11 @@ public class SpatialHash
         {
             int index = HashFunction(lines[i].Start);
             objectIndex[i] = index;
-            if (!used.ContainsKey(index))
-            {
-                used[index] = 1;
-            }
-            else
-            {
-                used[index]++;
-            }
+            used[index]++;
         }
 
         int accum = 0;
-        for (int i = 0; i < used.Count; i++)
+        for (int i = 0; i < used.Length; i++)
         {
             initial[i] = accum;
             accum += used[i];
@@ -86,6 +96,21 @@ public class SpatialHash
         {
             hashTable[final[objectIndex[i]] - 1] = lines[i];
             final[objectIndex[i]] -= 1;
+        }
+    }
+
+    public void DebugRenderCells()
+    {
+        for (int x = 0; x < horizontalCells; x++)
+        {
+            for (int y = 0; y < verticalCells; y++)
+            {
+                Vector2 cellStart = new Vector2(x * cellDimension.x, y * cellDimension.y);
+                Vector2 cellEnd = cellStart + cellDimension;
+
+                Debug.DrawLine(new Vector3(cellStart.x, cellStart.y, 0), new Vector3(cellEnd.x, cellStart.y, 0), Color.red);
+                Debug.DrawLine(new Vector3(cellStart.x, cellStart.y, 0), new Vector3(cellStart.x, cellEnd.y, 0), Color.red);
+            }
         }
     }
 }
