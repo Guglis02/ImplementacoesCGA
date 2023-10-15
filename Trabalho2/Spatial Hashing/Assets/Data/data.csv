@@ -1,3 +1,4 @@
 Plane Width,Plane Height,Number of Circles,Circle Radius,Number of Control Points,Brute Force Time,Spatial Hashing Time
-360,200,200,1,200,3.446327,0
 360,200,200,1,200,2.569473,0.08166885
+360,200,1000,0.5,1000,50.90909,1.545128
+360,200,10,10,10,0.008581161,0.003154755
