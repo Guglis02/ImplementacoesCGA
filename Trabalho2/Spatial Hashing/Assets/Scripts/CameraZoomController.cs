@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Classe responsável por controlar a câmera.
+/// </summary>
 public class CameraZoomController : MonoBehaviour
 {
-    private Camera camera;
+    private new Camera camera;
     private Vector2 lastMousePos;
     private Vector2 mouseDelta;
 
@@ -17,6 +20,9 @@ public class CameraZoomController : MonoBehaviour
         initialZoom = camera.orthographicSize;
     }
 
+    /// <summary>
+    /// Ao rodar o scroll do mouse, a câmera dá zoom in/out na posição do mouse.
+    /// </summary>
     public void OnMouseWheel(InputAction.CallbackContext value)
     {
         float scroll = Mathf.Clamp(value.ReadValue<float>(), -1, 1);
@@ -28,6 +34,10 @@ public class CameraZoomController : MonoBehaviour
         camera.transform.position -= deltaPos;
     }
 
+    /// <summary>
+    /// Salva a posição do mouse, caso o botão esquerdo esteja clicado,
+    /// arrasta a câmera.
+    /// </summary>
     public void OnMousePosition(InputAction.CallbackContext value)
     {
         Vector2 mousePos = value.ReadValue<Vector2>();

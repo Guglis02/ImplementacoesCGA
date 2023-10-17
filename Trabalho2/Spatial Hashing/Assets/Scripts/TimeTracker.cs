@@ -1,6 +1,9 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Classe responsável pelo painel de marcações de tempo.
+/// </summary>
 public class TimeTracker : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI bruteForceTimeLabel;
