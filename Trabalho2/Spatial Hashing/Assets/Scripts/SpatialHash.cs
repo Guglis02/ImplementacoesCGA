@@ -76,6 +76,7 @@ public class SpatialHash
         float circleRadius = circle.Radius;
 
         int centerIndex = HashFunction(circleCenter);
+        rangedCells.Add(centerIndex);
 
         for (float i = 0; i < 360; i += 45)
         {
