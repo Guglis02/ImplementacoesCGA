@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// Classe responsável por gerenciar um arquivo csv com os dados dos testes.
+/// </summary>
 public class CsvController : MonoBehaviour
 {
     [SerializeField] private Transform planeTransform;
@@ -39,6 +42,8 @@ public class CsvController : MonoBehaviour
         lines.Add(string.Join(",", data));
 
         File.WriteAllLines(filePath, lines);
+
+        Debug.Log("Dados salvos com sucesso!");
     }
 }
 

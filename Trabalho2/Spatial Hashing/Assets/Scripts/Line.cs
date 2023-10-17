@@ -1,18 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Classe que representa um trecho da curva BSpline.
+/// </summary>
 public class Line : MonoBehaviour
 {
     public LineRenderer lineRenderer;
-    public List<Vector3> points;
 
-    public Vector2 Start => points[0];
-    public Vector2 End => points[1];
+    private Vector3 m_StartPoint;
+    private Vector3 m_EndPoint;
 
-    public void Initialize(List<Vector3> linePoints)
+    public Vector2 Start => m_StartPoint;
+    public Vector2 End => m_EndPoint;
+
+    public void Initialize(Vector3 startPoint, Vector3 endPoint)
     {
-        points = linePoints;
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPositions(points.ToArray());
+        m_StartPoint = startPoint;
+        m_EndPoint = endPoint;
+
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPositions(new[] { startPoint, endPoint });
     }
 }

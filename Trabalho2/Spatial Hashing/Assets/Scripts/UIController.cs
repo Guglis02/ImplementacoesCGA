@@ -1,6 +1,9 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Classe responsável pelo painel de inputs.
+/// </summary>
 public class UIController : MonoBehaviour
 {
     [SerializeField] private TMP_InputField numberOfPointsInput;

@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Classe de métodos utilitários.
+/// </summary>
 static class UtilitaryMethods
 {
     public static Vector3 BSpline3(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, float t)
@@ -16,11 +19,11 @@ static class UtilitaryMethods
 
     public static bool LineCircleIntersection(Line line, Circle circle)
     {
-        return LineCircleIntersection(line.Start, line.End, circle.transform.position, circle.Radius);
-    }
+        Vector2 lineStart = line.Start;
+        Vector2 lineEnd = line.End;
+        Vector2 circleCenter = circle.transform.position;
+        float circleRadius = circle.Radius;
 
-    public static bool LineCircleIntersection(Vector2 lineStart, Vector2 lineEnd, Vector2 circleCenter, float circleRadius)
-    {
         Vector2 lineDirection = lineEnd - lineStart;
         Vector2 lineToCircle = circleCenter - lineStart;
         float lineLength = lineDirection.magnitude;

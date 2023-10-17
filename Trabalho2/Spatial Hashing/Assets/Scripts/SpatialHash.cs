@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Classe responsável por implementar a Spatial Hash Table, descrita no artigo
+/// do professor.
+/// </summary>
 public class SpatialHash
 {
     private Vector2 cellDimension;
@@ -18,10 +22,13 @@ public class SpatialHash
 
     public SpatialHash(int planeWidth, int planeHeight)
     {
-        this.cellDimension = new Vector2(planeWidth / horizontalCells, planeHeight / verticalCells);
-        this.cellAmount = horizontalCells * verticalCells;
+        cellDimension = new Vector2(planeWidth / horizontalCells, planeHeight / verticalCells);
+        cellAmount = horizontalCells * verticalCells;
     }
 
+    /// <summary>
+    /// Define as linhas que serão salvas na tabela hash.
+    /// </summary>
     public void SetLines(List<Line> lines)
     {
         this.lines = lines;
@@ -29,27 +36,53 @@ public class SpatialHash
         SpatialHashingUpdate();
     }
 
+    /// <summary>
+    /// Calcula em qual célula da tabela hash o círculo está e verifica se há interseção
+    /// com alguma linha daquela célula.
+    /// </summary>
     public void CheckHashIntersection(Circle circle)
     {
-        int cellIndex = HashFunction(circle.transform.position);
+        List<int> rangedCells = CalculateRangedCells(circle);
 
-        if (used[cellIndex] == 0)
+        foreach (int cellIndex in rangedCells)
         {
-            return;
-        }
-
-        for (int i = initial[cellIndex]; i < initial[cellIndex] + used[cellIndex]; i++)
-        {
-            Line line = hashTable[i];
-
-            if (UtilitaryMethods.LineCircleIntersection(line, circle))
+            if (used[cellIndex] == 0)
             {
-                circle.Collide(true);
-                return;
+                continue;
+            }
+
+            for (int i = initial[cellIndex]; i < initial[cellIndex] + used[cellIndex]; i++)
+            {
+                Line line = hashTable[i];
+
+                if (UtilitaryMethods.LineCircleIntersection(line, circle))
+                {
+                    circle.Collide(true);
+                    return;
+                }
+
+                circle.Collide(false);
             }
         }
     }
 
+    /// <summary>
+    /// Procura em quais células o círculo está.
+    /// </summary>
+    private List<int> CalculateRangedCells(Circle circle)
+    {
+        List<int> rangedCells = new List<int>();
+        Vector2 circleCenter = circle.transform.position;
+        float circleRadius = circle.Radius;
+
+        rangedCells.Add(HashFunction(circleCenter));
+
+        return rangedCells;
+    }
+
+    /// <summary>
+    /// Calcula em qual célula da tabela hash o ponto está.
+    /// </summary>
     private int HashFunction(Vector2 point)
     {
         Vector2 pointInGrid = point / cellDimension;
@@ -60,6 +93,9 @@ public class SpatialHash
         return x + y * horizontalCells;
     }
 
+    /// <summary>
+    /// Inicializa estruturas de dados necessárias para a tabela hash.
+    /// </summary>
     private void StartHashTable()
     {
         int numLines = lines.Count;
@@ -75,6 +111,11 @@ public class SpatialHash
         }
     }
 
+    /// <summary>
+    /// Atualiza pivos e hash table, como os elementos salvos na tabela não se movem,
+    /// este método não precisa ser chamado todo frame, mas sim apenas quando os 
+    /// elementos são recriados.
+    /// </summary>
     public void SpatialHashingUpdate()
     {
         for (int i = 0; i < lines.Count; i++)
@@ -99,6 +140,9 @@ public class SpatialHash
         }
     }
 
+    /// <summary>
+    /// Função de debug que desenha as células da tabela hash.
+    /// </summary>
     public void DebugRenderCells()
     {
         for (int x = 0; x < horizontalCells; x++)
