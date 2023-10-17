@@ -183,8 +183,6 @@ public class ElementsController : MonoBehaviour
             circle.Initialize(circleRadius);
             circles.Add(circle);
         }
-
-        timeTracker.Reset();
     }
     #endregion
 
