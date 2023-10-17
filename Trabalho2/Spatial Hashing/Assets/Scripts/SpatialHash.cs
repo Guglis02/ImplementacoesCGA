@@ -75,11 +75,18 @@ public class SpatialHash
         Vector2 circleCenter = circle.transform.position;
         float circleRadius = circle.Radius;
 
-        rangedCells.Add(HashFunction(circleCenter));
+        int centerIndex = HashFunction(circleCenter);
+
+        for (float i = 0; i < 360; i += 45)
+        {
+            Vector2 circlePoint = new Vector2(circleCenter.x + circleRadius * Mathf.Cos(i), circleCenter.y + circleRadius * Mathf.Sin(i));
+            if (HashFunction(circlePoint) != centerIndex)
+                rangedCells.Add(HashFunction(circlePoint));
+        }
 
         return rangedCells;
     }
-
+    
     /// <summary>
     /// Calcula em qual célula da tabela hash o ponto está.
     /// </summary>
