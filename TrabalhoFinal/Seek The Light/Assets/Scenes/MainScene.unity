@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -289,7 +289,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 20
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -378,9 +378,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0613d908837a24f4f82c8cde22d3064c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerOffset: {x: 0, y: 8, z: -10}
-  m_CameraRotationDamping: 0.2
-  m_CameraPositionDamping: 0.2
+  m_PlayerOffset: {x: 0, y: 30, z: -5}
+  m_CameraRotationDamping: 0.1
+  m_CameraPositionDamping: 8
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,9 +548,8 @@ MonoBehaviour:
   levelMap: {fileID: 2800000, guid: ed17a797d2ab8994dae702934fdf114e, type: 3}
   floor: {fileID: 235068896}
   wallsParent: {fileID: 1462102078}
+  wallMaterial: {fileID: 2100000, guid: 9fe11cf48d838934588fe38e07b92920, type: 2}
   enemiesParent: {fileID: 995208303}
-  wallPrefab: {fileID: 1741668580266989065, guid: af63825fabbb6c3448d99a3163dea08a,
-    type: 3}
   enemyPrefab: {fileID: 5503278443985119119, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
     type: 3}
 --- !u!1 &832575517
