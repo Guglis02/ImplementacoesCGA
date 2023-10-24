@@ -548,7 +548,8 @@ MonoBehaviour:
   levelMap: {fileID: 2800000, guid: ed17a797d2ab8994dae702934fdf114e, type: 3}
   floor: {fileID: 235068896}
   wallsParent: {fileID: 1462102078}
-  wallMaterial: {fileID: 2100000, guid: 9fe11cf48d838934588fe38e07b92920, type: 2}
+  wallPrefab: {fileID: 1741668580266989065, guid: af63825fabbb6c3448d99a3163dea08a,
+    type: 3}
   enemiesParent: {fileID: 995208303}
   enemyPrefab: {fileID: 5503278443985119119, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
     type: 3}
@@ -774,8 +775,41 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7169483335598730837, guid: 29f0a2d2fd2e37343a776dbee7d7d423,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1918677697}
   m_SourcePrefab: {fileID: 100100000, guid: 29f0a2d2fd2e37343a776dbee7d7d423, type: 3}
+--- !u!1 &1918677696 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7169483335598730837, guid: 29f0a2d2fd2e37343a776dbee7d7d423,
+    type: 3}
+  m_PrefabInstance: {fileID: 1918677695}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1918677697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918677696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
