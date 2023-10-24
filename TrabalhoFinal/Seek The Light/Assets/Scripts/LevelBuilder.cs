@@ -82,6 +82,8 @@ public class LevelBuilder : MonoBehaviour
 
     private void CreateCustomWallMesh(int startX, int startY, bool[,] visited)
     {
+
+
         for (int u = startX; u < levelMap.width; u++)
         {
             for (int v = startY; v < levelMap.height; v++)
