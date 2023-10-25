@@ -19,15 +19,19 @@ public class PlayerMovement : MonoBehaviour
     Vector3 m_Velocity;
     Vector3 m_PreviousInputDirection;
     CharacterController m_CharacterController;
+    Animator m_Animator;
 
     void Awake()
     {
         m_PreviousInputDirection = Vector3.forward;
         m_CharacterController = GetComponent<CharacterController>();
+        m_Animator = GetComponentInChildren<Animator>();
     }
 
     private void FixedUpdate()
     {
+        m_Animator.SetFloat("Speed", Vector3.Magnitude(m_Velocity));
+
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         var inputDirection = new Vector3(horizontal, 0, vertical);

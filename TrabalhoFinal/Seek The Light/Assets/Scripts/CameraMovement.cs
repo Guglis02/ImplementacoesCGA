@@ -23,7 +23,7 @@ public class CameraMovement : MonoBehaviour
     {
         var playerPosition = GameManager.PlayerPosition;
         m_DeadZone.center += playerPosition;
-        transform.position = m_DeadZone.center + m_PlayerOffset;
+        transform.position = playerPosition;
     }
 
     private void Update()
