@@ -551,7 +551,7 @@ MonoBehaviour:
   wallPrefab: {fileID: 1741668580266989065, guid: af63825fabbb6c3448d99a3163dea08a,
     type: 3}
   enemiesParent: {fileID: 995208303}
-  enemyPrefab: {fileID: 5503278443985119119, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
+  enemyPrefab: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
     type: 3}
 --- !u!1 &832575517
 GameObject:

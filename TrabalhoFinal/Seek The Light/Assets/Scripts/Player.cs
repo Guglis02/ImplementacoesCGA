@@ -8,10 +8,9 @@ public class Player : MonoBehaviour
     {
         var characterController = GetComponent<CharacterController>();
         bool prevCharacterControlerEnabled = characterController.enabled;
+
         characterController.enabled = false;
-
         transform.position = position;
-
         characterController.enabled = prevCharacterControlerEnabled;
     }
 }

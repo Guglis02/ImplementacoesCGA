@@ -15,14 +15,20 @@ public class LevelBuilder : MonoBehaviour
     [SerializeField] private GameObject wallPrefab;
 
     [SerializeField] private GameObject enemiesParent;
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Enemy enemyPrefab;
+
+    public static int blockSize = 4;
+    private float halfBlockSize => blockSize * 0.5f;
 
     private Vector2[,] cellSizes;
     private Color[] pixels;
 
     private int levelWidth;
     private int levelHeight;
-    
+
+    private List<Vector2> walkableCells = new List<Vector2>();
+    public List<Vector2> WalkableCells => walkableCells;
+        
     enum LevelElementID
     {
         Wall,
@@ -41,6 +47,23 @@ public class LevelBuilder : MonoBehaviour
         { Color.white, LevelElementID.Path }
     };
 
+    private void OnDrawGizmos()
+    {
+        for (int y = 0; y < levelHeight; y++)
+        {
+            for (int x = 0; x < levelWidth; x++)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireCube(new Vector3((x - cellSizes[x, y].x * 0.5f) * blockSize + halfBlockSize,
+                                                0,
+                                                (y - cellSizes[x, y].y * 0.5f) * blockSize + halfBlockSize),
+                                    new Vector3(cellSizes[x, y].x * blockSize,
+                                                1,
+                                                cellSizes[x, y].y * blockSize));
+            }
+        }
+    }
+
     public void BuildLevel()
     {
         levelHeight = levelMap.height;
@@ -55,8 +78,8 @@ public class LevelBuilder : MonoBehaviour
             }
         }
 
-        floor.transform.localScale = new Vector3(levelWidth, 0.1f, levelHeight);
-        floor.transform.position = new Vector3(levelWidth / 2, 0, levelHeight / 2);
+        floor.transform.localScale = new Vector3(levelWidth * blockSize, 0.1f, levelHeight * blockSize);
+        floor.transform.position = new Vector3(levelWidth / 2 * blockSize, 0, levelHeight / 2 * blockSize);
 
         pixels = levelMap.GetPixels();
 
@@ -76,23 +99,24 @@ public class LevelBuilder : MonoBehaviour
                 switch (elementID)
                 {
                     case LevelElementID.Wall:
-                        GameObject wall = Instantiate(wallPrefab, new Vector3(x, 0, y), Quaternion.identity);
-                        Vector2 size = cellSizes[x, y];
-                        wall.transform.parent = wallsParent.transform;
-                        wall.transform.localScale = new Vector3(size.x, 1, size.y);
-                        wall.transform.position = new Vector3(x - size.x * 0.5f, 0, y - size.y * 0.5f);
+                        InitializeWall(y, x); 
                         break;
                     case LevelElementID.PowerUp:
                         // Add power-up
                         break;
                     case LevelElementID.Enemy:
-                        GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 0, y), Quaternion.identity);
-                        enemy.transform.parent = enemiesParent.transform;
+                        InitializeEnemy(y, x);
+                        walkableCells.Add(new Vector2(x, y));
                         break;
                     case LevelElementID.Player:
-                        GameManager.Player.SetPosition(new Vector3(x, 1, y));
+                        Vector3 spawnPoint = new Vector3(x * blockSize,
+                                                         1,
+                                                         y * blockSize);
+                        GameManager.Player.SetPosition(spawnPoint);
+                        walkableCells.Add(new Vector2(x, y));
                         break;
                     case LevelElementID.Path:
+                        walkableCells.Add(new Vector2(x, y));
                         break;
                     default:
                         throw new NotImplementedException();
@@ -101,13 +125,43 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
+    private void InitializeEnemy(int y, int x)
+    {
+        Vector3 spawnPoint = new Vector3(x * blockSize,
+                                         0,
+                                         y * blockSize);
+
+        Enemy enemy = Instantiate(enemyPrefab,
+                                       spawnPoint,
+                                       Quaternion.identity);
+
+        enemy.transform.parent = enemiesParent.transform;
+
+        enemy.SetInitialTarget(new Vector2(levelWidth + 1, levelHeight));
+    }
+
+    private void InitializeWall(int y, int x)
+    {
+        GameObject wall = Instantiate(wallPrefab, Vector3.zero, Quaternion.identity);
+        Vector2 size = cellSizes[x, y];
+
+        wall.transform.parent = wallsParent.transform;
+        wall.transform.localScale = new Vector3(size.x * blockSize,
+                                                1,
+                                                size.y * blockSize);
+        wall.transform.position = new Vector3((x - size.x * 0.5f) * blockSize + halfBlockSize,
+                                              0,
+                                              (y - size.y * 0.5f) * blockSize + halfBlockSize);
+    }
+
     private void GroupHorizontalCells()
     {
         for (int y = 0; y < levelHeight; y++)
         {
             for (int x = 1; x < levelWidth; x++)
             {
-                if (pixels[y * levelWidth + x] != pixels[y * levelWidth + x - 1])
+                if (levelElementIDByColor[pixels[y * levelWidth + x]] != LevelElementID.Wall
+                    || pixels[y * levelWidth + x] != pixels[y * levelWidth + x - 1])
                     continue;
                 cellSizes[x, y].x += cellSizes[x - 1, y].x;
                 cellSizes[x - 1, y] = Vector2.zero;
@@ -121,7 +175,8 @@ public class LevelBuilder : MonoBehaviour
         {
             for (int y = 1; y < levelHeight; y++)
             {
-                if (cellSizes[x, y - 1] == Vector2.zero
+                if (levelElementIDByColor[pixels[y * levelWidth + x]] != LevelElementID.Wall
+                    || cellSizes[x, y - 1] == Vector2.zero
                     || pixels[y * levelWidth + x] != pixels[(y - 1) * levelWidth + x]
                     || cellSizes[x, y - 1].x != cellSizes[x, y].x)
                 {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -5,6 +6,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LevelBuilder levelBuilder;
 
     public static GameManager Instance { get; private set; }
+
+    public List<Vector2> WalkableCells => levelBuilder.WalkableCells;
 
     private static Player m_player;
     public static Player Player
