@@ -42,6 +42,10 @@ public class Enemy : MonoBehaviour
             new Vector3(targetCell.x, 0, targetCell.y) * LevelBuilder.blockSize
             , Color.red);
 
+        Debug.DrawLine(transform.position,
+            new Vector3(nextCell.x, 0, nextCell.y) * LevelBuilder.blockSize
+                       , Color.green);
+
         switch (behaviourState)
         {
             case BehaviourState.Scatter:

@@ -54,12 +54,12 @@ public class LevelBuilder : MonoBehaviour
             for (int x = 0; x < levelWidth; x++)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(new Vector3((x - cellSizes[x, y].x * 0.5f) * blockSize + halfBlockSize,
+                Gizmos.DrawWireCube(new Vector3(x * blockSize + halfBlockSize,
                                                 0,
-                                                (y - cellSizes[x, y].y * 0.5f) * blockSize + halfBlockSize),
-                                    new Vector3(cellSizes[x, y].x * blockSize,
+                                                y * blockSize + halfBlockSize),
+                                    new Vector3(blockSize,
                                                 1,
-                                                cellSizes[x, y].y * blockSize));
+                                                blockSize));
             }
         }
     }
