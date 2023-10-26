@@ -58,7 +58,7 @@ public class LevelBuilder : MonoBehaviour
                                                 0,
                                                 y * blockSize + halfBlockSize),
                                     new Vector3(blockSize,
-                                                1,
+                                                0,
                                                 blockSize));
             }
         }
@@ -149,9 +149,9 @@ public class LevelBuilder : MonoBehaviour
         wall.transform.localScale = new Vector3(size.x * blockSize,
                                                 1,
                                                 size.y * blockSize);
-        wall.transform.position = new Vector3((x - size.x * 0.5f) * blockSize + halfBlockSize,
+        wall.transform.position = new Vector3((x - size.x * 0.5f) * blockSize + blockSize,
                                               0,
-                                              (y - size.y * 0.5f) * blockSize + halfBlockSize);
+                                              (y - size.y * 0.5f) * blockSize + blockSize);
     }
 
     private void GroupHorizontalCells()

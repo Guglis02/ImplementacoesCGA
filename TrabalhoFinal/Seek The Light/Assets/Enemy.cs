@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
+[SelectionBase]
 public class Enemy : MonoBehaviour
 {
     private enum BehaviourState
@@ -18,15 +22,15 @@ public class Enemy : MonoBehaviour
     private BehaviourState behaviourState = BehaviourState.Scatter;
     private Vector2 targetCell;
 
-    private Vector2 previousCell;
-    private Vector2 currentCell;
-    private Vector2 nextCell;
+    private Vector2Int previousCell;
+    private Vector2Int currentCell;
+    private Vector2Int nextCell;
 
     private void Awake()
     {
         m_characterController = GetComponent<CharacterController>();
-        previousCell = Vector2.zero;
-        nextCell = currentCell = new Vector2(Mathf.RoundToInt(transform.position.x / LevelBuilder.blockSize),
+        previousCell = Vector2Int.zero;
+        nextCell = currentCell = new Vector2Int(Mathf.RoundToInt(transform.position.x / LevelBuilder.blockSize),
                                              Mathf.RoundToInt(transform.position.z / LevelBuilder.blockSize));
     }
 
@@ -38,11 +42,11 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         //UpdateBehaviour();
-        Debug.DrawLine(transform.position, 
+        UnityEngine.Debug.DrawLine(transform.position, 
             new Vector3(targetCell.x, 0, targetCell.y) * LevelBuilder.blockSize
             , Color.red);
 
-        Debug.DrawLine(transform.position,
+        UnityEngine.Debug.DrawLine(transform.position,
             new Vector3(nextCell.x, 0, nextCell.y) * LevelBuilder.blockSize
                        , Color.green);
 
@@ -77,8 +81,7 @@ public class Enemy : MonoBehaviour
             m_characterController.Move(movementDirection * Time.fixedDeltaTime);
 
             previousCell = currentCell;
-            currentCell = new Vector2((int)((transform.position.x) / LevelBuilder.blockSize),
-                                      (int)((transform.position.z) / LevelBuilder.blockSize));
+            currentCell = Vector2Int.RoundToInt(new Vector2(((transform.position.x) / LevelBuilder.blockSize), ((transform.position.z) / LevelBuilder.blockSize)));
         }
     }
 
@@ -90,24 +93,24 @@ public class Enemy : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            Vector2 direction = Vector2.zero;
+            Vector2Int direction = Vector2Int.zero;
             switch (i)
             {
                 case 0:
-                    direction = Vector2.up;
+                    direction = Vector2Int.up;
                     break;
                 case 1:
-                    direction = Vector2.left;
+                    direction = Vector2Int.left;
                     break;
                 case 2:
-                    direction = Vector2.down;
+                    direction = Vector2Int.down;
                     break;
                 case 3:
-                    direction = Vector2.right;
+                    direction = Vector2Int.right;
                     break;
             }
 
-            Vector2 nextCellCandidate = currentCell + direction;
+            Vector2Int nextCellCandidate = currentCell + direction;
             if (nextCellCandidate.Equals(previousCell)
                 || !GameManager.Instance.WalkableCells.Contains(nextCellCandidate))
             {
