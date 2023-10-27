@@ -19,9 +19,11 @@ public class Enemy : MonoBehaviour
 
     private CharacterController m_characterController;
 
-    private BehaviourState behaviourState = BehaviourState.Scatter;
-    private Vector2 targetCell;
+    private Grid<LevelBuilder.LevelCell> m_grid;
 
+    private BehaviourState behaviourState = BehaviourState.Scatter;
+
+    private Vector2Int targetCell;
     private Vector2Int previousCell;
     private Vector2Int currentCell;
     private Vector2Int nextCell;
@@ -29,12 +31,12 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         m_characterController = GetComponent<CharacterController>();
+        m_grid = GameManager.Instance.LevelGrid;
         previousCell = Vector2Int.zero;
-        nextCell = currentCell = new Vector2Int(Mathf.RoundToInt(transform.position.x / LevelBuilder.blockSize),
-                                             Mathf.RoundToInt(transform.position.z / LevelBuilder.blockSize));
+        nextCell = currentCell = m_grid.PositionToCoord(transform.position);
     }
 
-    public void SetInitialTarget(Vector2 targetCell)
+    public void SetInitialTarget(Vector2Int targetCell)
     {
         this.targetCell = targetCell;
     }
@@ -42,13 +44,9 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         //UpdateBehaviour();
-        UnityEngine.Debug.DrawLine(transform.position, 
-            new Vector3(targetCell.x, 0, targetCell.y) * LevelBuilder.blockSize
-            , Color.red);
+        UnityEngine.Debug.DrawLine(transform.position, m_grid.CoordToPosition(targetCell), Color.red);
 
-        UnityEngine.Debug.DrawLine(transform.position,
-            new Vector3(nextCell.x, 0, nextCell.y) * LevelBuilder.blockSize
-                       , Color.green);
+        UnityEngine.Debug.DrawLine(transform.position, m_grid.CoordToPosition(nextCell), Color.green);
 
         switch (behaviourState)
         {
@@ -74,14 +72,12 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Vector3 movementDirection = new Vector3(
-                (nextCell.x - currentCell.x),
-                0,
-                (nextCell.y - currentCell.y));
-            m_characterController.Move(movementDirection * Time.fixedDeltaTime);
+            Vector2 dir = nextCell - currentCell;
+            Vector3 movementDir = new Vector3(dir.x, 0, dir.y);
+            m_characterController.Move(movementDir * Time.fixedDeltaTime);
 
             previousCell = currentCell;
-            currentCell = Vector2Int.RoundToInt(new Vector2(((transform.position.x) / LevelBuilder.blockSize), ((transform.position.z) / LevelBuilder.blockSize)));
+            currentCell = m_grid.PositionToCoord(transform.position);
         }
     }
 
@@ -112,7 +108,7 @@ public class Enemy : MonoBehaviour
 
             Vector2Int nextCellCandidate = currentCell + direction;
             if (nextCellCandidate.Equals(previousCell)
-                || !GameManager.Instance.WalkableCells.Contains(nextCellCandidate))
+                || !GameManager.Instance.LevelGrid[nextCellCandidate].isWalkable)
             {
                 continue;
             }
@@ -124,10 +120,5 @@ public class Enemy : MonoBehaviour
                 nextCell = nextCellCandidate;
             }
         }
-    }
-
-    private void UpdateBehaviour()
-    {
-        throw new NotImplementedException();
     }
 }

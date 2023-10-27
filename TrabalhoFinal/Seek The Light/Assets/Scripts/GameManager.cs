@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    public List<Vector2> WalkableCells => levelBuilder.WalkableCells;
+    public Grid<LevelBuilder.LevelCell> LevelGrid => levelBuilder.levelGrid;
 
     private static Player m_player;
     public static Player Player
