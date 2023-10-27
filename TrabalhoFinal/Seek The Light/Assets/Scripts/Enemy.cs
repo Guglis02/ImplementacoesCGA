@@ -1,16 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 [SelectionBase]
 public class Enemy : MonoBehaviour
 {
     private enum BehaviourState
     {
+        Random,
         Scatter,
         Chase,
         Frightened,
@@ -23,7 +19,8 @@ public class Enemy : MonoBehaviour
 
     private BehaviourState behaviourState = BehaviourState.Scatter;
 
-    private Vector2Int targetCell;
+    [SerializeField] private Vector2Int targetCell;
+
     private Vector2Int previousCell;
     private Vector2Int currentCell;
     private Vector2Int nextCell;
@@ -45,7 +42,6 @@ public class Enemy : MonoBehaviour
     {
         //UpdateBehaviour();
         UnityEngine.Debug.DrawLine(transform.position, m_grid.CoordToPosition(targetCell), Color.red);
-
         UnityEngine.Debug.DrawLine(transform.position, m_grid.CoordToPosition(nextCell), Color.green);
 
         switch (behaviourState)
@@ -64,19 +60,23 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    Vector3 movementDir = Vector3.zero;
     private void Scatter()
     {
-        if (currentCell.Equals(nextCell))
+        if (Vector3.Distance(transform.position, m_grid.CoordToPosition(nextCell)) <= 0.3f)
         {
             CalculateNextCell();
+            Vector2 dir = nextCell - currentCell;
+            movementDir = new Vector3(dir.x, 0, dir.y);
         }
         else
         {
-            Vector2 dir = nextCell - currentCell;
-            Vector3 movementDir = new Vector3(dir.x, 0, dir.y);
             m_characterController.Move(movementDir * Time.fixedDeltaTime);
 
-            previousCell = currentCell;
+            if (!currentCell.Equals(nextCell))
+            {
+                previousCell = currentCell;
+            }
             currentCell = m_grid.PositionToCoord(transform.position);
         }
     }
@@ -107,8 +107,15 @@ public class Enemy : MonoBehaviour
             }
 
             Vector2Int nextCellCandidate = currentCell + direction;
+
+            if (i == 0 && m_grid[nextCellCandidate].color == Color.cyan)
+            {
+                nextCell = nextCellCandidate;
+                break;
+            }
+
             if (nextCellCandidate.Equals(previousCell)
-                || !GameManager.Instance.LevelGrid[nextCellCandidate].isWalkable)
+                || !m_grid[nextCellCandidate].isWalkable)
             {
                 continue;
             }

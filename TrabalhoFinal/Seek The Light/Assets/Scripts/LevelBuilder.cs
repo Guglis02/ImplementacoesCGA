@@ -28,6 +28,7 @@ public class LevelBuilder : MonoBehaviour
     enum LevelElementID
     {
         Wall,
+        GhostHouse,
         PowerUp,
         Enemy,
         Player,
@@ -37,6 +38,7 @@ public class LevelBuilder : MonoBehaviour
     Dictionary<Color, LevelElementID> levelElementIDByColor = new()
     {
         { Color.black, LevelElementID.Wall },
+        { Color.magenta, LevelElementID.GhostHouse },
         { Color.blue, LevelElementID.PowerUp },
         { Color.red, LevelElementID.Enemy },
         { Color.green, LevelElementID.Player },
@@ -110,10 +112,8 @@ public class LevelBuilder : MonoBehaviour
                         Vector3 spawnPoint = levelGrid.CoordToPosition(x, y);
                         GameManager.Player.SetPosition(spawnPoint);
                         break;
-                    case LevelElementID.Path:
-                        break;
                     default:
-                        throw new NotImplementedException();
+                        break;
                 }
             }
         }

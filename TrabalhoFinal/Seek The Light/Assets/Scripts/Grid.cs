@@ -50,8 +50,8 @@ public class Grid<T>
         Vector3 relativePosition = position - GetOriginPosition();
         return new
         (
-            Mathf.RoundToInt(relativePosition.x / m_CellSize.x),
-            Mathf.RoundToInt(relativePosition.z / m_CellSize.y)
+            Mathf.FloorToInt(relativePosition.x / m_CellSize.x),
+            Mathf.FloorToInt(relativePosition.z / m_CellSize.y)
         );
     }
 
