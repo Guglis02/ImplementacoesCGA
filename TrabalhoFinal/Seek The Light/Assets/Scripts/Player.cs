@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool IsPoweredUp = false;
+
     public void SetPosition(Vector3 position)
     {
         var characterController = GetComponent<CharacterController>();

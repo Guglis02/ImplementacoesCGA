@@ -6,14 +6,22 @@ public class Enemy : MonoBehaviour
 {
     private enum BehaviourState
     {
-        Random,
         Scatter,
         Chase,
         Frightened,
         Dead
     }
 
+    private enum EnemyType
+    {
+        Blinky,
+        Pinky,
+        Inky,
+        Clyde
+    }
+
     private CharacterController m_characterController;
+    private Animator m_Animator;
 
     private Grid<LevelBuilder.LevelCell> m_grid;
 
@@ -28,6 +36,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         m_characterController = GetComponent<CharacterController>();
+        m_Animator = GetComponentInChildren<Animator>();
         m_grid = GameManager.Instance.LevelGrid;
         previousCell = Vector2Int.zero;
         nextCell = currentCell = m_grid.PositionToCoord(transform.position);
@@ -40,16 +49,20 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        //UpdateBehaviour();
-        UnityEngine.Debug.DrawLine(transform.position, m_grid.CoordToPosition(targetCell), Color.red);
-        UnityEngine.Debug.DrawLine(transform.position, m_grid.CoordToPosition(nextCell), Color.green);
+        UpdateBehaviour();
+        
+        Debug.DrawLine(transform.position, m_grid.CoordToPosition(targetCell), Color.red);
+        Debug.DrawLine(transform.position, m_grid.CoordToPosition(nextCell), Color.green);
 
         switch (behaviourState)
         {
             case BehaviourState.Scatter:
-                Scatter();
+                scatterTimer += Time.deltaTime;
+                Move();
                 break;
             case BehaviourState.Chase:
+                chaseTimer += Time.deltaTime;
+                Move();
                 break;
             case BehaviourState.Frightened:
                 break;
@@ -58,12 +71,30 @@ public class Enemy : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+    }
+
+    float scatterTimer = 0f;
+    float chaseTimer = 0f;
+
+    private void UpdateBehaviour()
+    {
+        if (scatterTimer >= 7f)
+        {
+            behaviourState = BehaviourState.Chase;
+            scatterTimer = 0;
+        } else if (chaseTimer >= 20f)
+        {
+            behaviourState = BehaviourState.Scatter;
+            chaseTimer = 0;
+        }
+
     }
 
     Vector3 movementDir = Vector3.zero;
-    private void Scatter()
+    private void Move()
     {
-        if (Vector3.Distance(transform.position, m_grid.CoordToPosition(nextCell)) <= 0.3f)
+        if (Vector3.Distance(transform.position, m_grid.CoordToPosition(nextCell)) <= 3.5f)
         {
             CalculateNextCell();
             Vector2 dir = nextCell - currentCell;
