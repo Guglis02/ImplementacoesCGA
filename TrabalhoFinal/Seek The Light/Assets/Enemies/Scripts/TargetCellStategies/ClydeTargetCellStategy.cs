@@ -8,15 +8,12 @@ public class ClydeTargetCellStategy : TargetCellStategy
         m_scatterTargetCell = new Vector2Int(0, -1);
     }
 
-    public override Vector2Int CalculateChaseTargetCell()
+    public override Vector2Int CalculateChaseTargetCell(Vector2Int playerCell, Vector2Int enemyCell)
     {
-        Vector2Int playerCell = GameManager.Instance.LevelGrid.PositionToCoord(GameManager.PlayerPosition);
-
-        //TODO: Fazer funcionar igual no jogo original, levando em consideração a posição do Clyde.
-        //if (Vector2Int.Distance(playerCell, clydeCell) < 8)
-        //{
-        //    return m_scatterTargetCell;
-        //}
+        if (Vector2Int.Distance(playerCell, enemyCell) < 8)
+        { 
+            return m_scatterTargetCell;
+        }
 
         return playerCell;
     }

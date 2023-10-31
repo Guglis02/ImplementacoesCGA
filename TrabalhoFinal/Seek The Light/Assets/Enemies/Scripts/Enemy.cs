@@ -51,9 +51,7 @@ public class Enemy : MonoBehaviour
                 Move();
                 break;
             case BehaviourState.Chase:
-                targetCell = targetCellStategy.CalculateChaseTargetCell();
-                chaseTimer += Time.deltaTime;
-                Move();
+                Chase();
                 break;
             case BehaviourState.Frightened:
                 break;
@@ -62,7 +60,15 @@ public class Enemy : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
 
+    private void Chase()
+    {
+        Vector2Int playerCell = m_grid.PositionToCoord(GameManager.PlayerPosition);
+        targetCell = targetCellStategy.CalculateChaseTargetCell(playerCell, currentCell);
+
+        chaseTimer += Time.deltaTime;
+        Move();
     }
 
     float scatterTimer = 0f;

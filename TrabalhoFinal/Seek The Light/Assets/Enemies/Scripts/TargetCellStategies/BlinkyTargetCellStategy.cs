@@ -8,8 +8,8 @@ public class BlinkyTargetCellStategy : TargetCellStategy
         m_scatterTargetCell = new Vector2Int(gridWidth - 1, gridHeight + 2);
     }
 
-    public override Vector2Int CalculateChaseTargetCell()
+    public override Vector2Int CalculateChaseTargetCell(Vector2Int playerCell, Vector2Int enemyCell)
     {
-        return GameManager.Instance.LevelGrid.PositionToCoord(GameManager.PlayerPosition);
+        return playerCell;
     }
 }
