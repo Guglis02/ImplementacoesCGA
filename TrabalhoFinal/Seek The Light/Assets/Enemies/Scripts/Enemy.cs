@@ -12,22 +12,15 @@ public class Enemy : MonoBehaviour
         Dead
     }
 
-    private enum EnemyType
-    {
-        Blinky,
-        Pinky,
-        Inky,
-        Clyde
-    }
-
     private CharacterController m_characterController;
     private Animator m_Animator;
 
     private Grid<LevelBuilder.LevelCell> m_grid;
+    [SerializeField] private TargetCellStategy targetCellStategy;
 
     private BehaviourState behaviourState = BehaviourState.Scatter;
 
-    [SerializeField] private Vector2Int targetCell;
+    private Vector2Int targetCell;
 
     private Vector2Int previousCell;
     private Vector2Int currentCell;
@@ -40,11 +33,7 @@ public class Enemy : MonoBehaviour
         m_grid = GameManager.Instance.LevelGrid;
         previousCell = Vector2Int.zero;
         nextCell = currentCell = m_grid.PositionToCoord(transform.position);
-    }
-
-    public void SetInitialTarget(Vector2Int targetCell)
-    {
-        this.targetCell = targetCell;
+        targetCellStategy.PlaceScatterTargetCell(m_grid.Width, m_grid.Height);
     }
 
     private void Update()
@@ -57,10 +46,12 @@ public class Enemy : MonoBehaviour
         switch (behaviourState)
         {
             case BehaviourState.Scatter:
+                targetCell = targetCellStategy.GetScatterTargetCell();
                 scatterTimer += Time.deltaTime;
                 Move();
                 break;
             case BehaviourState.Chase:
+                targetCell = targetCellStategy.CalculateChaseTargetCell();
                 chaseTimer += Time.deltaTime;
                 Move();
                 break;
@@ -82,19 +73,20 @@ public class Enemy : MonoBehaviour
         if (scatterTimer >= 7f)
         {
             behaviourState = BehaviourState.Chase;
+            m_Animator.SetTrigger("Chase");
             scatterTimer = 0;
         } else if (chaseTimer >= 20f)
         {
             behaviourState = BehaviourState.Scatter;
+            m_Animator.SetTrigger("Scatter");
             chaseTimer = 0;
         }
-
     }
 
     Vector3 movementDir = Vector3.zero;
     private void Move()
     {
-        if (Vector3.Distance(transform.position, m_grid.CoordToPosition(nextCell)) <= 3.5f)
+        if (Vector3.Distance(transform.position, m_grid.CoordToPosition(nextCell)) <= 0.5f)
         {
             CalculateNextCell();
             Vector2 dir = nextCell - currentCell;
@@ -102,7 +94,10 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            m_characterController.Move(movementDir * Time.fixedDeltaTime);
+            m_characterController.Move(movementDir * 0.5f * Time.fixedDeltaTime); 
+            
+            Quaternion rotation = Quaternion.LookRotation(-movementDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime);
 
             if (!currentCell.Equals(nextCell))
             {

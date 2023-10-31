@@ -13,9 +13,10 @@ public class LevelBuilder : MonoBehaviour
     [SerializeField] private GameObject wallPrefab;
 
     [SerializeField] private GameObject enemiesParent;
-    [SerializeField] private Enemy enemyPrefab;
+    [SerializeField] private List<Enemy> enemiesPrefabs;
+    private int enemyCounter = 0;
 
-    public static int cellSize = 4;
+    public static int s_CellSize = 4;
 
     private LevelCell[,] m_LevelGrid;
     public Grid<LevelCell> levelGrid;
@@ -28,7 +29,6 @@ public class LevelBuilder : MonoBehaviour
     enum LevelElementID
     {
         Wall,
-        GhostHouse,
         PowerUp,
         Enemy,
         Player,
@@ -38,7 +38,6 @@ public class LevelBuilder : MonoBehaviour
     Dictionary<Color, LevelElementID> levelElementIDByColor = new()
     {
         { Color.black, LevelElementID.Wall },
-        { Color.magenta, LevelElementID.GhostHouse },
         { Color.blue, LevelElementID.PowerUp },
         { Color.red, LevelElementID.Enemy },
         { Color.green, LevelElementID.Player },
@@ -78,8 +77,8 @@ public class LevelBuilder : MonoBehaviour
             }
         }
 
-        Vector3 center = new Vector3(levelWidth / 2 * cellSize, 0, levelHeight / 2 * cellSize);
-        levelGrid = new Grid<LevelCell>(m_LevelGrid, center, new Vector2(cellSize, cellSize));
+        Vector3 center = new Vector3(levelWidth / 2 * s_CellSize, 0, levelHeight / 2 * s_CellSize);
+        levelGrid = new Grid<LevelCell>(m_LevelGrid, center, new Vector2(s_CellSize, s_CellSize));
 
         floor.transform.localScale = levelGrid.GridTotalSize();
         floor.transform.position = center;
@@ -123,10 +122,13 @@ public class LevelBuilder : MonoBehaviour
     {
         Vector3 spawnPoint = levelGrid.CoordToPosition(x, y);
 
-        Enemy enemy = Instantiate(enemyPrefab, spawnPoint, Quaternion.identity);
+        Enemy enemy = Instantiate(enemiesPrefabs[enemyCounter % enemiesPrefabs.Count],
+                                  spawnPoint,
+                                  Quaternion.identity);
+
+        enemyCounter++;
 
         enemy.transform.parent = enemiesParent.transform;
-        enemy.SetInitialTarget(new Vector2Int(levelWidth + 1, levelHeight));
     }
 
     private void InitializeWall(int y, int x)
@@ -135,10 +137,7 @@ public class LevelBuilder : MonoBehaviour
         Vector2Int size = levelGrid[x, y].stackCount;
 
         wall.transform.parent = wallsParent.transform;
-        wall.transform.localScale = new Vector3(size.x * cellSize, 1, size.y * cellSize);
-        //wall.transform.position = new Vector3((x - size.x * 0.5f) * cellSize + cellSize,
-        //                                      0,
-        //                                      (y - size.y * 0.5f) * cellSize + cellSize);
+        wall.transform.localScale = new Vector3(size.x * s_CellSize, 1, size.y * s_CellSize);
         wall.transform.position = levelGrid.CoordToPosition(x, y);
     }
 
@@ -192,12 +191,12 @@ public class LevelBuilder : MonoBehaviour
             for (int x = 0; x < levelGrid.Width; x++)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(new Vector3(x * cellSize + cellSize * 0.5f,
+                Gizmos.DrawWireCube(new Vector3(x * s_CellSize + s_CellSize * 0.5f,
                                                 0,
-                                                y * cellSize + cellSize * 0.5f),
-                                    new Vector3(cellSize,
+                                                y * s_CellSize + s_CellSize * 0.5f),
+                                    new Vector3(s_CellSize,
                                                 0,
-                                                cellSize));
+                                                s_CellSize));
             }
         }
     }
