@@ -154,17 +154,14 @@ public class LevelBuilder : MonoBehaviour
         {
             for (int x = 1; x < levelGrid.Width; x++)
             {
-                LevelCell current = levelGrid[x, y];
-                LevelCell previous = levelGrid[x - 1, y];
+                ref LevelCell current = ref levelGrid[x, y];
+                ref LevelCell previous = ref levelGrid[x - 1, y];
 
                 if (current.isWalkable || current.color != previous.color)
                     continue;
 
                 current.stackCount.x += previous.stackCount.x;
                 previous.stackCount = Vector2Int.zero;
-
-                levelGrid[x, y] = current;
-                levelGrid[x - 1, y] = previous;
             }
         }
     }
@@ -175,8 +172,8 @@ public class LevelBuilder : MonoBehaviour
         {
             for (int y = 1; y < levelGrid.Height; y++)
             {
-                LevelCell current = levelGrid[x, y];
-                LevelCell previous = levelGrid[x, y - 1];
+                ref LevelCell current = ref levelGrid[x, y];
+                ref LevelCell previous = ref levelGrid[x, y - 1];
 
                 if (current.isWalkable
                     || previous.stackCount == Vector2.zero
@@ -188,9 +185,6 @@ public class LevelBuilder : MonoBehaviour
 
                 current.stackCount.y += previous.stackCount.y;
                 previous.stackCount = Vector2Int.zero;
-
-                levelGrid[x, y] = current;
-                levelGrid[x, y - 1] = previous;
             }
         }
     }

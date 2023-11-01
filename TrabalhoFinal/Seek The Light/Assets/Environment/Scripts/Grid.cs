@@ -12,29 +12,19 @@ public class Grid<T>
     public int Width => m_Cells.GetLength(0);
     public int Height => m_Cells.GetLength(1);
 
-    public T this[Vector2Int coord]
+    public ref T this[Vector2Int coord]
     {
         get
         {
-            return m_Cells[coord.x, coord.y];
-        }
-
-        set
-        {
-            m_Cells[coord.x, coord.y] = value;
+            return ref m_Cells[coord.x, coord.y];
         }
     }
 
-    public T this[int x, int y]
+    public ref T this[int x, int y]
     {
         get
         {
-            return this[new Vector2Int(x, y)];
-        }
-
-        set
-        {
-            this[new Vector2Int(x, y)] = value;
+            return ref this[new Vector2Int(x, y)];
         }
     }
 
