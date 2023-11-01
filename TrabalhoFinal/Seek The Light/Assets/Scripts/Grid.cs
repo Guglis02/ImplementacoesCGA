@@ -67,7 +67,7 @@ public class Grid<T>
 
     public Vector3 GridTotalSize()
     {
-        return new(Width * m_CellSize.x, 0, Height * m_CellSize.y);
+        return new(Width * m_CellSize.x, 0.1f, Height * m_CellSize.y);
     }
 
     public Vector3 GetOriginPosition()

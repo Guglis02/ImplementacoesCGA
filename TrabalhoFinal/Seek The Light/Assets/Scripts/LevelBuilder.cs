@@ -7,10 +7,11 @@ public class LevelBuilder : MonoBehaviour
 
     [SerializeField] private Texture2D levelMap;
 
-    [SerializeField] private GameObject floor;
-
     [SerializeField] private GameObject wallsParent;
     [SerializeField] private GameObject wallPrefab;
+
+    [SerializeField] private GameObject floor;
+    [SerializeField] private GameObject water;
 
     [SerializeField] private GameObject enemiesParent;
     [SerializeField] private List<Enemy> enemiesPrefabs;
@@ -80,9 +81,13 @@ public class LevelBuilder : MonoBehaviour
         Vector3 center = new Vector3(levelWidth / 2 * s_CellSize, 0, levelHeight / 2 * s_CellSize);
         levelGrid = new Grid<LevelCell>(m_LevelGrid, center, new Vector2(s_CellSize, s_CellSize));
 
-        floor.transform.localScale = levelGrid.GridTotalSize();
+        Vector3 levelSize = levelGrid.GridTotalSize();
+        floor.transform.localScale = levelSize;
         floor.transform.position = center;
-                
+
+        water.transform.localScale = levelSize;
+        water.transform.position = new Vector3(center.x, water.transform.position.y, center.z);
+
         GroupHorizontalCells();
         GroupVerticalCells();
         
@@ -137,8 +142,10 @@ public class LevelBuilder : MonoBehaviour
         Vector2Int size = levelGrid[x, y].stackCount;
 
         wall.transform.parent = wallsParent.transform;
-        wall.transform.localScale = new Vector3(size.x * s_CellSize, 1, size.y * s_CellSize);
-        wall.transform.position = levelGrid.CoordToPosition(x, y);
+        Vector3 scale = new Vector3(size.x * s_CellSize, 1, size.y * s_CellSize);
+        wall.transform.localScale = scale;
+        Vector3 position = levelGrid.CoordToPosition(x - size.x / 2f + 0.5f, y - size.y / 2f + 0.5f);
+        wall.transform.position = position;
     }
 
     private void GroupHorizontalCells()
@@ -155,6 +162,9 @@ public class LevelBuilder : MonoBehaviour
 
                 current.stackCount.x += previous.stackCount.x;
                 previous.stackCount = Vector2Int.zero;
+
+                levelGrid[x, y] = current;
+                levelGrid[x - 1, y] = previous;
             }
         }
     }
@@ -178,9 +188,13 @@ public class LevelBuilder : MonoBehaviour
 
                 current.stackCount.y += previous.stackCount.y;
                 previous.stackCount = Vector2Int.zero;
+
+                levelGrid[x, y] = current;
+                levelGrid[x, y - 1] = previous;
             }
         }
     }
+
     private void OnDrawGizmos()
     {
         if (levelGrid == null)
