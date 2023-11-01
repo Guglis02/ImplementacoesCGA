@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
         Dead
     }
 
+    private const float enemyMoveSpeed = 1.5f;
     private CharacterController m_characterController;
     private Animator m_Animator;
 
@@ -100,10 +101,10 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            m_characterController.Move(movementDir * 0.5f * Time.fixedDeltaTime); 
+            m_characterController.Move(movementDir * enemyMoveSpeed * Time.deltaTime); 
             
             Quaternion rotation = Quaternion.LookRotation(-movementDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 5f * Time.deltaTime);
 
             if (!currentCell.Equals(nextCell))
             {
