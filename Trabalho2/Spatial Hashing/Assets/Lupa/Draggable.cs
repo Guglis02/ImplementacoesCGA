@@ -4,18 +4,19 @@ using UnityEngine.InputSystem;
 public class Draggable : MonoBehaviour
 {
     private Vector2 mousePos;
-    public bool isDragging = false;
+    private bool isDragging = false;
 
-    public GameObject indicator;
+    [SerializeField] private GameObject indicator;
 
     public float Radius => indicator.transform.localScale.x / 2;
 
-    public void Update()
+    public void OnMouseClick(InputAction.CallbackContext value)
     {
-        Vector3 mousePosWorld = Camera.main.ScreenToWorldPoint(mousePos);
-        if (Input.GetMouseButtonDown(0) && !(Vector2.Distance(mousePosWorld, transform.position) < Radius))
+        Vector2 mousePosWorld = Camera.main.ScreenToWorldPoint(mousePos);
+        if (value.ReadValueAsButton() && Vector2.Distance(mousePosWorld, indicator.transform.position) < Radius)
         {
             isDragging = true;
+            return;
         }
 
         isDragging = false;
