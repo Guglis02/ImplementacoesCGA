@@ -135,7 +135,7 @@
 	<stdio.h>
 	<math.h>
 
-1700609098 source:e:\github\implementacoescga\trabalho4\src\main.cpp
+1700620763 source:e:\github\implementacoescga\trabalho4\src\main.cpp
 	<GL/glut.h>
 	<GL/freeglut_ext.h>
 	<math.h>
@@ -145,6 +145,7 @@
 	"Slider.h"
 	"MouseHandler.h"
 	"Fourier.h"
+	"Points.h"
 
 1700608922 e:\github\implementacoescga\trabalho4\src\slider.h
 	"./gl_canvas2d.h"
@@ -153,8 +154,12 @@
 
 1683506297 e:\github\implementacoescga\trabalho4\src\mousehandler.h
 
-1700609436 e:\github\implementacoescga\trabalho4\src\fourier.h
+1700621496 e:\github\implementacoescga\trabalho4\src\fourier.h
 	"./gl_canvas2d.h"
 	<math.h>
+	<vector>
+	"Points.h"
+
+1700618743 e:\github\implementacoescga\trabalho4\src\points.h
 	<vector>
 
