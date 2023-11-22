@@ -15,6 +15,7 @@ Gustavo Machado de Freitas
 #include "Slider.h"
 #include "MouseHandler.h"
 #include "Fourier.h"
+#include "Points.h"
 
 using namespace std;
 
@@ -28,8 +29,17 @@ void render()
 {
     CV::clear(0, 0, 0);
     slider->Render();
-    fourier->Render(screenWidth/3, screenHeight >> 1, slider->GetValue() * 10);
-    CV::translate(screenWidth >> 1, screenHeight >> 1);
+    CV::translate(screenWidth / 3, screenHeight >> 1);
+    fourier->Render();
+
+    CV::color(1, 1, 1);
+    CV::line(0, 0, points[0], points[1]);
+
+    for (int i = 0; i < points.size(); i += 4)
+    {
+        CV::color(1, 1, 1);
+        CV::line(points[i], points[i + 1], points[i + 2], points[i + 3]);
+    }
 }
 
 void mouse(int button, int state, int wheel, int direction, int x, int y)
