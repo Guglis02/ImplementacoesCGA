@@ -30,4 +30,9 @@ public class GameManager : MonoBehaviour
         Instance = this;
         levelBuilder.BuildLevel();
     }
+
+    private void Update()
+    {
+        Shader.SetGlobalVector("_AgentPos", PlayerPosition);
+    }
 }
