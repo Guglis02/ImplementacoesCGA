@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public Grid<LevelBuilder.LevelCell> LevelGrid => levelBuilder.levelGrid;
+    public Vector3 LevelSize => levelBuilder.LevelSize;
+    public Vector3 LevelCenter => levelBuilder.LevelCenter;
 
     private static Player m_player;
     public static Player Player

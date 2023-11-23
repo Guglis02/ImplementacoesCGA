@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelBuilder : MonoBehaviour
@@ -26,7 +27,10 @@ public class LevelBuilder : MonoBehaviour
 
     private int levelWidth;
     private int levelHeight;
-            
+    
+    public Vector3 LevelSize => levelGrid.IsUnityNull() ? Vector3.one : levelGrid.GridTotalSize();
+    public Vector3 LevelCenter => new Vector3(levelWidth / 2 * s_CellSize, 0, levelHeight / 2 * s_CellSize);
+
     enum LevelElementID
     {
         Wall,
@@ -78,15 +82,13 @@ public class LevelBuilder : MonoBehaviour
             }
         }
 
-        Vector3 center = new Vector3(levelWidth / 2 * s_CellSize, 0, levelHeight / 2 * s_CellSize);
-        levelGrid = new Grid<LevelCell>(m_LevelGrid, center, new Vector2(s_CellSize, s_CellSize));
+        levelGrid = new Grid<LevelCell>(m_LevelGrid, LevelCenter, new Vector2(s_CellSize, s_CellSize));
 
-        Vector3 levelSize = levelGrid.GridTotalSize();
-        floor.transform.localScale = levelSize;
-        floor.transform.position = center;
+        floor.transform.localScale = LevelSize;
+        floor.transform.position = LevelCenter;
 
-        water.transform.localScale = levelSize;
-        water.transform.position = new Vector3(center.x, water.transform.position.y, center.z);
+        water.transform.localScale = LevelSize;
+        water.transform.position = new Vector3(LevelCenter.x, water.transform.position.y, LevelCenter.z);
 
         GroupHorizontalCells();
         GroupVerticalCells();
