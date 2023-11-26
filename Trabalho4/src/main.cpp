@@ -19,7 +19,7 @@ Gustavo Machado de Freitas
 
 using namespace std;
 
-int screenWidth = 500, screenHeight = 500;
+int screenWidth = 1500, screenHeight = 800;
 
 MouseHandler* mouseHandler = NULL;
 Slider* slider = NULL;
@@ -28,18 +28,7 @@ Fourier* fourier = NULL;
 void render()
 {
     CV::clear(0, 0, 0);
-    slider->Render();
-    CV::translate(screenWidth / 3, screenHeight >> 1);
-    fourier->Render();
-
-    CV::color(1, 1, 1);
-    CV::line(0, 0, points[0], points[1]);
-
-    for (int i = 0; i < points.size(); i += 4)
-    {
-        CV::color(1, 1, 1);
-        CV::line(points[i], points[i + 1], points[i + 2], points[i + 3]);
-    }
+    fourier->Render(screenWidth, screenHeight);
 }
 
 void mouse(int button, int state, int wheel, int direction, int x, int y)
