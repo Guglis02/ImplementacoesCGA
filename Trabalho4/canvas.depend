@@ -131,20 +131,20 @@
 1683506297 e:\github\implementacoescga\trabalho4\include\gl\freeglut_ext.h
 	<stdarg.h>
 
-1700607508 e:\github\implementacoescga\trabalho4\src\vector2.h
+1701031242 e:\github\implementacoescga\trabalho4\src\vector2.h
 	<stdio.h>
 	<math.h>
 
-1701014233 source:e:\github\implementacoescga\trabalho4\src\main.cpp
+1701031455 source:e:\github\implementacoescga\trabalho4\src\main.cpp
 	<GL/glut.h>
 	<GL/freeglut_ext.h>
 	<math.h>
 	<stdio.h>
 	<stdlib.h>
 	"gl_canvas2d.h"
-	"Slider.h"
 	"MouseHandler.h"
 	"Fourier.h"
+	"ComplexFourier.h"
 	"Points.h"
 
 1700608922 e:\github\implementacoescga\trabalho4\src\slider.h
@@ -154,12 +154,20 @@
 
 1683506297 e:\github\implementacoescga\trabalho4\src\mousehandler.h
 
-1701027147 e:\github\implementacoescga\trabalho4\src\fourier.h
+1701031375 e:\github\implementacoescga\trabalho4\src\fourier.h
 	"./gl_canvas2d.h"
 	<math.h>
 	<vector>
-	"Points.h"
+	<algorithm>
 
-1701011623 e:\github\implementacoescga\trabalho4\src\points.h
+1701029917 e:\github\implementacoescga\trabalho4\src\points.h
 	<vector>
+	"gl_canvas2d.h"
+
+1701031541 e:\github\implementacoescga\trabalho4\src\complexfourier.h
+	"./Fourier.h"
+	"./gl_canvas2d.h"
+	<math.h>
+	<vector>
+	<algorithm>
 

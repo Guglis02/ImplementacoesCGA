@@ -2,8 +2,99 @@
 #define POINTS_H_INCLUDED
 
 #include <vector>
+#include "gl_canvas2d.h"
 
-std::vector<double> points = {
+using namespace std;
+
+vector<double> generateGearPoints()
+{
+    vector<double> points;
+    
+    float ang = 0;
+    float raio1 = 100;
+    float raio2 = 120;
+    float raio = raio1;
+    float passo = (2.0 * PI)/100;
+
+    for(ang = 0; ang <= 2 * PI; ang += passo)
+    {
+        float x1 = raio * cos(ang);
+        float y1 = raio * sin(ang);
+
+        ang += passo;
+
+        float x2 = raio * cos(ang);
+        float y2 = raio * sin(ang);
+        
+        points.push_back(x1);
+        points.push_back(y1);
+        points.push_back(x2);
+        points.push_back(y2);
+
+        if(raio == raio1)
+            raio = raio2;
+        else
+            raio = raio1;
+    }
+
+    return points;
+}
+
+vector<double> generateSpiralPoints()
+{
+    vector<double> points;
+    float ang = 0;
+    float raio = 0;
+    for(int i = 0; i < 1000; i++)
+    {
+        float x = raio * cos(ang);
+        float y = raio * sin(ang);
+        points.push_back(x);
+        points.push_back(y);
+        raio += 0.1;
+        ang -= 0.1;
+    }
+    return points;
+}
+
+vector<double> generateWheelPoints(int edges) {
+    vector<double> points;
+    double radius = 100;
+    for (int i = 0; i < edges; ++i) {
+        for (double theta = 0; theta < 2 * PI; theta += PI / edges) {
+            double x = radius * cos(i * 2 * PI / edges + theta / 2);
+            double y = radius * sin(i * 2 * PI / edges + theta / 2);
+            points.push_back(x);
+            points.push_back(y);
+        }
+    }
+    return points;
+}
+
+vector<double> generateSquarePoints(int pointsPerSide) {
+    vector<double> points;
+    double sideLength = 200;
+    for (int i = 0; i < pointsPerSide; ++i) {
+        // Top side
+        points.push_back(-100 + i * sideLength / pointsPerSide);
+        points.push_back(100);
+
+        // Right side
+        points.push_back(100);
+        points.push_back(100 - i * sideLength / pointsPerSide);
+
+        // Bottom side
+        points.push_back(100 - i * sideLength / pointsPerSide);
+        points.push_back(-100);
+
+        // Left side
+        points.push_back(-100);
+        points.push_back(-100 + i * sideLength / pointsPerSide);
+    }
+    return points;
+}
+
+vector<double> codingTrainPoints = {
   -75.23920093800275, -9.276916512631997,
   -73.99534065831229, -9.582732689485699,
   -72.74106439694725, -9.89162195029445,
@@ -5005,5 +5096,17 @@ std::vector<double> points = {
   -73.31673575860373, -7.553891527027265,
   -74.2779609610822, -8.41540401982963
 };
+
+vector<double> getCodingTrainPoints()
+{    
+    vector<double> points;
+    for (int i = 0; i < codingTrainPoints.size(); i += 4)
+    {
+        points.push_back(codingTrainPoints[i]);
+        points.push_back(codingTrainPoints[i + 1]);
+    }
+
+    return points;
+}
 
 #endif //POINTS_H_INCLUDED
