@@ -17,7 +17,7 @@ class Fourier
 public:
     Fourier()
     {
-        for (int i = 0; i < points.size(); i += 2)
+        for (int i = 0; i < points.size() - 1; i += 8)
         {
             xValues.push_back(points[i]);
             yValues.push_back(points[i + 1]);
@@ -29,10 +29,10 @@ public:
         sortFourierVectors();
     }
 
-    void Render()
+    void Render(int screenWidth, int screenHeight)
     {
-        Vector2 vx = epiCycles(-300, 0, 0, fourierX);
-        Vector2 vy = epiCycles(0, 300, PI / 2, fourierY);
+        Vector2 vx = epiCycles(screenWidth >> 1, 100, 0, fourierX);
+        Vector2 vy = epiCycles(300, screenHeight >> 1, PI * 0.5, fourierY);
         Vector2 v = Vector2(vx.x, vy.y);
 
         wave.insert(wave.begin(), v);
@@ -40,17 +40,29 @@ public:
         CV::line(vy.x, vy.y, v.x, v.y);
 
         CV::color(1, 1, 1);
-        for (int i = 0; i < wave.size() - 1; i += 2)
+        for (int i = 0; i < wave.size() - 1; i++)
         {
             CV::line(wave[i].x, wave[i].y, wave[i + 1].x, wave[i + 1].y);
         }
 
-        time += 0.01;
+        time += PI_2 / fourierY.size();
 
         if (time > PI * 2)
         {
             time = 0;
             wave.clear();
+        }
+        
+        // Demonstração do desenho
+        Vector2 offset = Vector2((screenWidth >> 1) + 500, screenHeight >> 1);
+
+        for (int i = 0; i < xValues.size() - 1; i += 1)
+        {
+            CV::color(1, 1, 1);
+            CV::line(xValues[i] + offset.x,
+                    yValues[i] + offset.y,
+                    xValues[i + 1] + offset.x,
+                    yValues[i + 1] + offset.y);
         }
     }
 private:
@@ -68,6 +80,15 @@ private:
         double freq;
         double amp;
         double phase;
+
+        WavePoint(double re, double im, double freq, double amp, double phase)
+        {
+            this->re = re;
+            this->im = im;
+            this->freq = freq;
+            this->amp = amp;
+            this->phase = phase;
+        }
     };
 
     vector<WavePoint> fourierX;
@@ -85,7 +106,7 @@ private:
 
             for (int n = 0; n < N; n++)
             {
-                double phi = (2 * PI * k * n) / N;
+                double phi = (PI_2 * k * n) / N;
                 re += v[n] * cos(phi);
                 im -= v[n] * sin(phi);
             }
@@ -97,11 +118,7 @@ private:
             double amp = sqrt(re * re + im * im);
             double phase = atan2(im, re);
 
-            WavePoint wavePoint;
-            wavePoint.re = re;
-            wavePoint.im = im;
-            wavePoint.freq = freq;
-            wavePoint.amp = amp;
+            WavePoint wavePoint = WavePoint(re, im, freq, amp, phase);
 
             X.push_back(wavePoint);
         }
@@ -135,14 +152,14 @@ private:
     }
 
     void sortFourierVectors() {
-    std::sort(fourierX.begin(), fourierX.end(), [](const WavePoint& a, const WavePoint& b) {
-        return b.amp < a.amp;
-    });
+        std::sort(fourierX.begin(), fourierX.end(), [](const WavePoint& a, const WavePoint& b) {
+            return b.amp < a.amp;
+        });
 
-    std::sort(fourierY.begin(), fourierY.end(), [](const WavePoint& a, const WavePoint& b) {
-        return b.amp < a.amp;
-    });
-}
+        std::sort(fourierY.begin(), fourierY.end(), [](const WavePoint& a, const WavePoint& b) {
+            return b.amp < a.amp;
+        });
+    }
 };
 
 #endif // FOURIER_H_INCLUDED
