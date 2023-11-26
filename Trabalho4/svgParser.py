@@ -12,7 +12,7 @@ for path in paths:
             points.append((segment.start.real, segment.start.imag))
             points.append((segment.end.real, segment.end.imag))
             
-with open('src/Points.h', 'w+') as f:
+with open('src/teste.h', 'w+') as f:
     f.write('#ifndef POINTS_H_INCLUDED\n'
             '#define POINTS_H_INCLUDED\n'
             '\n'

@@ -4,8 +4,7 @@
 #include "./gl_canvas2d.h"
 #include <math.h>
 #include <vector>
-
-#include "Points.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -15,9 +14,14 @@ Classe responsavel pela logica das transformacoes de fourier.
 class Fourier
 {
 public:
-    Fourier()
+    Fourier(){}
+
+    void Setup(vector<double> points)
     {
-        for (int i = 0; i < points.size() - 1; i += 8)
+        size_t size = points.size();
+        int step = size / (size * 0.5);
+
+        for (int i = 0; i < points.size() - 1; i += step)
         {
             xValues.push_back(points[i]);
             yValues.push_back(points[i + 1]);
@@ -26,13 +30,16 @@ public:
         fourierX = discreteFourierTransform(xValues);
         fourierY = discreteFourierTransform(yValues);
 
+        xRestoredValues = invertedDisceteFourierTransform(fourierX);
+        yRestoredValues = invertedDisceteFourierTransform(fourierY);
+
         sortFourierVectors();
     }
 
     void Render(int screenWidth, int screenHeight)
     {
-        Vector2 vx = epiCycles(screenWidth >> 1, 100, 0, fourierX);
-        Vector2 vy = epiCycles(300, screenHeight >> 1, PI * 0.5, fourierY);
+        Vector2 vx = epiCycles(400, 100, 0, fourierX);
+        Vector2 vy = epiCycles(100, screenHeight >> 1, PI * 0.5, fourierY);
         Vector2 v = Vector2(vx.x, vy.y);
 
         wave.insert(wave.begin(), v);
@@ -53,24 +60,22 @@ public:
             wave.clear();
         }
         
-        // Demonstração do desenho
-        Vector2 offset = Vector2((screenWidth >> 1) + 500, screenHeight >> 1);
+        // Sinal original
+        Vector2 offset = Vector2((screenWidth >> 1) + 500, 100);
+        drawSignal(xValues, yValues, offset);
 
-        for (int i = 0; i < xValues.size() - 1; i += 1)
-        {
-            CV::color(1, 1, 1);
-            CV::line(xValues[i] + offset.x,
-                    yValues[i] + offset.y,
-                    xValues[i + 1] + offset.x,
-                    yValues[i + 1] + offset.y);
-        }
+        // Sinal reconstruído
+        offset = Vector2((screenWidth >> 1) + 500, screenHeight >> 1);
+        drawSignal(xValues, yValues, offset);        
     }
-private:
+protected:
     float time = 0;
     int oldTimeSinceStart = 0;
     vector<Vector2> wave;
     vector<double> xValues;
     vector<double> yValues;
+    vector<double> xRestoredValues;
+    vector<double> yRestoredValues;
     float x, y, oldX, oldY, n, radius;
 
     struct WavePoint
@@ -126,6 +131,27 @@ private:
         return X;
     }
 
+    vector<double> invertedDisceteFourierTransform(vector<WavePoint> fourier)
+    {
+        vector<double> x;
+
+        for (int n = 0; n < fourier.size(); n++)
+        {
+            double sum = 0;
+
+            for (int k = 0; k < fourier.size(); k++)
+            {
+                double phi = (PI_2 * k * n) / fourier.size();
+                sum += fourier[k].amp * cos(phi + fourier[k].phase);
+            }
+
+            sum /= fourier.size();
+            x.push_back(sum);
+        }
+
+        return x;
+    }
+
     Vector2 epiCycles(double x, double y, double rotation, vector<WavePoint> fourier)
     {
         for (int i = 0; i < fourier.size(); i++)
@@ -159,6 +185,20 @@ private:
         std::sort(fourierY.begin(), fourierY.end(), [](const WavePoint& a, const WavePoint& b) {
             return b.amp < a.amp;
         });
+    }
+
+    void drawSignal(vector<double> xS, vector<double> yS, Vector2 offset)
+    {
+        for (int i = 0; i < xS.size() - 1; i += 1)
+        {
+            CV::color(1, 1, 1);
+            CV::line(xS[i] + offset.x,
+                    yS[i] + offset.y,
+                    xS[i + 1] + offset.x,
+                    yS[i + 1] + offset.y);
+            CV::color(0, 0, 1);
+            CV::circleFill(xS[i] + offset.x, yS[i] + offset.y, 1, 16);
+        }
     }
 };
 

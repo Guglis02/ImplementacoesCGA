@@ -99,6 +99,14 @@ public:
         return( aux );
     }
 
+    Vector2 operator * (const Vector2& v)
+    {
+        double re = x * v.x - y * v.y;
+        double im = x * v.y + y * v.x;
+        Vector2 aux( re, im);
+        return( aux );
+    }
+
     Vector2 operator * (const float& f)
     {
         Vector2 aux( x * f, y * f);

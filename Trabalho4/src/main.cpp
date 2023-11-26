@@ -12,9 +12,9 @@ Gustavo Machado de Freitas
 #include <stdlib.h>
 
 #include "gl_canvas2d.h"
-#include "Slider.h"
 #include "MouseHandler.h"
 #include "Fourier.h"
+#include "ComplexFourier.h"
 #include "Points.h"
 
 using namespace std;
@@ -22,31 +22,19 @@ using namespace std;
 int screenWidth = 1500, screenHeight = 800;
 
 MouseHandler* mouseHandler = NULL;
-Slider* slider = NULL;
 Fourier* fourier = NULL;
+ComplexFourier* complexFourier = NULL;
 
 void render()
 {
     CV::clear(0, 0, 0);
     fourier->Render(screenWidth, screenHeight);
+    complexFourier->Render(screenWidth, screenHeight);
 }
 
 void mouse(int button, int state, int wheel, int direction, int x, int y)
 {
     mouseHandler->Update(button, state, wheel, direction, x, y);
-
-    if (mouseHandler->GetState() == 0)
-    {
-        slider->OnMouseClick(mouseHandler->GetX(), mouseHandler->GetY());
-    }
-    else if (mouseHandler->IsDragging())
-    {
-        slider->OnMouseDrag(mouseHandler->GetX());
-    }
-    else if (mouseHandler->GetState() == 1)
-    {
-        slider->OnMouseRelease();
-    }
 
     //printf("\nmouse %d %d %d %d %d %d", button, state, wheel, direction,  x, y);
 }
@@ -66,11 +54,15 @@ void keyboardUp(int key)
 
 int main(void)
 {
-   CV::init(&screenWidth, &screenHeight, "Trabalho 4 - Fourier");
+    CV::init(&screenWidth, &screenHeight, "Trabalho 4 - Fourier");
 
-   slider = new Slider(15, 15, 100, 15, 0.01, 1, 0.5);
-   mouseHandler = new MouseHandler();
-   fourier = new Fourier();
+    vector<double> points = generateSpiralPoints();
 
-   CV::run();
+    mouseHandler = new MouseHandler();
+    fourier = new Fourier();
+    fourier->Setup(points);
+    complexFourier = new ComplexFourier();
+    complexFourier->Setup(points);
+
+    CV::run();
 }
