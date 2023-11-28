@@ -24,7 +24,6 @@ public class RippleTest : MonoBehaviour
     private void Update()
     {
         material.SetColor(0, Color.red);
-
-        Graphics.RenderMesh(renderParams, mesh);
+        //Graphics.RenderMesh(renderParams, mesh);
     }
 }
