@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <math.h>
 
+/*
+Classe representando um vetor de dois floats
+Foram feitas algumas modificações para funcionar como uma tupla
+que representa um valor com parte real e parte imaginaria.
+*/
 class Vector2
 {
 public:
