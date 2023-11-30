@@ -6,10 +6,14 @@
 
 using namespace std;
 
+/*
+Classe utilitária para gerar os sinais
+*/
+
 vector<double> generateGearPoints()
 {
     vector<double> points;
-    
+
     float ang = 0;
     float raio1 = 100;
     float raio2 = 120;
@@ -25,7 +29,7 @@ vector<double> generateGearPoints()
 
         float x2 = raio * cos(ang);
         float y2 = raio * sin(ang);
-        
+
         points.push_back(x1);
         points.push_back(y1);
         points.push_back(x2);
@@ -57,8 +61,9 @@ vector<double> generateSpiralPoints()
     return points;
 }
 
-vector<double> generateWheelPoints(int edges) {
+vector<double> generateWheelPoints() {
     vector<double> points;
+    int edges = 15;
     double radius = 100;
     for (int i = 0; i < edges; ++i) {
         for (double theta = 0; theta < 2 * PI; theta += PI / edges) {
@@ -72,25 +77,36 @@ vector<double> generateWheelPoints(int edges) {
 }
 
 vector<double> generateSquarePoints(int pointsPerSide) {
-    vector<double> points;
+    std::vector<double> points;
     double sideLength = 200;
+
+    // Top side
     for (int i = 0; i < pointsPerSide; ++i) {
-        // Top side
         points.push_back(-100 + i * sideLength / pointsPerSide);
         points.push_back(100);
+    }
 
-        // Right side
+    // Right side
+    for (int i = 0; i < pointsPerSide; ++i) {
         points.push_back(100);
         points.push_back(100 - i * sideLength / pointsPerSide);
+    }
 
-        // Bottom side
+    // Bottom side
+    for (int i = 0; i < pointsPerSide; ++i) {
         points.push_back(100 - i * sideLength / pointsPerSide);
         points.push_back(-100);
+    }
 
-        // Left side
+    // Left side
+    for (int i = 0; i < pointsPerSide; ++i) {
         points.push_back(-100);
         points.push_back(-100 + i * sideLength / pointsPerSide);
     }
+
+    points.push_back(-100);
+    points.push_back(100);
+
     return points;
 }
 
@@ -5098,7 +5114,7 @@ vector<double> codingTrainPoints = {
 };
 
 vector<double> getCodingTrainPoints()
-{    
+{
     vector<double> points;
     for (int i = 0; i < codingTrainPoints.size(); i += 4)
     {

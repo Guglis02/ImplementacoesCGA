@@ -12,7 +12,6 @@ Gustavo Machado de Freitas
 #include <stdlib.h>
 
 #include "gl_canvas2d.h"
-#include "MouseHandler.h"
 #include "Fourier.h"
 #include "ComplexFourier.h"
 #include "Points.h"
@@ -21,7 +20,6 @@ using namespace std;
 
 int screenWidth = 1500, screenHeight = 800;
 
-MouseHandler* mouseHandler = NULL;
 Fourier* fourier = NULL;
 ComplexFourier* complexFourier = NULL;
 
@@ -34,8 +32,6 @@ void render()
 
 void mouse(int button, int state, int wheel, int direction, int x, int y)
 {
-    mouseHandler->Update(button, state, wheel, direction, x, y);
-
     //printf("\nmouse %d %d %d %d %d %d", button, state, wheel, direction,  x, y);
 }
 
@@ -51,14 +47,16 @@ void keyboardUp(int key)
    printf("\nLiberou: %d" , key);
 }
 
-
 int main(void)
 {
     CV::init(&screenWidth, &screenHeight, "Trabalho 4 - Fourier");
 
-    vector<double> points = generateSpiralPoints();
+    //vector<double> points = generateSpiralPoints(); // Espiral
+    //vector<double> points = generateGearPoints(); // Engrenagem
+    //vector<double> points = getCodingTrainPoints(); // Trenzinho do Coding Train
+    //vector<double> points = generateWheelPoints(); // Roda de bicicleta
+    vector<double> points = generateSquarePoints(10); // Quadrado
 
-    mouseHandler = new MouseHandler();
     fourier = new Fourier();
     fourier->Setup(points);
     complexFourier = new ComplexFourier();
