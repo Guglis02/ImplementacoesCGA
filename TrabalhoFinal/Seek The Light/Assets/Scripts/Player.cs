@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     public bool IsPoweredUp = false;
 
+    public int Health = 3;
+
     public Vector3 Forward => transform.forward;
 
     public void SetPosition(Vector3 position)
