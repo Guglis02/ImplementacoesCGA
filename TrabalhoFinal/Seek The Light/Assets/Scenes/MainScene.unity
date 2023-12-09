@@ -123,6 +123,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &262345375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 262345376}
+  m_Layer: 0
+  m_Name: Collectables
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &262345376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262345375}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5201316, y: 0.79475117, z: 1.2907095}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &330585544
 AudioListener:
   m_ObjectHideFlags: 0
@@ -307,7 +338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &678497675
 Transform:
   m_ObjectHideFlags: 0
@@ -1003,9 +1034,20 @@ PrefabInstance:
       objectReference: {fileID: 2800000, guid: ed17a797d2ab8994dae702934fdf114e, type: 3}
     - target: {fileID: 3650401382701274246, guid: bd1bed12ee54ed948b555d0c8ac6a820,
         type: 3}
+      propertyPath: pickupPrefab
+      value: 
+      objectReference: {fileID: 7114236057164356120, guid: 819a3b3d84738994692258f67314ae39,
+        type: 3}
+    - target: {fileID: 3650401382701274246, guid: bd1bed12ee54ed948b555d0c8ac6a820,
+        type: 3}
       propertyPath: enemiesParent
       value: 
       objectReference: {fileID: 995208303}
+    - target: {fileID: 3650401382701274246, guid: bd1bed12ee54ed948b555d0c8ac6a820,
+        type: 3}
+      propertyPath: pickupsParent
+      value: 
+      objectReference: {fileID: 262345375}
     - target: {fileID: 4909377674760760219, guid: bd1bed12ee54ed948b555d0c8ac6a820,
         type: 3}
       propertyPath: m_Layer
@@ -1032,6 +1074,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 330585546}
   - {fileID: 832575519}
+  - {fileID: 262345376}
   - {fileID: 995208304}
   - {fileID: 4511861996779166018}
   - {fileID: 1743499131}

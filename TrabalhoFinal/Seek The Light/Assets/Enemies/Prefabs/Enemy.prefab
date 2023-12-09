@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCellStategy: {fileID: 0}
   attackCollider: {fileID: 8673482130672226585}
+  behaviourState: 0
 --- !u!143 &7834495190935136986
 CharacterController:
   m_ObjectHideFlags: 0

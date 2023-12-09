@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Vector3 LevelSize => levelBuilder.LevelSize;
     public Vector3 LevelCenter => levelBuilder.LevelCenter;
 
+    public int TotalPoints => levelBuilder.pointsCounter;
+
     private static Player m_player;
     public static Player Player
     {

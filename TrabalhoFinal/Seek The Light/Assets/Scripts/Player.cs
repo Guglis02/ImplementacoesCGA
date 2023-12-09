@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -9,11 +10,15 @@ public class Player : MonoBehaviour
 
     public bool IsPoweredUp = false;
 
-    public int Health = 3;
+    public int MaxHealth = 3;
+    
+    private int health = 3;
+    private int points = 0;
 
     public Vector3 Forward => transform.forward;
 
-    public Action OnPlayerHit;
+    public Action<int> OnPlayerHit;
+    public Action<int> OnPointPickup;
     public Action OnPlayerPowerUp;
 
     private void Awake()
@@ -32,18 +37,23 @@ public class Player : MonoBehaviour
             }
             else
             {
-                Health--;
-                OnPlayerHit?.Invoke();
+                health--;
+                OnPlayerHit?.Invoke(health);
+            }
+        }
+        else if (other.gameObject.TryGetComponent<Pickup>(out Pickup pickup))
+        {
+            if (pickup.pickupType == Pickup.PickupType.Point)
+            {
+                points++;
+                OnPointPickup?.Invoke(points);
+                Destroy(pickup.gameObject);
             }
         }
     }
 
     public void SetPosition(Vector3 position)
     {
-        bool prevCharacterControlerEnabled = m_CharacterController.enabled;
-
-        m_CharacterController.enabled = false;
-        transform.position = position;
-        m_CharacterController.enabled = prevCharacterControlerEnabled;
+        m_CharacterController.SetPosition(position);
     }
 }

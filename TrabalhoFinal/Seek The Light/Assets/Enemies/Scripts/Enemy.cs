@@ -58,9 +58,9 @@ public class Enemy : MonoBehaviour
         // Changes enemy mesh to only eyes mesh
     }
 
-    private void OnPlayerHit()
+    private void OnPlayerHit(int _)
     {
-        transform.position = m_grid.CoordToPosition(starterCell);
+        m_characterController.SetPosition(m_grid.CoordToPosition(starterCell));
         behaviourState = BehaviourState.Scatter;
         m_Animator.SetTrigger("Scatter");
         timer = 0;
@@ -79,6 +79,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        attackCollider.SetActive(false);
+
         timer += Time.deltaTime;
 
         switch (behaviourState)
@@ -130,11 +132,9 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        attackCollider.SetActive(true);
         Vector3 lookDir = transform.position - GameManager.PlayerPosition;
         Quaternion rotation = Quaternion.LookRotation(new Vector3(lookDir.x, 0, lookDir.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20f * Time.deltaTime);
-        attackCollider.SetActive(false);
     }
 
     private void Flee()
@@ -179,6 +179,7 @@ public class Enemy : MonoBehaviour
             return;
         } else if (Vector3.Distance(GameManager.PlayerPosition, transform.position) < 1.5f)
         {
+            attackCollider.SetActive(true);
             behaviourState = BehaviourState.Attack;
             m_Animator.SetTrigger("Attack");
             timer += 20;

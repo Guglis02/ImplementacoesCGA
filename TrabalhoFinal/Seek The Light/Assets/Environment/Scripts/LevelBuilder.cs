@@ -17,7 +17,12 @@ public class LevelBuilder : MonoBehaviour
     [SerializeField] private GameObject enemiesParent;
     [SerializeField] private List<Enemy> enemiesPrefabs;
 
+    [SerializeField] private GameObject pickupsParent;
+    [SerializeField] private Pickup pickupPrefab;
+
     private int enemyCounter = 0;
+
+    public int pointsCounter = 0;
 
     public static int s_CellSize = 4;
 
@@ -59,8 +64,8 @@ public class LevelBuilder : MonoBehaviour
         public LevelCell(LevelElementID levelElementID)
         {
             this.levelElementID = levelElementID;
-            this.stackCount = Vector2Int.one;
-            this.isWalkable = levelElementID != LevelElementID.Wall;
+            stackCount = Vector2Int.one;
+            isWalkable = levelElementID != LevelElementID.Wall;
         }
     }
 
@@ -116,11 +121,26 @@ public class LevelBuilder : MonoBehaviour
                         Vector3 spawnPoint = levelGrid.CoordToPosition(x, y);
                         GameManager.Player.SetPosition(spawnPoint);
                         break;
+                    case LevelElementID.Path:
+                        InitializePickup(y, x);
+                        pointsCounter++;
+                        break;
                     default:
                         break;
                 }
             }
         }
+    }
+
+    private void InitializePickup(int y, int x)
+    {
+        Vector3 spawnPoint = levelGrid.CoordToPosition(x, y);
+
+        Pickup pickup = Instantiate(pickupPrefab,
+                                    spawnPoint,
+                                    Quaternion.identity);
+
+        pickup.transform.parent = pickupsParent.transform;
     }
 
     private void InitializeEnemy(int y, int x)
@@ -157,7 +177,8 @@ public class LevelBuilder : MonoBehaviour
                 ref LevelCell current = ref levelGrid[x, y];
                 ref LevelCell previous = ref levelGrid[x - 1, y];
 
-                if (current.isWalkable || current.levelElementID != previous.levelElementID)
+                if (current.isWalkable
+                    || current.levelElementID != previous.levelElementID)
                     continue;
 
                 current.stackCount.x += previous.stackCount.x;
