@@ -16,6 +16,7 @@ public class LevelBuilder : MonoBehaviour
 
     [SerializeField] private GameObject enemiesParent;
     [SerializeField] private List<Enemy> enemiesPrefabs;
+
     private int enemyCounter = 0;
 
     public static int s_CellSize = 4;
@@ -31,7 +32,7 @@ public class LevelBuilder : MonoBehaviour
     public Vector3 LevelSize => levelGrid.IsUnityNull() ? Vector3.one : levelGrid.GridTotalSize();
     public Vector3 LevelCenter => new Vector3(levelWidth / 2 * s_CellSize, 0, levelHeight / 2 * s_CellSize);
 
-    enum LevelElementID
+    public enum LevelElementID
     {
         Wall,
         PowerUp,
@@ -40,7 +41,7 @@ public class LevelBuilder : MonoBehaviour
         Path
     }
 
-    Dictionary<Color, LevelElementID> levelElementIDByColor = new()
+    public Dictionary<Color, LevelElementID> levelElementIDByColor = new()
     {
         { Color.black, LevelElementID.Wall },
         { Color.blue, LevelElementID.PowerUp },
@@ -51,15 +52,15 @@ public class LevelBuilder : MonoBehaviour
 
     public struct LevelCell
     {
-        public Color color;
+        public LevelElementID levelElementID;
         public Vector2Int stackCount;
         public bool isWalkable;
 
-        public LevelCell(Color color, Vector2Int stackCount, bool isWalkable)
+        public LevelCell(LevelElementID levelElementID)
         {
-            this.color = color;
-            this.stackCount = stackCount;
-            this.isWalkable = isWalkable;
+            this.levelElementID = levelElementID;
+            this.stackCount = Vector2Int.one;
+            this.isWalkable = levelElementID != LevelElementID.Wall;
         }
     }
 
@@ -75,10 +76,7 @@ public class LevelBuilder : MonoBehaviour
             for (int y = 0; y < levelHeight; y++)
             {
                 Color32 pixelColor = pixels[y * levelWidth + x];
-                m_LevelGrid[x, y] = new LevelCell(
-                    pixelColor,
-                    Vector2Int.one,
-                    levelElementIDByColor[pixelColor] != LevelElementID.Wall);
+                m_LevelGrid[x, y] = new LevelCell(levelElementIDByColor[pixelColor]);
             }
         }
 
@@ -159,7 +157,7 @@ public class LevelBuilder : MonoBehaviour
                 ref LevelCell current = ref levelGrid[x, y];
                 ref LevelCell previous = ref levelGrid[x - 1, y];
 
-                if (current.isWalkable || current.color != previous.color)
+                if (current.isWalkable || current.levelElementID != previous.levelElementID)
                     continue;
 
                 current.stackCount.x += previous.stackCount.x;
@@ -179,7 +177,7 @@ public class LevelBuilder : MonoBehaviour
 
                 if (current.isWalkable
                     || previous.stackCount == Vector2.zero
-                    || current.color != previous.color
+                    || current.levelElementID != previous.levelElementID
                     || current.stackCount.x != previous.stackCount.x)
                 {
                     continue;

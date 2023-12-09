@@ -1,14 +1,23 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[SelectionBase]
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] 
+    private TargetCellStategy targetCellStategy;
+    [SerializeField]
+    private GameObject attackCollider;
+
+    [SerializeField]
+    private BehaviourState behaviourState = BehaviourState.Scatter;
+    
     private enum BehaviourState
     {
         Scatter,
         Chase,
         Frightened,
+        Attack,
         Dead
     }
 
@@ -17,148 +26,173 @@ public class Enemy : MonoBehaviour
     private Animator m_Animator;
 
     private Grid<LevelBuilder.LevelCell> m_grid;
-    [SerializeField] private TargetCellStategy targetCellStategy;
 
-    private BehaviourState behaviourState = BehaviourState.Scatter;
 
-    private Vector2Int targetCell;
-
-    private Vector2Int previousCell;
+    private Vector2Int starterCell;
     private Vector2Int currentCell;
-    private Vector2Int nextCell;
+
+    private CellInterpolator cellInterpolator;
+
+    private float timer = 0;
 
     private void Awake()
     {
         m_characterController = GetComponent<CharacterController>();
         m_Animator = GetComponentInChildren<Animator>();
+
         m_grid = GameManager.Instance.LevelGrid;
-        previousCell = Vector2Int.zero;
-        nextCell = currentCell = m_grid.PositionToCoord(transform.position);
+        starterCell = currentCell = m_grid.PositionToCoord(transform.position);
         targetCellStategy.PlaceScatterTargetCell(m_grid.Width, m_grid.Height);
+    
+        GameManager.Player.OnPlayerPowerUp += OnPlayerPowerUp;
+        GameManager.Player.OnPlayerHit += OnPlayerHit;
+
+        cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, enemyMoveSpeed);
+    }
+
+    #region Callbacks and Events
+    public void OnEaten()
+    {
+        behaviourState = BehaviourState.Dead;
+        cellInterpolator.SetTargetCell(starterCell);
+        // Changes enemy mesh to only eyes mesh
+    }
+
+    private void OnPlayerHit()
+    {
+        transform.position = m_grid.CoordToPosition(starterCell);
+        behaviourState = BehaviourState.Scatter;
+        m_Animator.SetTrigger("Scatter");
+        timer = 0;
+    }
+
+    private void OnPlayerPowerUp()
+    {
+        behaviourState = BehaviourState.Frightened;
+    }
+    #endregion
+
+    private void OnDrawGizmos()
+    {
+        cellInterpolator.Gizmos();
     }
 
     private void Update()
     {
-        UpdateBehaviour();
-        
-        Debug.DrawLine(transform.position, m_grid.CoordToPosition(targetCell), Color.red);
-        Debug.DrawLine(transform.position, m_grid.CoordToPosition(nextCell), Color.green);
+        timer += Time.deltaTime;
 
         switch (behaviourState)
         {
             case BehaviourState.Scatter:
-                targetCell = targetCellStategy.GetScatterTargetCell();
-                scatterTimer += Time.deltaTime;
-                Move();
+                Scatter();
                 break;
             case BehaviourState.Chase:
                 Chase();
                 break;
+            case BehaviourState.Attack:
+                Attack();
+                break;
             case BehaviourState.Frightened:
+                Flee();
                 break;
             case BehaviourState.Dead:
+                ReturnToSpawn();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        UpdateBehaviour();
+    }
+
+    private void Scatter()
+    {
+        // Se estiver na ghost house, o alvo � sair dela
+        if (m_grid[currentCell].levelElementID == LevelBuilder.LevelElementID.Enemy)
+        {
+            cellInterpolator.SetTargetCell(currentCell + Vector2Int.up);
+        }
+        else
+        {
+            cellInterpolator.SetTargetCell(targetCellStategy.GetScatterTargetCell());
+        }
+
+        cellInterpolator.Move();
     }
 
     private void Chase()
     {
         Vector2Int playerCell = m_grid.PositionToCoord(GameManager.PlayerPosition);
-        targetCell = targetCellStategy.CalculateChaseTargetCell(playerCell, currentCell);
+        cellInterpolator.SetTargetCell(targetCellStategy.CalculateChaseTargetCell(playerCell, currentCell));
 
-        chaseTimer += Time.deltaTime;
-        Move();
+        cellInterpolator.Move();
     }
 
-    float scatterTimer = 0f;
-    float chaseTimer = 0f;
-
-    private void UpdateBehaviour()
+    private void Attack()
     {
-        if (scatterTimer >= 7f)
-        {
-            behaviourState = BehaviourState.Chase;
-            m_Animator.SetTrigger("Chase");
-            scatterTimer = 0;
-        } else if (chaseTimer >= 20f)
-        {
-            behaviourState = BehaviourState.Scatter;
-            m_Animator.SetTrigger("Scatter");
-            chaseTimer = 0;
-        }
+        attackCollider.SetActive(true);
+        Vector3 lookDir = transform.position - GameManager.PlayerPosition;
+        Quaternion rotation = Quaternion.LookRotation(new Vector3(lookDir.x, 0, lookDir.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20f * Time.deltaTime);
+        attackCollider.SetActive(false);
     }
 
-    Vector3 movementDir = Vector3.zero;
-    private void Move()
+    private void Flee()
     {
-        if (Vector3.Distance(transform.position, m_grid.CoordToPosition(nextCell)) <= 0.5f)
+        List<Vector2Int> possibleCells = new List<Vector2Int>();
+
+        for (int index = 0; index < 4; index++)
         {
-            CalculateNextCell();
-            Vector2 dir = nextCell - currentCell;
-            movementDir = new Vector3(dir.x, 0, dir.y);
-        }
-        else
-        {
-            m_characterController.Move(movementDir * enemyMoveSpeed * Time.deltaTime); 
-            
-            Quaternion rotation = Quaternion.LookRotation(-movementDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 5f * Time.deltaTime);
+            Vector2Int nextCellCandidate;
 
-            if (!currentCell.Equals(nextCell))
-            {
-                previousCell = currentCell;
-            }
-            currentCell = m_grid.PositionToCoord(transform.position);
-        }
-    }
-
-    private void CalculateNextCell()
-    {
-        float minDistance = float.MaxValue;
-
-        nextCell = previousCell;
-
-        for (int i = 0; i < 4; i++)
-        {
-            Vector2Int direction = Vector2Int.zero;
-            switch (i)
-            {
-                case 0:
-                    direction = Vector2Int.up;
-                    break;
-                case 1:
-                    direction = Vector2Int.left;
-                    break;
-                case 2:
-                    direction = Vector2Int.down;
-                    break;
-                case 3:
-                    direction = Vector2Int.right;
-                    break;
-            }
-
-            Vector2Int nextCellCandidate = currentCell + direction;
-
-            if (i == 0 && m_grid[nextCellCandidate].color == Color.cyan)
-            {
-                nextCell = nextCellCandidate;
-                break;
-            }
-
-            if (nextCellCandidate.Equals(previousCell)
-                || !m_grid[nextCellCandidate].isWalkable)
+            if (!cellInterpolator.TryGetNeighbourCell(index, out nextCellCandidate))
             {
                 continue;
             }
 
-            float distance = Vector2.Distance(nextCellCandidate, targetCell);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                nextCell = nextCellCandidate;
-            }
+            possibleCells.Add(nextCellCandidate);
+        }
+
+        int randomIndex = UnityEngine.Random.Range(0, possibleCells.Count);
+        cellInterpolator.SetTargetCell(possibleCells[randomIndex]);
+    }
+
+    private void ReturnToSpawn()
+    {
+        cellInterpolator.Move();
+
+        if (Vector3.Distance(transform.position, m_grid.CoordToPosition(starterCell)) <= 0.5f)
+        {
+            behaviourState = BehaviourState.Scatter;
+            m_Animator.SetTrigger("Scatter");
+            timer = 0;
+        }
+    }
+
+    private void UpdateBehaviour()
+    {
+        if (behaviourState == BehaviourState.Dead)
+        {
+            return;
+        } else if (GameManager.Player.IsPoweredUp)
+        {
+            return;
+        } else if (Vector3.Distance(GameManager.PlayerPosition, transform.position) < 1.5f)
+        {
+            behaviourState = BehaviourState.Attack;
+            m_Animator.SetTrigger("Attack");
+            timer += 20;
+        } else if (timer >= 20f && behaviourState != BehaviourState.Scatter)
+        {
+            behaviourState = BehaviourState.Scatter;
+            m_Animator.SetTrigger("Scatter");
+            timer = 0;
+        }
+        else if (timer >= 7f && behaviourState != BehaviourState.Chase)
+        {
+            behaviourState = BehaviourState.Chase;
+            m_Animator.SetTrigger("Chase");
+            timer = 0;
         }
     }
 }

@@ -10,6 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
         type: 3}
+      propertyPath: attackCollider
+      value: 
+      objectReference: {fileID: 4115706085831154710}
+    - target: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
+        type: 3}
       propertyPath: targetCellStategy
       value: 
       objectReference: {fileID: 11400000, guid: bd413def33d9a41449bc5786b6731b87,
@@ -69,16 +74,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inky
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 214034767737902493, guid: ecff9da0158ac8c45bf56b9eb4d779b1, type: 3}
+    - {fileID: 528553218114420420, guid: ecff9da0158ac8c45bf56b9eb4d779b1, type: 3}
     m_RemovedGameObjects:
     - {fileID: 5147540269452076432, guid: ecff9da0158ac8c45bf56b9eb4d779b1, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1092180721455788301, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
         type: 3}
-      insertIndex: -1
+      insertIndex: 0
       addedObject: {fileID: 1061278912922585362}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ecff9da0158ac8c45bf56b9eb4d779b1, type: 3}
+--- !u!1 &4115706085831154710 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8673482130672226585, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4702755174497357071}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5650819607543249922 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1092180721455788301, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
