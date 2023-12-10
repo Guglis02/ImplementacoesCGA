@@ -115,10 +115,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: VolumetricLightShaft
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d9b6d14d226ddc4e8a6ae0d4c4dc45d,
+        type: 3}
+      propertyPath: m_TagString
+      value: VolumetricLight
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d9b6d14d226ddc4e8a6ae0d4c4dc45d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6944860202605313629}
   m_SourcePrefab: {fileID: 100100000, guid: 5d9b6d14d226ddc4e8a6ae0d4c4dc45d, type: 3}
 --- !u!4 &8212504471227914580 stripped
 Transform:
@@ -126,3 +135,31 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8534906455066001087}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8841548905514042350 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d9b6d14d226ddc4e8a6ae0d4c4dc45d,
+    type: 3}
+  m_PrefabInstance: {fileID: 8534906455066001087}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &6944860202605313629
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841548905514042350}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: 5d9b6d14d226ddc4e8a6ae0d4c4dc45d, type: 3}

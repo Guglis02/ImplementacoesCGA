@@ -173,7 +173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &330585544
 AudioListener:
   m_ObjectHideFlags: 0
@@ -330,7 +330,6 @@ GameObject:
   m_Component:
   - component: {fileID: 678497675}
   - component: {fileID: 678497678}
-  - component: {fileID: 678497677}
   - component: {fileID: 678497676}
   m_Layer: 0
   m_Name: SecondaryCamera
@@ -338,7 +337,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &678497675
 Transform:
   m_ObjectHideFlags: 0
@@ -398,14 +397,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!81 &678497677
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 678497674}
-  m_Enabled: 1
 --- !u!20 &678497678
 Camera:
   m_ObjectHideFlags: 0
