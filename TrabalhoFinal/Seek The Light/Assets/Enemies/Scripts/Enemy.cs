@@ -41,12 +41,17 @@ public class Enemy : MonoBehaviour
         m_Animator = GetComponentInChildren<Animator>();
 
         m_grid = GameManager.Instance.LevelGrid;
-        starterCell = currentCell = m_grid.PositionToCoord(transform.position);
         targetCellStategy.PlaceScatterTargetCell(m_grid.Width, m_grid.Height);
-    
+
         GameManager.Player.OnPlayerPowerUp += OnPlayerPowerUp;
         GameManager.Player.OnPlayerHit += OnPlayerHit;
 
+        ResetInterpolator();
+    }
+
+    private void ResetInterpolator()
+    {
+        starterCell = currentCell = m_grid.PositionToCoord(transform.position);
         cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, enemyMoveSpeed);
     }
 
@@ -55,12 +60,13 @@ public class Enemy : MonoBehaviour
     {
         behaviourState = BehaviourState.Dead;
         cellInterpolator.SetTargetCell(starterCell);
-        // Changes enemy mesh to only eyes mesh
+        m_Animator.SetTrigger("Dead");
     }
 
     private void OnPlayerHit(int _)
     {
         m_characterController.SetPosition(m_grid.CoordToPosition(starterCell));
+        ResetInterpolator();
         behaviourState = BehaviourState.Scatter;
         m_Animator.SetTrigger("Scatter");
         timer = 0;
@@ -75,6 +81,14 @@ public class Enemy : MonoBehaviour
     private void OnDrawGizmos()
     {
         cellInterpolator.Gizmos();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("VolumetricLight"))
+        {
+            OnEaten();
+        }
     }
 
     private void Update()

@@ -5,6 +5,12 @@ public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private Object gameScene;
 
+    public void Awake()
+    {
+        try {SceneManager.UnloadSceneAsync(gameScene.name);}
+        catch (System.ArgumentException) {}
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene(gameScene.name);

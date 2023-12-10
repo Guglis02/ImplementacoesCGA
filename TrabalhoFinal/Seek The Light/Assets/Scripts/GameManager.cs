@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private LevelBuilder levelBuilder;
+    
+    [SerializeField] private Object mainMenuScene;
 
     public static GameManager Instance { get; private set; }
 
@@ -33,6 +36,11 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         levelBuilder.BuildLevel();
+    }
+
+    private void Start()
+    {
+        Player.OnPlayerDeath += () => SceneManager.LoadScene(mainMenuScene.name, LoadSceneMode.Single);
     }
 
     private void Update()

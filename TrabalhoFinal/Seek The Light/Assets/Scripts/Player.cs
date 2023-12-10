@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     public Action<int> OnPlayerHit;
     public Action<int> OnPointPickup;
     public Action OnPlayerPowerUp;
+    public Action OnPlayerPowerDown;
+    public Action OnPlayerDeath;
 
     private void Awake()
     {
@@ -39,6 +41,10 @@ public class Player : MonoBehaviour
             {
                 health--;
                 OnPlayerHit?.Invoke(health);
+                if (health <= 0)
+                {
+                    OnPlayerDeath?.Invoke();
+                }
             }
         }
         else if (other.gameObject.TryGetComponent<Pickup>(out Pickup pickup))
@@ -50,6 +56,20 @@ public class Player : MonoBehaviour
                 Destroy(pickup.gameObject);
             }
         }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Teste();
+        }
+    }
+
+    public void Teste()
+    {
+        Debug.Log("Teste");
+        OnPlayerHit?.Invoke(health);
     }
 
     public void SetPosition(Vector3 position)
