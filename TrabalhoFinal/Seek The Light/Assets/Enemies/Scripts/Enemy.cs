@@ -26,7 +26,6 @@ public class Enemy : MonoBehaviour
     private Grid<LevelBuilder.LevelCell> m_grid;
 
     private Vector2Int starterCell;
-    private Vector2Int currentCell;
 
     private CellInterpolator cellInterpolator;
 
@@ -49,7 +48,7 @@ public class Enemy : MonoBehaviour
 
     private void ResetInterpolator()
     {
-        starterCell = currentCell = m_grid.PositionToCoord(transform.position);
+        starterCell = m_grid.PositionToCoord(transform.position);
         cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, enemyMoveSpeed);
     }
 
@@ -115,6 +114,8 @@ public class Enemy : MonoBehaviour
 
     private void Scatter()
     {
+        Vector2Int currentCell = cellInterpolator.GetCurrentCell();
+
         // Se estiver na ghost house, o alvo eh sair dela
         if (m_grid[currentCell].levelElementID == LevelBuilder.LevelElementID.Enemy)
         {
@@ -131,6 +132,8 @@ public class Enemy : MonoBehaviour
     private void Chase()
     {
         Vector2Int playerCell = m_grid.PositionToCoord(GameManager.PlayerPosition);
+        Vector2Int currentCell = cellInterpolator.GetCurrentCell();
+
         cellInterpolator.SetTargetCell(targetCellStategy.CalculateChaseTargetCell(playerCell, currentCell));
 
         cellInterpolator.Move();
@@ -161,6 +164,7 @@ public class Enemy : MonoBehaviour
 
         int randomIndex = UnityEngine.Random.Range(0, possibleCells.Count);
         cellInterpolator.SetTargetCell(possibleCells[randomIndex]);
+        cellInterpolator.Move();
     }
 
     private void ReturnToSpawn()
@@ -178,7 +182,8 @@ public class Enemy : MonoBehaviour
     private void UpdateBehaviour()
     {
         float distanceToPlayer = Vector3.Distance(GameManager.PlayerPosition, transform.position);
-        if (behaviourState == BehaviourState.Dead)
+        if (behaviourState == BehaviourState.Dead 
+            || behaviourState == BehaviourState.Frightened)
         {
             return;
         } else if (distanceToPlayer < 1.5f)

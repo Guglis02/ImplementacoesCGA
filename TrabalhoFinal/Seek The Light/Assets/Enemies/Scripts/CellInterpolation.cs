@@ -32,6 +32,11 @@ public class CellInterpolator
             grid.CoordToPosition(nextCell), Color.green);
     }
 
+    public Vector2Int GetCurrentCell()
+    {
+        return currentCell;
+    }
+
     public void SetTargetCell(Vector2Int targetCell)
     {
         this.targetCell = targetCell;

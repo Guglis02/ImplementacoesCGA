@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     public Action OnPlayerPowerUp;
     public Action OnPlayerPowerDown;
     public Action OnPlayerDeath;
+    public Action OnPlayerGotAllPoints;
 
     private bool IsPoweredUp = false;
 
@@ -69,26 +70,26 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (points == GameManager.Instance.TotalPoints)
+        {
+            OnPlayerGotAllPoints?.Invoke();
+        }
+
         if (IsPoweredUp)
         {
-            powerUpTimer -= Time.deltaTime;
-            if (powerUpTimer <= 0f)
-            {
-                IsPoweredUp = false;
-                volumetricLight.SetActive(false);
-                OnPlayerPowerDown?.Invoke();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Teste();
+            PowerUpUpdate();
         }
     }
 
-    public void Teste()
+    private void PowerUpUpdate()
     {
-        Debug.Log("Teste");
-        OnPlayerHit?.Invoke(health);
+        powerUpTimer -= Time.deltaTime;
+        if (powerUpTimer <= 0f)
+        {
+            IsPoweredUp = false;
+            volumetricLight.SetActive(false);
+            OnPlayerPowerDown?.Invoke();
+        }
     }
 
     public void SetPosition(Vector3 position)
