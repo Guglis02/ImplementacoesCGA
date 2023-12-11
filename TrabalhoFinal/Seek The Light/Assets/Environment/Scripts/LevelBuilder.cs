@@ -18,7 +18,8 @@ public class LevelBuilder : MonoBehaviour
     [SerializeField] private List<Enemy> enemiesPrefabs;
 
     [SerializeField] private GameObject pickupsParent;
-    [SerializeField] private Pickup pickupPrefab;
+    [SerializeField] private GameObject pickupPrefab;
+    [SerializeField] private GameObject powerUpPrefab;
 
     private int enemyCounter = 0;
 
@@ -112,17 +113,19 @@ public class LevelBuilder : MonoBehaviour
                         InitializeWall(y, x); 
                         break;
                     case LevelElementID.PowerUp:
-                        // Add power-up
+                        InitializeEntity(x, y, powerUpPrefab, pickupsParent);
                         break;
                     case LevelElementID.Enemy:
-                        InitializeEnemy(y, x);
+                        GameObject enemy = enemiesPrefabs[enemyCounter % enemiesPrefabs.Count].gameObject;
+                        InitializeEntity(x, y, enemy, enemiesParent);
+                        enemyCounter++;
                         break;
                     case LevelElementID.Player:
                         Vector3 spawnPoint = levelGrid.CoordToPosition(x, y);
                         GameManager.Player.SetPosition(spawnPoint);
                         break;
                     case LevelElementID.Path:
-                        InitializePickup(y, x);
+                        InitializeEntity(x, y, pickupPrefab, pickupsParent);
                         pointsCounter++;
                         break;
                     default:
@@ -132,28 +135,15 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    private void InitializePickup(int y, int x)
+    private void InitializeEntity(int x, int y, GameObject prefab, GameObject parent)
     {
         Vector3 spawnPoint = levelGrid.CoordToPosition(x, y);
 
-        Pickup pickup = Instantiate(pickupPrefab,
-                                    spawnPoint,
-                                    Quaternion.identity);
+        GameObject entity = Instantiate(prefab,
+                                        spawnPoint,
+                                        Quaternion.identity);
 
-        pickup.transform.parent = pickupsParent.transform;
-    }
-
-    private void InitializeEnemy(int y, int x)
-    {
-        Vector3 spawnPoint = levelGrid.CoordToPosition(x, y);
-
-        Enemy enemy = Instantiate(enemiesPrefabs[enemyCounter % enemiesPrefabs.Count],
-                                  spawnPoint,
-                                  Quaternion.identity);
-
-        enemyCounter++;
-
-        enemy.transform.parent = enemiesParent.transform;
+        entity.transform.parent = parent.transform;
     }
 
     private void InitializeWall(int y, int x)

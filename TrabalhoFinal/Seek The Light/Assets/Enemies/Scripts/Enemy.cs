@@ -6,8 +6,6 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] 
     private TargetCellStategy targetCellStategy;
-    [SerializeField]
-    private GameObject attackCollider;
 
     [SerializeField]
     private BehaviourState behaviourState = BehaviourState.Scatter;
@@ -27,7 +25,6 @@ public class Enemy : MonoBehaviour
 
     private Grid<LevelBuilder.LevelCell> m_grid;
 
-
     private Vector2Int starterCell;
     private Vector2Int currentCell;
 
@@ -44,6 +41,7 @@ public class Enemy : MonoBehaviour
         targetCellStategy.PlaceScatterTargetCell(m_grid.Width, m_grid.Height);
 
         GameManager.Player.OnPlayerPowerUp += OnPlayerPowerUp;
+        GameManager.Player.OnPlayerPowerDown += OnPlayerPowerDown;
         GameManager.Player.OnPlayerHit += OnPlayerHit;
 
         ResetInterpolator();
@@ -55,7 +53,6 @@ public class Enemy : MonoBehaviour
         cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, enemyMoveSpeed);
     }
 
-    #region Callbacks and Events
     public void OnEaten()
     {
         behaviourState = BehaviourState.Dead;
@@ -76,25 +73,20 @@ public class Enemy : MonoBehaviour
     {
         behaviourState = BehaviourState.Frightened;
     }
-    #endregion
+
+    private void OnPlayerPowerDown()
+    {
+        behaviourState = BehaviourState.Scatter;
+        timer = 0;
+    }
 
     private void OnDrawGizmos()
     {
         cellInterpolator.Gizmos();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("VolumetricLight"))
-        {
-            OnEaten();
-        }
-    }
-
     private void Update()
     {
-        attackCollider.SetActive(false);
-
         timer += Time.deltaTime;
 
         switch (behaviourState)
@@ -123,7 +115,7 @@ public class Enemy : MonoBehaviour
 
     private void Scatter()
     {
-        // Se estiver na ghost house, o alvo � sair dela
+        // Se estiver na ghost house, o alvo eh sair dela
         if (m_grid[currentCell].levelElementID == LevelBuilder.LevelElementID.Enemy)
         {
             cellInterpolator.SetTargetCell(currentCell + Vector2Int.up);
@@ -185,15 +177,12 @@ public class Enemy : MonoBehaviour
 
     private void UpdateBehaviour()
     {
+        float distanceToPlayer = Vector3.Distance(GameManager.PlayerPosition, transform.position);
         if (behaviourState == BehaviourState.Dead)
         {
             return;
-        } else if (GameManager.Player.IsPoweredUp)
+        } else if (distanceToPlayer < 1.5f)
         {
-            return;
-        } else if (Vector3.Distance(GameManager.PlayerPosition, transform.position) < 1.5f)
-        {
-            attackCollider.SetActive(true);
             behaviourState = BehaviourState.Attack;
             m_Animator.SetTrigger("Attack");
             timer += 20;

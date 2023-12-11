@@ -1,19 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject volumetricLight;
+
     private CharacterController m_CharacterController;
 
-    public bool IsPoweredUp = false;
-
     public int MaxHealth = 3;
-    
+
     private int health = 3;
     private int points = 0;
+
+    public const float PowerUpDuration = 30f;
+    private float powerUpTimer = 0f;
 
     public Vector3 Forward => transform.forward;
 
@@ -23,6 +24,8 @@ public class Player : MonoBehaviour
     public Action OnPlayerPowerDown;
     public Action OnPlayerDeath;
 
+    private bool IsPoweredUp = false;
+
     private void Awake()
     {
         m_CharacterController = GetComponent<CharacterController>();
@@ -30,8 +33,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent<Enemy>(out Enemy enemy)
-            || other.gameObject.CompareTag("AttackCollider"))
+        if (other.gameObject.TryGetComponent(out Enemy enemy))
         {
             if (IsPoweredUp)
             {
@@ -47,19 +49,36 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        else if (other.gameObject.TryGetComponent<Pickup>(out Pickup pickup))
+        else if (other.gameObject.TryGetComponent(out Pickup pickup))
         {
             if (pickup.pickupType == Pickup.PickupType.Point)
             {
                 points++;
                 OnPointPickup?.Invoke(points);
-                Destroy(pickup.gameObject);
             }
+            else if (pickup.pickupType == Pickup.PickupType.PowerUp)
+            {
+                IsPoweredUp = true;
+                powerUpTimer = PowerUpDuration;
+                volumetricLight.SetActive(true);
+                OnPlayerPowerUp?.Invoke();
+            }
+            Destroy(pickup.gameObject);
         }
     }
 
     private void Update()
     {
+        if (IsPoweredUp)
+        {
+            powerUpTimer -= Time.deltaTime;
+            if (powerUpTimer <= 0f)
+            {
+                IsPoweredUp = false;
+                volumetricLight.SetActive(false);
+                OnPlayerPowerDown?.Invoke();
+            }
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Teste();
