@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject volumetricLight;
-
     private CharacterController m_CharacterController;
 
     public int MaxHealth = 3;
@@ -61,7 +58,6 @@ public class Player : MonoBehaviour
             {
                 IsPoweredUp = true;
                 powerUpTimer = PowerUpDuration;
-                volumetricLight.SetActive(true);
                 OnPlayerPowerUp?.Invoke();
             }
             Destroy(pickup.gameObject);
@@ -87,7 +83,6 @@ public class Player : MonoBehaviour
         if (powerUpTimer <= 0f)
         {
             IsPoweredUp = false;
-            volumetricLight.SetActive(false);
             OnPlayerPowerDown?.Invoke();
         }
     }

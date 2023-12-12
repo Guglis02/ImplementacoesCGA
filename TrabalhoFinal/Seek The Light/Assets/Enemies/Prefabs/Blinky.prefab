@@ -170,6 +170,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blinky
       objectReference: {fileID: 0}
+    - target: {fileID: 5503278443985119119, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
+        type: 3}
+      propertyPath: m_TagString
+      value: Blinky
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

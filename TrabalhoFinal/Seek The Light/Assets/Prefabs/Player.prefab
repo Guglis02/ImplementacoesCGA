@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfa391ece86e2f4dbefef89f0c117f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volumetricLight: {fileID: 3581125664225287413}
   MaxHealth: 3
 --- !u!114 &5964212924420181183
 MonoBehaviour:
@@ -61,10 +60,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3c5672d35ea6740b8290819de530ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_GroundAccelerate: 10
+  m_GroundAccelerate: 20
   m_GroundFriction: 0.4
   m_GroundMaxSpeed: 10
   m_RotationDamping: 5
+  m_Velocity: {x: 0, y: 0, z: 0}
 --- !u!143 &3442862102818078028
 CharacterController:
   m_ObjectHideFlags: 0
@@ -251,7 +251,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1748005900571201372, guid: 7b1398449d3210b4884ae5777b4a4cba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3377147463577868145}
   m_SourcePrefab: {fileID: 100100000, guid: 7b1398449d3210b4884ae5777b4a4cba, type: 3}
 --- !u!1 &3581125664225287413 stripped
 GameObject:
@@ -265,3 +269,32 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4630874168438460912}
   m_PrefabAsset: {fileID: 0}
+--- !u!108 &5062880721300557943 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 434277080881267079, guid: 7b1398449d3210b4884ae5777b4a4cba,
+    type: 3}
+  m_PrefabInstance: {fileID: 4630874168438460912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6342758910320697004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1748005900571201372, guid: 7b1398449d3210b4884ae5777b4a4cba,
+    type: 3}
+  m_PrefabInstance: {fileID: 4630874168438460912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3377147463577868145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6342758910320697004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf5d568b8c73d54db2900cfa4c0c7a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumetricLight: {fileID: 3581125664225287413}
+  pointLight: {fileID: 5062880721300557943}
+  maxLightIntensity: 4
+  minLightIntensity: 1
+  decayRate: 0.005
