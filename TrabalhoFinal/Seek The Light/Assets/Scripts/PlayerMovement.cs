@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float m_RotationDamping = 5;
 
-    Vector3 m_Velocity;
+    public Vector3 m_Velocity;
     Vector3 m_PreviousInputDirection;
     CharacterController m_CharacterController;
     Animator m_Animator;
@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         if (inputDirection != Vector3.zero)
         {
             m_PreviousInputDirection = inputDirection;
-            //m_Velocity = inputDirection;
+            m_Velocity = inputDirection;
         }
 
         m_Velocity = MoveGround(inputDirection, m_Velocity);
