@@ -28,10 +28,13 @@ public class PlayerMovement : MonoBehaviour
         m_Animator = GetComponentInChildren<Animator>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         m_Animator.SetFloat("Speed", Vector3.Magnitude(m_Velocity));
+    }
 
+    private void FixedUpdate()
+    {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         var inputDirection = new Vector3(horizontal, 0, vertical);
@@ -40,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         if (inputDirection != Vector3.zero)
         {
             m_PreviousInputDirection = inputDirection;
-            m_Velocity = inputDirection;
+            //m_Velocity = inputDirection;
         }
 
         m_Velocity = MoveGround(inputDirection, m_Velocity);
