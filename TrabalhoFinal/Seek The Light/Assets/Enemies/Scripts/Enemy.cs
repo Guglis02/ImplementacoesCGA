@@ -134,7 +134,7 @@ public class Enemy : MonoBehaviour
         Vector2Int playerCell = m_grid.PositionToCoord(GameManager.PlayerPosition);
         Vector2Int currentCell = cellInterpolator.GetCurrentCell();
 
-        cellInterpolator.SetTargetCell(targetCellStategy.CalculateChaseTargetCell(playerCell));
+        cellInterpolator.SetTargetCell(targetCellStategy.CalculateChaseTargetCell(playerCell, currentCell));
 
         cellInterpolator.Move();
     }
