@@ -42,7 +42,7 @@ public class CellInterpolator
         this.targetCell = targetCell;
     }
 
-    public void Move()
+    public void Update()
     {
         if (Vector3.Distance(characterController.transform.position, grid.CoordToPosition(nextCell)) <= 0.5f)
         {

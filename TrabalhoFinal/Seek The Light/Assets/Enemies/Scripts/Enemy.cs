@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[SelectionBase]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     private TargetCellStategy targetCellStategy;
 
     [SerializeField]
     private BehaviourState behaviourState = BehaviourState.Scatter;
-    
+
     private enum BehaviourState
     {
         Scatter,
@@ -29,6 +31,8 @@ public class Enemy : MonoBehaviour
 
     private CellInterpolator cellInterpolator;
 
+    private BoxCollider[] boxColliders;
+
     private float timer = 0;
 
     private void Awake()
@@ -43,6 +47,8 @@ public class Enemy : MonoBehaviour
         GameManager.Player.OnPlayerPowerDown += OnPlayerPowerDown;
         GameManager.Player.OnPlayerHit += OnPlayerHit;
 
+        boxColliders = gameObject.GetComponentsInChildren<BoxCollider>(true);
+
         ResetInterpolator();
     }
 
@@ -51,8 +57,8 @@ public class Enemy : MonoBehaviour
         starterCell = m_grid.PositionToCoord(transform.position);
         cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, enemyMoveSpeed);
     }
-
-    public void OnEaten()
+    
+    public void Die()
     {
         behaviourState = BehaviourState.Dead;
         cellInterpolator.SetTargetCell(starterCell);
@@ -81,7 +87,12 @@ public class Enemy : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        cellInterpolator.Gizmos();
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        cellInterpolator?.Gizmos();
     }
 
     private void Update()
@@ -91,28 +102,29 @@ public class Enemy : MonoBehaviour
         switch (behaviourState)
         {
             case BehaviourState.Scatter:
-                Scatter();
+                UpdateScatterBehaviour();
                 break;
             case BehaviourState.Chase:
-                Chase();
+                UpdateChaseBehaviour();
                 break;
             case BehaviourState.Attack:
-                Attack();
+                UpdateAttackBehaviour();
                 break;
             case BehaviourState.Frightened:
-                Flee();
+                UpdateFleeBehaviour();
                 break;
             case BehaviourState.Dead:
-                ReturnToSpawn();
+                UpdateDeadBehaviour();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
+        cellInterpolator.Update();
         UpdateBehaviour();
     }
 
-    private void Scatter()
+    private void UpdateScatterBehaviour()
     {
         Vector2Int currentCell = cellInterpolator.GetCurrentCell();
 
@@ -125,28 +137,45 @@ public class Enemy : MonoBehaviour
         {
             cellInterpolator.SetTargetCell(targetCellStategy.GetScatterTargetCell());
         }
-
-        cellInterpolator.Move();
     }
 
-    private void Chase()
+    private void UpdateChaseBehaviour()
     {
         Vector2Int playerCell = m_grid.PositionToCoord(GameManager.PlayerPosition);
         Vector2Int currentCell = cellInterpolator.GetCurrentCell();
 
         cellInterpolator.SetTargetCell(targetCellStategy.CalculateChaseTargetCell(playerCell, currentCell));
-
-        cellInterpolator.Move();
     }
 
-    private void Attack()
+    static readonly Collider[] s_TempColliders = new Collider[32];
+
+    private void UpdateAttackBehaviour()
     {
         Vector3 lookDir = transform.position - GameManager.PlayerPosition;
         Quaternion rotation = Quaternion.LookRotation(new Vector3(lookDir.x, 0, lookDir.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20f * Time.deltaTime);
+
+        foreach (BoxCollider collider in boxColliders)
+        {
+            int colliderCount = Physics.OverlapBoxNonAlloc(
+                collider.center, 
+                collider.size / 2,
+                s_TempColliders, 
+                collider.transform.rotation, 
+                LayerMask.NameToLayer("Player"));
+
+            for (int i = 0; i < colliderCount; i++)
+            {
+                if (s_TempColliders[i].TryGetComponent(out Player player))
+                {
+                    //player.TakeDamage();
+                    return;
+                }
+            }
+        }
     }
 
-    private void Flee()
+    private void UpdateFleeBehaviour()
     {
         List<Vector2Int> possibleCells = new List<Vector2Int>();
 
@@ -164,13 +193,10 @@ public class Enemy : MonoBehaviour
 
         int randomIndex = UnityEngine.Random.Range(0, possibleCells.Count);
         cellInterpolator.SetTargetCell(possibleCells[randomIndex]);
-        cellInterpolator.Move();
     }
 
-    private void ReturnToSpawn()
+    private void UpdateDeadBehaviour()
     {
-        cellInterpolator.Move();
-
         if (Vector3.Distance(transform.position, m_grid.CoordToPosition(starterCell)) <= 0.5f)
         {
             behaviourState = BehaviourState.Scatter;
@@ -179,15 +205,26 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    bool IsPlayerOnAttackRange(float attackRange)
+    {
+        Vector3 playerPosition = GameManager.PlayerPosition;
+        Vector2 player2dPosition = new Vector2(playerPosition.x, playerPosition.z);
+        Vector2 current2dPosition = new Vector2(transform.position.x, transform.position.z);
+
+        float distanceToPlayer = Vector2.Distance(player2dPosition, current2dPosition);
+
+        return distanceToPlayer < attackRange;
+    }
+
     private void UpdateBehaviour()
     {
-        float distanceToPlayer = Vector3.Distance(GameManager.PlayerPosition, transform.position);
         if (behaviourState == BehaviourState.Dead 
             || behaviourState == BehaviourState.Frightened)
         {
             return;
-        } else if (distanceToPlayer < 1.5f)
+        } else if (IsPlayerOnAttackRange(1.5f))
         {
+            return;
             behaviourState = BehaviourState.Attack;
             m_Animator.SetTrigger("Attack");
             timer += 20;

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[SelectionBase]
 public class Player : MonoBehaviour
 {
     private CharacterController m_CharacterController;
@@ -29,23 +30,32 @@ public class Player : MonoBehaviour
         m_CharacterController = GetComponent<CharacterController>();
     }
 
+    private void HandleEnemyCollision(Enemy enemy)
+    {
+        if (IsPoweredUp)
+        {
+            enemy.Die();
+            return;
+        }
+
+        TakeDamage();
+    }
+
+    public void TakeDamage()
+    {
+        health--;
+        OnPlayerHit?.Invoke(health);
+        if (health <= 0)
+        {
+            OnPlayerDeath?.Invoke();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out Enemy enemy))
         {
-            if (IsPoweredUp)
-            {
-                enemy.OnEaten();
-            }
-            else
-            {
-                health--;
-                OnPlayerHit?.Invoke(health);
-                if (health <= 0)
-                {
-                    OnPlayerDeath?.Invoke();
-                }
-            }
+            HandleEnemyCollision(enemy);
         }
         else if (other.gameObject.TryGetComponent(out Pickup pickup))
         {
@@ -73,11 +83,11 @@ public class Player : MonoBehaviour
 
         if (IsPoweredUp)
         {
-            PowerUpUpdate();
+            UpdatePowerUp();
         }
     }
 
-    private void PowerUpUpdate()
+    private void UpdatePowerUp()
     {
         powerUpTimer -= Time.deltaTime;
         if (powerUpTimer <= 0f)
