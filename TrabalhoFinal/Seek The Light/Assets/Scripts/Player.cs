@@ -53,9 +53,13 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out Enemy enemy))
+        if (other.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
         {
             HandleEnemyCollision(enemy);
+        }
+        else if (other.gameObject.CompareTag("AttackCollider"))
+        {
+            TakeDamage();
         }
         else if (other.gameObject.TryGetComponent(out Pickup pickup))
         {

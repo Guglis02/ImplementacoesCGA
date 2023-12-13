@@ -31,8 +31,6 @@ public class Enemy : MonoBehaviour
 
     private CellInterpolator cellInterpolator;
 
-    private BoxCollider[] boxColliders;
-
     private float timer = 0;
 
     private void Awake()
@@ -46,8 +44,6 @@ public class Enemy : MonoBehaviour
         GameManager.Player.OnPlayerPowerUp += OnPlayerPowerUp;
         GameManager.Player.OnPlayerPowerDown += OnPlayerPowerDown;
         GameManager.Player.OnPlayerHit += OnPlayerHit;
-
-        boxColliders = gameObject.GetComponentsInChildren<BoxCollider>(true);
 
         ResetInterpolator();
     }
@@ -147,32 +143,11 @@ public class Enemy : MonoBehaviour
         cellInterpolator.SetTargetCell(targetCellStategy.CalculateChaseTargetCell(playerCell, currentCell));
     }
 
-    static readonly Collider[] s_TempColliders = new Collider[32];
-
     private void UpdateAttackBehaviour()
     {
         Vector3 lookDir = transform.position - GameManager.PlayerPosition;
         Quaternion rotation = Quaternion.LookRotation(new Vector3(lookDir.x, 0, lookDir.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 20f * Time.deltaTime);
-
-        foreach (BoxCollider collider in boxColliders)
-        {
-            int colliderCount = Physics.OverlapBoxNonAlloc(
-                collider.center, 
-                collider.size / 2,
-                s_TempColliders, 
-                collider.transform.rotation, 
-                LayerMask.NameToLayer("Player"));
-
-            for (int i = 0; i < colliderCount; i++)
-            {
-                if (s_TempColliders[i].TryGetComponent(out Player player))
-                {
-                    //player.TakeDamage();
-                    return;
-                }
-            }
-        }
     }
 
     private void UpdateFleeBehaviour()
@@ -222,9 +197,8 @@ public class Enemy : MonoBehaviour
             || behaviourState == BehaviourState.Frightened)
         {
             return;
-        } else if (IsPlayerOnAttackRange(1.5f))
+        } else if (IsPlayerOnAttackRange(2f))
         {
-            return;
             behaviourState = BehaviourState.Attack;
             m_Animator.SetTrigger("Attack");
             timer += 20;
