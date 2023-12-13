@@ -148,8 +148,8 @@ Camera:
   m_GameObject: {fileID: 2029799845247720811}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -377,8 +377,8 @@ MonoBehaviour:
   - {fileID: 5264667415374215060, guid: e87b0f480569ed349bc789b640db3676, type: 3}
   - {fileID: 2131136147619721867, guid: 6b9e76a5bd81db94d8ddc7b6c74a4b72, type: 3}
   pickupsParent: {fileID: 0}
-  pickupPrefab: {fileID: 7114236057164356120, guid: 819a3b3d84738994692258f67314ae39,
-    type: 3}
+  pickupPrefab: {fileID: 0}
+  powerUpPrefab: {fileID: 0}
   pointsCounter: 0
 --- !u!1 &9117196544883493577
 GameObject:

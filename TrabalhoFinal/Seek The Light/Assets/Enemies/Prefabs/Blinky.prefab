@@ -93,6 +93,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: AttackCollider
       objectReference: {fileID: 0}
+    - target: {fileID: 6417975181428428060, guid: 85812cb051453cb4eb28140e0c218334,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6535703226129089354, guid: 85812cb051453cb4eb28140e0c218334,
         type: 3}
       propertyPath: m_TagString
@@ -173,6 +178,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.6049056, y: 0.9999997, z: 2.1602716}
   m_Center: {x: -3.3278947, y: -0.08065402, z: 0.48988974}
+--- !u!1 &9128036854218317193 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6417975181428428060, guid: 85812cb051453cb4eb28140e0c218334,
+    type: 3}
+  m_PrefabInstance: {fileID: 2863294598687215765}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3169469599473248531
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -181,6 +192,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
+        type: 3}
+      propertyPath: bodyMesh
+      value: 
+      objectReference: {fileID: 9128036854218317193}
     - target: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
         type: 3}
       propertyPath: targetCellStategy

@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private BehaviourState behaviourState = BehaviourState.Scatter;
 
+    [SerializeField]
+    private GameObject bodyMesh;
+
     private enum BehaviourState
     {
         Scatter,
@@ -48,6 +51,14 @@ public class Enemy : MonoBehaviour
         ResetInterpolator();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("VolumetricLight"))
+        {
+            Die();
+        }
+    }
+
     private void ResetInterpolator()
     {
         starterCell = m_grid.PositionToCoord(transform.position);
@@ -58,7 +69,7 @@ public class Enemy : MonoBehaviour
     {
         behaviourState = BehaviourState.Dead;
         cellInterpolator.SetTargetCell(starterCell);
-        m_Animator.SetTrigger("Dead");
+        bodyMesh.SetActive(false);
     }
 
     private void OnPlayerHit(int _)
@@ -174,6 +185,7 @@ public class Enemy : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, m_grid.CoordToPosition(starterCell)) <= 0.5f)
         {
+            bodyMesh.SetActive(true);
             behaviourState = BehaviourState.Scatter;
             m_Animator.SetTrigger("Scatter");
             timer = 0;

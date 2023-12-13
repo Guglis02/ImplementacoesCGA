@@ -10,6 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
         type: 3}
+      propertyPath: bodyMesh
+      value: 
+      objectReference: {fileID: 5326966697799364860}
+    - target: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
+        type: 3}
       propertyPath: targetCellStategy
       value: 
       objectReference: {fileID: 11400000, guid: 3cb9abefd52c0904c8bd4c1d3a1a93f9,
@@ -196,6 +201,12 @@ PrefabInstance:
 --- !u!4 &1189837451415999872 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4055793857937584781, guid: b73015aa4d1416c4290d8845faa7aa56,
+    type: 3}
+  m_PrefabInstance: {fileID: 2939220933615806221}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5326966697799364860 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7000592875480504305, guid: b73015aa4d1416c4290d8845faa7aa56,
     type: 3}
   m_PrefabInstance: {fileID: 2939220933615806221}
   m_PrefabAsset: {fileID: 0}

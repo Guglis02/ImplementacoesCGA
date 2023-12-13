@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     public Action OnPlayerDeath;
     public Action OnPlayerGotAllPoints;
 
-    private bool IsPoweredUp = false;
+    private bool IsPoweredUp => powerUpTimer > 0;
 
     private void Awake()
     {
@@ -35,6 +35,16 @@ public class Player : MonoBehaviour
         if (IsPoweredUp)
         {
             enemy.Die();
+            return;
+        }
+
+        TakeDamage();
+    }
+
+    private void HandleEnemyAttack()
+    {
+        if (IsPoweredUp)
+        {
             return;
         }
 
@@ -53,13 +63,13 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+        if (other.gameObject.TryGetComponent(out Enemy enemy))
         {
             HandleEnemyCollision(enemy);
         }
         else if (other.gameObject.CompareTag("AttackCollider"))
         {
-            TakeDamage();
+            HandleEnemyAttack();
         }
         else if (other.gameObject.TryGetComponent(out Pickup pickup))
         {
@@ -70,7 +80,6 @@ public class Player : MonoBehaviour
             }
             else if (pickup.pickupType == Pickup.PickupType.PowerUp)
             {
-                IsPoweredUp = true;
                 powerUpTimer = PowerUpDuration;
                 OnPlayerPowerUp?.Invoke();
             }
@@ -96,7 +105,6 @@ public class Player : MonoBehaviour
         powerUpTimer -= Time.deltaTime;
         if (powerUpTimer <= 0f)
         {
-            IsPoweredUp = false;
             OnPlayerPowerDown?.Invoke();
         }
     }
