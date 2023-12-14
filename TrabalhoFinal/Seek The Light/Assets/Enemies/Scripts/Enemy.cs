@@ -10,7 +10,22 @@ public class Enemy : MonoBehaviour
     private TargetCellStategy targetCellStategy;
 
     [SerializeField]
-    private BehaviourState behaviourState = BehaviourState.Scatter;
+    private BehaviourState m_CurrentBehaviourState;
+    private BehaviourState CurrentBehaviourState
+    {
+        get {
+            return m_CurrentBehaviourState;
+        }
+        set {
+            if (m_CurrentBehaviourState == value)
+            {
+                return;
+            }
+
+            m_CurrentBehaviourState = value;
+            m_Animator.SetTrigger(m_CurrentBehaviourState.ToString());
+        }
+    }
 
     [SerializeField]
     private GameObject bodyMesh;
@@ -25,6 +40,8 @@ public class Enemy : MonoBehaviour
     }
 
     private const float enemyMoveSpeed = 1.5f;
+    private const float AttackRange = 2f;
+
     private CharacterController m_characterController;
     private Animator m_Animator;
 
@@ -51,6 +68,11 @@ public class Enemy : MonoBehaviour
         ResetInterpolator();
     }
 
+    private void Start()
+    {
+        CurrentBehaviourState = BehaviourState.Scatter;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("VolumetricLight"))
@@ -67,7 +89,7 @@ public class Enemy : MonoBehaviour
     
     public void Die()
     {
-        behaviourState = BehaviourState.Dead;
+        CurrentBehaviourState = BehaviourState.Dead;
         cellInterpolator.SetTargetCell(starterCell);
         bodyMesh.SetActive(false);
     }
@@ -76,19 +98,18 @@ public class Enemy : MonoBehaviour
     {
         m_characterController.SetPosition(m_grid.CoordToPosition(starterCell));
         ResetInterpolator();
-        behaviourState = BehaviourState.Scatter;
-        m_Animator.SetTrigger("Scatter");
+        CurrentBehaviourState = BehaviourState.Scatter;
         timer = 0;
     }
 
     private void OnPlayerPowerUp()
     {
-        behaviourState = BehaviourState.Frightened;
+        CurrentBehaviourState = BehaviourState.Frightened;
     }
 
     private void OnPlayerPowerDown()
     {
-        behaviourState = BehaviourState.Scatter;
+        CurrentBehaviourState = BehaviourState.Scatter;
         timer = 0;
     }
 
@@ -106,7 +127,7 @@ public class Enemy : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        switch (behaviourState)
+        switch (CurrentBehaviourState)
         {
             case BehaviourState.Scatter:
                 UpdateScatterBehaviour();
@@ -177,7 +198,7 @@ public class Enemy : MonoBehaviour
             possibleCells.Add(nextCellCandidate);
         }
 
-        int randomIndex = UnityEngine.Random.Range(0, possibleCells.Count);
+        int randomIndex = UnityEngine.Random.Range(0, possibleCells.Count - 1);
         cellInterpolator.SetTargetCell(possibleCells[randomIndex]);
     }
 
@@ -186,8 +207,7 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, m_grid.CoordToPosition(starterCell)) <= 0.5f)
         {
             bodyMesh.SetActive(true);
-            behaviourState = BehaviourState.Scatter;
-            m_Animator.SetTrigger("Scatter");
+            CurrentBehaviourState = BehaviourState.Scatter;
             timer = 0;
         }
     }
@@ -205,25 +225,22 @@ public class Enemy : MonoBehaviour
 
     private void UpdateBehaviour()
     {
-        if (behaviourState == BehaviourState.Dead 
-            || behaviourState == BehaviourState.Frightened)
+        if (CurrentBehaviourState == BehaviourState.Dead 
+            || CurrentBehaviourState == BehaviourState.Frightened)
         {
             return;
-        } else if (IsPlayerOnAttackRange(2f))
+        } else if (IsPlayerOnAttackRange(AttackRange))
         {
-            behaviourState = BehaviourState.Attack;
-            m_Animator.SetTrigger("Attack");
+            CurrentBehaviourState = BehaviourState.Attack;
             timer += 20;
-        } else if (timer >= 20f && behaviourState != BehaviourState.Scatter)
+        } else if (timer >= 20f && CurrentBehaviourState != BehaviourState.Scatter)
         {
-            behaviourState = BehaviourState.Scatter;
-            m_Animator.SetTrigger("Scatter");
+            CurrentBehaviourState = BehaviourState.Scatter;
             timer = 0;
         }
-        else if (timer >= 7f && behaviourState != BehaviourState.Chase)
+        else if (timer >= 7f && CurrentBehaviourState != BehaviourState.Chase)
         {
-            behaviourState = BehaviourState.Chase;
-            m_Animator.SetTrigger("Chase");
+            CurrentBehaviourState = BehaviourState.Chase;
             timer = 0;
         }
     }

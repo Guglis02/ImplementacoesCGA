@@ -12,7 +12,7 @@ PrefabInstance:
         type: 3}
       propertyPath: bodyMesh
       value: 
-      objectReference: {fileID: 428329189967221672}
+      objectReference: {fileID: 6328791863829261422}
     - target: {fileID: 597942962311117467, guid: ecff9da0158ac8c45bf56b9eb4d779b1,
         type: 3}
       propertyPath: targetCellStategy
@@ -200,12 +200,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 346325558902668035}
   m_SourcePrefab: {fileID: 100100000, guid: f4978608a44fbe64a8f771c0b43b5de4, type: 3}
---- !u!1 &428329189967221672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6180422163818134239, guid: f4978608a44fbe64a8f771c0b43b5de4,
-    type: 3}
-  m_PrefabInstance: {fileID: 5779523594593364343}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1061278912922585362 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6813547778923618405, guid: f4978608a44fbe64a8f771c0b43b5de4,
@@ -266,3 +260,9 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.6049056, y: 0.9999997, z: 2.1602716}
   m_Center: {x: -3.3278947, y: -0.08065402, z: 0.48988974}
+--- !u!1 &6328791863829261422 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 567625891804677401, guid: f4978608a44fbe64a8f771c0b43b5de4,
+    type: 3}
+  m_PrefabInstance: {fileID: 5779523594593364343}
+  m_PrefabAsset: {fileID: 0}

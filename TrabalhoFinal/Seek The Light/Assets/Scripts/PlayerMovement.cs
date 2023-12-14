@@ -16,10 +16,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float m_RotationDamping = 5;
 
-    public Vector3 m_Velocity;
+    Vector3 m_Velocity;
     Vector3 m_PreviousInputDirection;
     CharacterController m_CharacterController;
     Animator m_Animator;
+
+    private Vector3 m_LastFramePos;
+    private float m_Speed;
 
     void Awake()
     {
@@ -29,8 +32,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Update()
-    {
-        m_Animator.SetFloat("Speed", Vector3.Magnitude(m_Velocity));
+    {        
+        m_Animator.SetFloat("Speed", m_Speed);
     }
 
     private void FixedUpdate()
@@ -56,6 +59,9 @@ public class PlayerMovement : MonoBehaviour
         var position = transform.position;
         position.y = 1;
         transform.position = position;
+
+        m_Speed = (position - m_LastFramePos).magnitude / Time.deltaTime;
+        m_LastFramePos = position;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
