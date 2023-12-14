@@ -75,6 +75,11 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (CurrentBehaviourState == BehaviourState.Dead)
+        {
+            return;
+        }
+
         if (other.gameObject.CompareTag("VolumetricLight"))
         {
             Die();
@@ -89,17 +94,25 @@ public class Enemy : MonoBehaviour
     
     public void Die()
     {
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Player"), true);
         CurrentBehaviourState = BehaviourState.Dead;
         cellInterpolator.SetTargetCell(starterCell);
         m_EnemyMeshController.SetScorchedMaterials();
+    }
+
+    private void Revive()
+    {
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Player"), false);
+        m_EnemyMeshController.SetDefaultMaterials();
+        CurrentBehaviourState = BehaviourState.Scatter;
+        timer = 0;
     }
 
     private void OnPlayerHit(int _)
     {
         m_characterController.SetPosition(m_grid.CoordToPosition(starterCell));
         ResetInterpolator();
-        CurrentBehaviourState = BehaviourState.Scatter;
-        timer = 0;
+        Revive();
     }
 
     private void OnPlayerPowerUp()
@@ -206,9 +219,7 @@ public class Enemy : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, m_grid.CoordToPosition(starterCell)) <= 0.5f)
         {
-            m_EnemyMeshController.SetDefaultMaterials();
-            CurrentBehaviourState = BehaviourState.Scatter;
-            timer = 0;
+            Revive();
         }
     }
 
