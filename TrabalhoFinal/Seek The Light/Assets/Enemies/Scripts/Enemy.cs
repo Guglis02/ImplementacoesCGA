@@ -27,8 +27,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    private GameObject bodyMesh;
+    private EnemyMeshController m_EnemyMeshController;
 
     private enum BehaviourState
     {
@@ -57,6 +56,7 @@ public class Enemy : MonoBehaviour
     {
         m_characterController = GetComponent<CharacterController>();
         m_Animator = GetComponentInChildren<Animator>();
+        m_EnemyMeshController = GetComponentInChildren<EnemyMeshController>();
 
         m_grid = GameManager.Instance.LevelGrid;
         targetCellStategy.PlaceScatterTargetCell(m_grid.Width, m_grid.Height);
@@ -91,7 +91,7 @@ public class Enemy : MonoBehaviour
     {
         CurrentBehaviourState = BehaviourState.Dead;
         cellInterpolator.SetTargetCell(starterCell);
-        bodyMesh.SetActive(false);
+        m_EnemyMeshController.SetScorchedMaterials();
     }
 
     private void OnPlayerHit(int _)
@@ -206,7 +206,7 @@ public class Enemy : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, m_grid.CoordToPosition(starterCell)) <= 0.5f)
         {
-            bodyMesh.SetActive(true);
+            m_EnemyMeshController.SetDefaultMaterials();
             CurrentBehaviourState = BehaviourState.Scatter;
             timer = 0;
         }

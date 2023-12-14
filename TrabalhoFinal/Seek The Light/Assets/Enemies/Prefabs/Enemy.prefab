@@ -610,7 +610,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6f06d6cb46521e54c94ea40f945d390f, type: 2}
+  - {fileID: 2100000, guid: 16b9be24bf5d4a94d8e768fc65eaafdc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -770,8 +770,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 60046dfe1ab2d5746a6ccb2df0a78039, type: 2}
-  - {fileID: 2100000, guid: 2b81b17cea17e5c4497955c205aff964, type: 2}
+  - {fileID: 2100000, guid: 16b9be24bf5d4a94d8e768fc65eaafdc, type: 2}
+  - {fileID: 2100000, guid: 16b9be24bf5d4a94d8e768fc65eaafdc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1250,7 +1250,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCellStategy: {fileID: 11400000, guid: e026bd0d23de3df4897fb7613f84d957, type: 2}
   m_CurrentBehaviourState: 0
-  bodyMesh: {fileID: 6147830098681394330}
 --- !u!114 &2547354315215914728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1265,14 +1264,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BodyMeshRenderer: {fileID: 7840697197557507250}
   m_BodyMaterials:
-  - {fileID: 2100000, guid: 60046dfe1ab2d5746a6ccb2df0a78039, type: 2}
-  - {fileID: 2100000, guid: 2b81b17cea17e5c4497955c205aff964, type: 2}
+  - {fileID: 2100000, guid: 16b9be24bf5d4a94d8e768fc65eaafdc, type: 2}
+  - {fileID: 2100000, guid: 16b9be24bf5d4a94d8e768fc65eaafdc, type: 2}
   m_HeadMeshRenderer: {fileID: 7926732131064205209}
   m_HeadMeshFilter: {fileID: 1692096218705729392}
   m_HeadMesh: {fileID: -4559681348659797430, guid: fc2971568e92a4b42b2ffd0c8e03f1e4,
     type: 3}
   m_HeadMaterials:
-  - {fileID: 2100000, guid: 6f06d6cb46521e54c94ea40f945d390f, type: 2}
+  - {fileID: 2100000, guid: 16b9be24bf5d4a94d8e768fc65eaafdc, type: 2}
+  m_scorchedMaterial: {fileID: 2100000, guid: 16b9be24bf5d4a94d8e768fc65eaafdc, type: 2}
 --- !u!143 &7834495190935136986
 CharacterController:
   m_ObjectHideFlags: 0
