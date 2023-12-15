@@ -44,7 +44,7 @@ public class CellInterpolator
 
     public void Update()
     {
-        if (Vector3.Distance(characterController.transform.position, grid.CoordToPosition(nextCell)) <= 0.5f)
+        if (Vector3.Distance(characterController.transform.position, grid.CoordToPosition(nextCell)) <= 1f)
         {
             CalculateNextCell();
             Vector2 dir = nextCell - currentCell;

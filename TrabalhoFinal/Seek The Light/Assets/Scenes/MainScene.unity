@@ -561,6 +561,66 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 695790710}
     m_Modifications:
+    - target: {fileID: 71699526648272736, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 71699526648272736, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 71699526648272736, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 71699526648272736, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 71699526648272736, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 71699526648272736, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 726471364646383989, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 726471364646383989, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 726471364646383989, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 726471364646383989, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 726471364646383989, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 726471364646383989, guid: 75b3c1aa1df679240bd021dba19bd779,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2899901648716775045, guid: 75b3c1aa1df679240bd021dba19bd779,
         type: 3}
       propertyPath: m_AnchorMax.y
