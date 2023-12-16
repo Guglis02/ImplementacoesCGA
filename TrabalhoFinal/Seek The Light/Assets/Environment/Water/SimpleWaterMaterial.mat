@@ -36,9 +36,9 @@ Material:
     - _Amount: 0.6
     - _Foam: 8
     - _Height: 0.1
-    - _Scale: 0.5
+    - _Scale: 0.233
     - _Speed: 0.5
-    - _TextureDistort: 0.1
+    - _TextureDistort: 0.5
     m_Colors:
     - _Color: {r: 0.1462264, g: 1, b: 0.5599279, a: 0.5}
     - _FoamC: {r: 0.17121458, g: 1, b: 0, a: 0.5}

@@ -29,7 +29,6 @@ Shader "Unlit/Simple Water"
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			// make fog work
 			#pragma multi_compile_fog
 			
 			#include "UnityCG.cginc"
@@ -50,7 +49,7 @@ Shader "Unlit/Simple Water"
 			};
 			float _TextureDistort;
 			float4 _Color;
-			sampler2D _CameraDepthTexture; //Depth Texture
+			sampler2D _CameraDepthTexture; // Textura de profundidade da camera
 			sampler2D _MainTex, _NoiseTex;//
 			float4 _MainTex_ST;
 			float _Speed, _Amount, _Height, _Foam, _Scale;// 
@@ -88,25 +87,32 @@ Shader "Unlit/Simple Water"
 			
             fixed4 frag (v2f i) : SV_Target
             {
-                // rendertexture UV
+                // Ajustes no UV da textura para compensar a posicao do interactor
                 float2 uv = i.worldPos.xz - _Position.xz;
-                uv = uv/(_OrthographicCamSize *2);
+                uv = uv / (_OrthographicCamSize *2);
                 uv += 0.5;
+
                 // Ripples
                 float ripples = tex2D(_GlobalEffectRT, uv ).b;
  
-                // mask to prevent bleeding
+                // Mascara para evitar bleeding
                 float4 mask = tex2D(_MaskInt, uv);              
                 ripples *= mask.a;
  
                 fixed distortx = tex2D(_NoiseTex, (i.worldPos.xz * _Scale)  + (_Time.x * 2)).r ;// distortion 
                 distortx +=  (ripples *2);
            
-                half4 col = tex2D(_MainTex, (i.worldPos.xz * _Scale) - (distortx * _TextureDistort));// texture times tint;        
-                half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos ))); // depth
-                half4 foamLine =1 - saturate(_Foam* (depth - i.scrPos.w ) ) ;// foam line by comparing depth and screenposition
+				// Multiplica cores da textura pelas cores escolhidas
+                half4 col = tex2D(_MainTex, (i.worldPos.xz * _Scale) - (distortx * _TextureDistort));   
+				
+				// Profundidade do pixel
+                half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos )));
+                
+				// Compara profundidade com a posicao em tela para fazer a linha de espuma
+				half4 foamLine =1 - saturate(_Foam* (depth - i.scrPos.w ));
+
                 col *= _Color;
-                col += (step(0.4 * distortx,foamLine) * _FoamC); // add the foam line and tint to the texture
+                col += (step(0.4 * distortx,foamLine) * _FoamC);
                 col = saturate(col) * col.a ;
                
                ripples = step(0.99, ripples * 3);
