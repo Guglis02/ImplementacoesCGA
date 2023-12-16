@@ -18,6 +18,14 @@ public class GameManager : MonoBehaviour
 
     public int TotalPoints => levelBuilder.pointsCounter;
 
+    public enum AiMode
+    {
+        GridInterpolation,
+        SteeringBehaviour
+    }
+
+    public AiMode aiMode = AiMode.GridInterpolation;
+
     private static Player m_player;
     public static Player Player
     {

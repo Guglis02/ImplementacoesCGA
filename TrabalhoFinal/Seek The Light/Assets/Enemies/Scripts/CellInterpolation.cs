@@ -42,6 +42,11 @@ public class CellInterpolator
         this.targetCell = targetCell;
     }
 
+    public Vector3 GetTargetPos()
+    {
+        return grid.CoordToPosition(targetCell);
+    }
+
     public void Update()
     {
         if (Vector3.Distance(characterController.transform.position, grid.CoordToPosition(nextCell)) <= 1f)

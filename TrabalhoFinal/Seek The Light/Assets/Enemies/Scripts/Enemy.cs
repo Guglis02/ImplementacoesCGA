@@ -11,6 +11,10 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private BehaviourState m_CurrentBehaviourState;
+
+    [SerializeField]
+    private float m_MoveSpeed = 1.5f;
+
     private BehaviourState CurrentBehaviourState
     {
         get {
@@ -28,6 +32,7 @@ public class Enemy : MonoBehaviour
     }
 
     private EnemyMeshController m_EnemyMeshController;
+    private SteeringBehaviour m_SteeringBehaviour;
 
     private enum BehaviourState
     {
@@ -38,7 +43,7 @@ public class Enemy : MonoBehaviour
         Dead
     }
 
-    private const float enemyMoveSpeed = 1.5f;
+
     private const float AttackRange = 2f;
 
     private CharacterController m_characterController;
@@ -57,6 +62,8 @@ public class Enemy : MonoBehaviour
         m_characterController = GetComponent<CharacterController>();
         m_Animator = GetComponentInChildren<Animator>();
         m_EnemyMeshController = GetComponentInChildren<EnemyMeshController>();
+        m_SteeringBehaviour = GetComponent<SteeringBehaviour>();
+        m_SteeringBehaviour.m_MaxSpeed = m_MoveSpeed;
 
         m_grid = GameManager.Instance.LevelGrid;
         targetCellStategy.PlaceScatterTargetCell(m_grid.Width, m_grid.Height);
@@ -89,7 +96,7 @@ public class Enemy : MonoBehaviour
     private void ResetInterpolator()
     {
         starterCell = m_grid.PositionToCoord(transform.position);
-        cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, enemyMoveSpeed);
+        cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, m_MoveSpeed);
     }
     
     public void Die()
@@ -118,17 +125,19 @@ public class Enemy : MonoBehaviour
     private void OnPlayerPowerUp()
     {
         CurrentBehaviourState = BehaviourState.Frightened;
+        m_SteeringBehaviour.m_ShouldFlee = true;
     }
 
     private void OnPlayerPowerDown()
     {
         CurrentBehaviourState = BehaviourState.Scatter;
+        m_SteeringBehaviour.m_ShouldFlee = false;
         timer = 0;
     }
 
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying || !isActiveAndEnabled)
+        if (!Application.isPlaying)
         {
             return;
         }
@@ -161,7 +170,18 @@ public class Enemy : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
 
-        cellInterpolator.Update();
+        switch (GameManager.Instance.aiMode)
+        {
+            case GameManager.AiMode.GridInterpolation:
+                cellInterpolator.Update();
+                break;
+            case GameManager.AiMode.SteeringBehaviour:
+                m_SteeringBehaviour.UpdateSteering(cellInterpolator.GetTargetPos());
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
         UpdateBehaviour();
     }
 

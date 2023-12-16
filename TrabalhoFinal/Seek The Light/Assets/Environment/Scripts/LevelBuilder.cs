@@ -12,8 +12,7 @@ public class LevelBuilder : MonoBehaviour
     [SerializeField] private GameObject wallPrefab;
 
     [SerializeField] private TerrainScaler floor;
-    [SerializeField] private TerrainScaler water;
-    [SerializeField] private TerrainScaler mud;
+    [SerializeField] private TerrainScaler terrainPrefab;
 
     [SerializeField] private GameObject enemiesParent;
     [SerializeField] private List<Enemy> enemiesPrefabs;
@@ -82,8 +81,8 @@ public class LevelBuilder : MonoBehaviour
         levelGrid = new Grid<LevelCell>(m_LevelGrid, LevelCenter, new Vector2(s_CellSize, s_CellSize));
 
         floor.Initialize(LevelSize, LevelCenter);
-        water.Initialize(LevelSize, LevelCenter);
-        mud.Initialize(LevelSize, LevelCenter);
+        TerrainScaler terrain = Instantiate(terrainPrefab, transform);
+        terrain.Initialize(LevelSize, LevelCenter);
 
         GroupHorizontalCells();
         GroupVerticalCells();

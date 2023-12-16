@@ -3,9 +3,6 @@ using UnityEngine;
 public class SteeringBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private float m_MaxSpeed = 1.5f;
-
-    [SerializeField]
     private float m_MaxForce = 1f;
 
     [SerializeField]
@@ -16,6 +13,8 @@ public class SteeringBehaviour : MonoBehaviour
 
     public Vector3 m_acceleration = Vector3.zero;
 
+    public float m_MaxSpeed;
+
     private CharacterController m_CharacterController;
 
     private float m_WanderDistance = 2f;
@@ -23,7 +22,7 @@ public class SteeringBehaviour : MonoBehaviour
     private float m_WanderTheta = Mathf.PI / 2f;
     private float m_WallDetectionDistance = 1f;
 
-    private bool m_ShouldFlee = false;
+    public bool m_ShouldFlee = false;
 
     private void Awake()
     {
@@ -84,7 +83,7 @@ public class SteeringBehaviour : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying || !isActiveAndEnabled)
+        if (!Application.isPlaying)
         {
             return;
         }
@@ -121,7 +120,7 @@ public class SteeringBehaviour : MonoBehaviour
         }
     }
 
-    public void Update()
+    public void UpdateSteering(Vector3 target)
     {        
         if (m_ShouldFlee)
         {
@@ -129,7 +128,7 @@ public class SteeringBehaviour : MonoBehaviour
         }
         else
         {
-            Seek(GameManager.PlayerPosition);
+            Seek(target);
         }
         WallAvoidance();
 
