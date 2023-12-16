@@ -99,7 +99,6 @@ Shader "Unlit/Simple Water"
                 float4 mask = tex2D(_MaskInt, uv);              
                 ripples *= mask.a;
  
- 
                 fixed distortx = tex2D(_NoiseTex, (i.worldPos.xz * _Scale)  + (_Time.x * 2)).r ;// distortion 
                 distortx +=  (ripples *2);
            

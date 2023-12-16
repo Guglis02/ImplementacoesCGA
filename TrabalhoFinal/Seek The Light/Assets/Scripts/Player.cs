@@ -89,10 +89,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (points == GameManager.Instance.TotalPoints)
-        {
-            OnPlayerGotAllPoints?.Invoke();
-        }
+        //if (points == GameManager.Instance.TotalPoints)
+        //{
+        //    OnPlayerGotAllPoints?.Invoke();
+        //}
 
         if (IsPoweredUp)
         {

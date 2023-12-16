@@ -3,13 +3,15 @@ using UnityEngine;
 public class WaterSimulationCamera : MonoBehaviour
 {
     [SerializeField]
-    Transform m_WaterInteractor;
+    private RenderTexture m_RenderTexture;
+    [SerializeField]
+    private Transform m_WaterInteractor;
 
     void Awake()
     {
         Camera cam = GetComponent<Camera>();
 
-        Shader.SetGlobalTexture("_GlobalEffectRT", cam.activeTexture);
+        Shader.SetGlobalTexture("_GlobalEffectRT", m_RenderTexture);
         Shader.SetGlobalFloat("_OrthographicCamSize", cam.orthographicSize);
     }
 
