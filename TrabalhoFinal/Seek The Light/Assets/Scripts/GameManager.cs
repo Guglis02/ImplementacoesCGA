@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private LevelBuilder levelBuilder;
     [SerializeField] private Object mainMenuScene;
+    [SerializeField] private Object m_NextScene;
     [SerializeField] private GameObject playerCamera;
     [SerializeField] private GameObject topCamera;
 
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Player.OnPlayerDeath += () => SceneManager.LoadScene(mainMenuScene.name, LoadSceneMode.Single);
-        Player.OnPlayerGotAllPoints += () => SceneManager.LoadScene(mainMenuScene.name, LoadSceneMode.Single);
+        Player.OnPlayerGotAllPoints += () => SceneManager.LoadScene(m_NextScene.name, LoadSceneMode.Single);
     }
 
     private void Update()

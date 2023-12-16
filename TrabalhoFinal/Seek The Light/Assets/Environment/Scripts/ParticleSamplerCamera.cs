@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class WaterSimulationCamera : MonoBehaviour
+public class ParticleSamplerCamera : MonoBehaviour
 {
+    [SerializeField] 
+    private string m_GlobalTextureName;
     [SerializeField]
     private RenderTexture m_RenderTexture;
     [SerializeField]
@@ -11,7 +13,7 @@ public class WaterSimulationCamera : MonoBehaviour
     {
         Camera cam = GetComponent<Camera>();
 
-        Shader.SetGlobalTexture("_GlobalEffectRT", m_RenderTexture);
+        Shader.SetGlobalTexture(m_GlobalTextureName, m_RenderTexture);
         Shader.SetGlobalFloat("_OrthographicCamSize", cam.orthographicSize);
     }
 

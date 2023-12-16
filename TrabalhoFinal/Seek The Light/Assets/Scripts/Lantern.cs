@@ -43,7 +43,7 @@ public class Lantern : MonoBehaviour
     {
         if (pointLight.intensity >= minLightIntensity)
         {
-            pointLight.intensity -= decayRate;
+            pointLight.intensity -= decayRate * Time.deltaTime;
         }
     }
 }

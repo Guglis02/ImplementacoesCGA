@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1481274253966179307}
   - component: {fileID: 2824542360334838635}
   - component: {fileID: 945923129197629415}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Lantern
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   pointLight: {fileID: 434277080881267079}
   maxLightIntensity: 4
   minLightIntensity: 1
-  decayRate: 0.005
+  decayRate: 2
 --- !u!1 &6379468298995231835
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 8672686396596689628}
   - component: {fileID: 434277080881267079}
   - component: {fileID: 1160769287529185085}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,8 +247,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7128615242501679257, guid: ed38af19ccb927145b851e9cf008ea11,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7128615242501679257, guid: ed38af19ccb927145b851e9cf008ea11,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8841548905514042350, guid: ed38af19ccb927145b851e9cf008ea11,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9055032904043064789, guid: ed38af19ccb927145b851e9cf008ea11,
         type: 3}
