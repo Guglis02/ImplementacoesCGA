@@ -11,8 +11,8 @@ public class LevelBuilder : MonoBehaviour
     [SerializeField] private GameObject wallsParent;
     [SerializeField] private GameObject wallPrefab;
 
-    [SerializeField] private GameObject floor;
-    [SerializeField] private GameObject water;
+    [SerializeField] private Floor floor;
+    [SerializeField] private Water water;
 
     [SerializeField] private GameObject enemiesParent;
     [SerializeField] private List<Enemy> enemiesPrefabs;
@@ -76,27 +76,16 @@ public class LevelBuilder : MonoBehaviour
         levelWidth = levelMap.width;
         pixels = levelMap.GetPixels();
 
-        m_LevelGrid = new LevelCell[levelWidth, levelHeight];
-        for (int x = 0; x < levelWidth; x++)
-        {
-            for (int y = 0; y < levelHeight; y++)
-            {
-                Color32 pixelColor = pixels[y * levelWidth + x];
-                m_LevelGrid[x, y] = new LevelCell(levelElementIDByColor[pixelColor]);
-            }
-        }
+        PopulateLocalGrid();
 
         levelGrid = new Grid<LevelCell>(m_LevelGrid, LevelCenter, new Vector2(s_CellSize, s_CellSize));
 
-        floor.transform.localScale = LevelSize;
-        floor.transform.position = LevelCenter;
-
-        water.transform.localScale = LevelSize;
-        water.transform.position = new Vector3(LevelCenter.x, water.transform.position.y, LevelCenter.z);
+        floor.Initialize(LevelSize, LevelCenter);
+        water.Initialize(LevelSize, LevelCenter);
 
         GroupHorizontalCells();
         GroupVerticalCells();
-        
+
         for (int y = 0; y < levelHeight; y++)
         {
             for (int x = 0; x < levelWidth; x++)
@@ -110,7 +99,7 @@ public class LevelBuilder : MonoBehaviour
                 switch (elementID)
                 {
                     case LevelElementID.Wall:
-                        InitializeWall(y, x); 
+                        InitializeWall(y, x);
                         break;
                     case LevelElementID.PowerUp:
                         InitializeEntity(x, y, powerUpPrefab, pickupsParent);
@@ -131,6 +120,19 @@ public class LevelBuilder : MonoBehaviour
                     default:
                         break;
                 }
+            }
+        }
+    }
+
+    private void PopulateLocalGrid()
+    {
+        m_LevelGrid = new LevelCell[levelWidth, levelHeight];
+        for (int x = 0; x < levelWidth; x++)
+        {
+            for (int y = 0; y < levelHeight; y++)
+            {
+                Color32 pixelColor = pixels[y * levelWidth + x];
+                m_LevelGrid[x, y] = new LevelCell(levelElementIDByColor[pixelColor]);
             }
         }
     }
@@ -209,7 +211,7 @@ public class LevelBuilder : MonoBehaviour
         {
             for (int x = 0; x < levelGrid.Width; x++)
             {
-                Gizmos.color = Color.red;
+                Gizmos.color = Color.white;
                 Gizmos.DrawWireCube(new Vector3(x * s_CellSize + s_CellSize * 0.5f,
                                                 0,
                                                 y * s_CellSize + s_CellSize * 0.5f),

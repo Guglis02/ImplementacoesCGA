@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Water
+  m_Name: SimpleWaterMaterial
   m_Shader: {fileID: 4800000, guid: 10eff511fb950f84183c22fe4a82f0b2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -40,6 +40,6 @@ Material:
     - _Speed: 0.5
     - _TextureDistort: 0.1
     m_Colors:
-    - _Color: {r: 0, g: 0.8301887, b: 0.72392076, a: 0.5}
-    - _FoamC: {r: 0, g: 0.38679248, b: 0.3233004, a: 0.5}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.5}
+    - _FoamC: {r: 1, g: 1, b: 1, a: 0.5}
   m_BuildTextureStacks: []

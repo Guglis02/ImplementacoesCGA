@@ -84,6 +84,11 @@ public class SteeringBehaviour : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!Application.isPlaying || !isActiveAndEnabled)
+        {
+            return;
+        }
+
         Vector3 forwardRayVector = m_CharacterController.velocity.normalized;
 
         forwardRayVector = Vector3.ClampMagnitude(forwardRayVector, m_WallDetectionDistance);
