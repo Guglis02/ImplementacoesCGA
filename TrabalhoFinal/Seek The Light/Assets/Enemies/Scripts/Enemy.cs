@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying)
+        if (!Application.isPlaying || !isActiveAndEnabled)
         {
             return;
         }

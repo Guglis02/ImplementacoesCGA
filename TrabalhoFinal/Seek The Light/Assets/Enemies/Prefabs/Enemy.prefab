@@ -1212,6 +1212,7 @@ GameObject:
   - component: {fileID: 2547354315215914728}
   - component: {fileID: 7834495190935136986}
   - component: {fileID: 4555243902468579687}
+  - component: {fileID: 6914633466472806188}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Blinky
@@ -1243,7 +1244,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5503278443985119119}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a2ba7bd81a313340998b196d072cbc6, type: 3}
   m_Name: 
@@ -1322,6 +1323,23 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6914633466472806188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5503278443985119119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16da8a0ddab3c8046b03da602bfb80f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxSpeed: 1.5
+  m_MaxForce: 1
+  m_PanicDistance: 4
+  m_WanderAngleVariance: 10
+  m_acceleration: {x: 0, y: 0, z: 0}
 --- !u!1 &5745540467574264251
 GameObject:
   m_ObjectHideFlags: 0

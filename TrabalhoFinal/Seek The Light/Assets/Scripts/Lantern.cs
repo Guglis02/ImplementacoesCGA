@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class Lantern : MonoBehaviour
 {
@@ -38,12 +36,12 @@ public class Lantern : MonoBehaviour
 
     private void OnPlayerPowerDown()
     {
-        volumetricLight.SetActive(true);
+        volumetricLight.SetActive(false);
     }
 
     private void Update()
     {
-        if (pointLight.intensity >= minLightIntensity) 
+        if (pointLight.intensity >= minLightIntensity)
         {
             pointLight.intensity -= decayRate;
         }

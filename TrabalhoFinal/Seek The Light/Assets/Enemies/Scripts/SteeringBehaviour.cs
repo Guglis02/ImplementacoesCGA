@@ -11,12 +11,19 @@ public class SteeringBehaviour : MonoBehaviour
     [SerializeField]
     private float m_PanicDistance = 4f;
 
+    [SerializeField]
+    private float m_WanderAngleVariance;
+
     public Vector3 m_acceleration = Vector3.zero;
 
     private CharacterController m_CharacterController;
 
+    private float m_WanderDistance = 2f;
     private float m_WanderRadius = 2f;
     private float m_WanderTheta = Mathf.PI / 2f;
+    private float m_WallDetectionDistance = 1f;
+
+    private bool m_ShouldFlee = false;
 
     private void Awake()
     {
@@ -55,51 +62,74 @@ public class SteeringBehaviour : MonoBehaviour
         m_acceleration += new Vector3(force.x, 0, force.z);
     }
 
-    public void Wander()
+    public Vector3 UpdateWanderPoint()
     {
-        Vector3 wanderPoint = m_CharacterController.velocity;
-        wanderPoint = Vector3.ClampMagnitude(wanderPoint, 2f);
-        wanderPoint += transform.position;
+        float theta = m_WanderTheta + Mathf.Atan2(m_CharacterController.velocity.x, 
+                                                  m_CharacterController.velocity.z);
 
-        float theta = m_WanderTheta + Mathf.Atan2(m_CharacterController.velocity.x, m_CharacterController.velocity.z);
+        Vector3 wanderPoint = m_CharacterController.velocity;
+        wanderPoint = Vector3.ClampMagnitude(wanderPoint, m_WanderDistance);
+        wanderPoint += transform.position;
 
         float x = m_WanderRadius * Mathf.Cos(theta);
         float z = m_WanderRadius * Mathf.Sin(theta);
 
         wanderPoint += new Vector3(x, 0, z);
 
-        Vector3 steer = wanderPoint - transform.position;
-        steer = Vector3.ClampMagnitude(steer, m_MaxForce);
-        m_acceleration += new Vector3(steer.x, 0, steer.z);
-
-        float displacementRange = 0.3f;
+        float displacementRange = m_WanderAngleVariance * Time.deltaTime;
         m_WanderTheta += Random.Range(-displacementRange, displacementRange);
+
+        return wanderPoint;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Vector3 forwardRayVector = m_CharacterController.velocity.normalized;
+
+        forwardRayVector = Vector3.ClampMagnitude(forwardRayVector, m_WallDetectionDistance);
+
+        Gizmos.DrawRay(transform.position, forwardRayVector);
+
+        Gizmos.color = Color.blue;
+        Vector3 wanderPoint = m_CharacterController.velocity;
+        wanderPoint = Vector3.ClampMagnitude(wanderPoint, m_WanderDistance);
+        wanderPoint += transform.position;
+        Gizmos.DrawWireSphere(wanderPoint, m_WanderRadius);
+
+        wanderPoint = UpdateWanderPoint();
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(wanderPoint, 0.5f);
     }
 
     public void WallAvoidance()
     {
-        float rayLength = 1f;
-        Vector3 rayVector = m_CharacterController.velocity.normalized;
-        rayVector = Vector3.ClampMagnitude(rayVector, rayLength);
+        Vector3 forwardRayVector = m_CharacterController.velocity.normalized;
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, rayVector, out hit, rayLength))
+        forwardRayVector = Vector3.ClampMagnitude(forwardRayVector, m_WallDetectionDistance);
+
+        if (Physics.Raycast(transform.position, forwardRayVector, out RaycastHit forwardHit, m_WallDetectionDistance))
         {
-            Vector3 force = hit.normal * m_MaxSpeed;
-            force -= m_CharacterController.velocity;
+            Vector3 force = forwardHit.normal * m_MaxSpeed;
+            force -= m_CharacterController.velocity.normalized;
             force = Vector3.ClampMagnitude(force, m_MaxForce);
             m_acceleration += new Vector3(force.x, 0, force.z);
         }
     }
 
     public void Update()
-    {
-        //Seek(GameManager.PlayerPosition);
-        //Flee(GameManager.PlayerPosition);
-        Wander();
-        //WallAvoidance();
+    {        
+        if (m_ShouldFlee)
+        {
+            Flee(GameManager.PlayerPosition);
+        }
+        else
+        {
+            Seek(GameManager.PlayerPosition);
+        }
+        WallAvoidance();
 
-        Vector3 movementDir = m_acceleration.normalized * m_MaxSpeed * Time.deltaTime;
+        m_acceleration = Vector3.ClampMagnitude(m_acceleration, m_MaxForce);
+        Vector3 movementDir = m_acceleration * m_MaxSpeed * Time.deltaTime;
         m_CharacterController.Move(movementDir);
 
         Quaternion rotation = Quaternion.LookRotation(-movementDir);
