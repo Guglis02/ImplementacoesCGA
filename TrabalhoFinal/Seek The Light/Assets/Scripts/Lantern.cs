@@ -3,19 +3,15 @@ using UnityEngine;
 public class Lantern : MonoBehaviour
 {
     [SerializeField]
-    private GameObject volumetricLight;
-
+    private GameObject m_volumetricLight;
     [SerializeField]
-    private Light pointLight;
-
+    private Light m_pointLight;
     [SerializeField]
-    private float maxLightIntensity;
-
+    private float m_maxLightIntensity;
     [SerializeField]
-    private float minLightIntensity;
-
+    private float m_minLightIntensity;
     [SerializeField]
-    private float decayRate;
+    private float m_decayRate;
 
     private void Start()
     {
@@ -26,24 +22,24 @@ public class Lantern : MonoBehaviour
 
     private void OnPlayerPickup(int _)
     {
-        pointLight.intensity = maxLightIntensity;
+        m_pointLight.intensity = m_maxLightIntensity;
     }
 
     private void OnPlayerPowerUp()
     {
-        volumetricLight.SetActive(true);
+        m_volumetricLight.SetActive(true);
     }
 
     private void OnPlayerPowerDown()
     {
-        volumetricLight.SetActive(false);
+        m_volumetricLight.SetActive(false);
     }
 
     private void Update()
     {
-        if (pointLight.intensity >= minLightIntensity)
+        if (m_pointLight.intensity >= m_minLightIntensity)
         {
-            pointLight.intensity -= decayRate * Time.deltaTime;
+            m_pointLight.intensity -= m_decayRate * Time.deltaTime;
         }
     }
 }

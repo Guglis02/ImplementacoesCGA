@@ -1,49 +1,45 @@
 using UnityEngine;
 
-
 public class CameraFade : MonoBehaviour
 {
-    public float speedScale = 1f;
-    public Color fadeColor = Color.black;
+    public float SpeedScale = 0.1f;
+    public Color FadeColor = Color.black;
     public AnimationCurve Curve = new AnimationCurve(new Keyframe(0, 1),
         new Keyframe(0.5f, 0.5f, -1.5f, -1.5f), new Keyframe(1, 0));
 
-    private float alpha = 0f;
-    private Texture2D texture;
-    private int direction = 0;
-    private float time = 0f;
+    private float m_alpha = 0f;
+    private Texture2D m_texture;
+    private int m_direction = 0;
+    private float m_time = 0f;
 
     private void Start()
     {
         StartFadeIn();
 
-        texture = new Texture2D(1, 1);
-        texture.SetPixel(0, 0, new Color(fadeColor.r, fadeColor.g, fadeColor.b, alpha));
-        texture.Apply();
+        m_texture = new Texture2D(1, 1);
+        m_texture.SetPixel(0, 0, new Color(FadeColor.r, FadeColor.g, FadeColor.b, m_alpha));
+        m_texture.Apply();
 
-        GameManager.Player.OnPlayerHit += (_) =>
-        {
-            StartFadeIn();
-        };
+        GameManager.Player.OnPlayerHit += (_) => { StartFadeIn(); };
     }
 
     private void StartFadeIn()
     {
-        alpha = 1f;
-        time = 0f;
-        direction = 1;
+        m_alpha = 1f;
+        m_time = 0f;
+        m_direction = 1;
     }
 
     public void OnGUI()
     {
-        if (alpha > 0f) GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), texture);
-        if (direction != 0)
+        if (m_alpha > 0f) GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), m_texture);
+        if (m_direction != 0)
         {
-            time += direction * Time.deltaTime * speedScale;
-            alpha = Curve.Evaluate(time);
-            texture.SetPixel(0, 0, new Color(fadeColor.r, fadeColor.g, fadeColor.b, alpha));
-            texture.Apply();
-            if (alpha <= 0f || alpha >= 1f) direction = 0;
+            m_time += m_direction * Time.deltaTime * SpeedScale;
+            m_alpha = Curve.Evaluate(m_time);
+            m_texture.SetPixel(0, 0, new Color(FadeColor.r, FadeColor.g, FadeColor.b, m_alpha));
+            m_texture.Apply();
+            if (m_alpha <= 0f || m_alpha >= 1f) m_direction = 0;
         }
     }
 }

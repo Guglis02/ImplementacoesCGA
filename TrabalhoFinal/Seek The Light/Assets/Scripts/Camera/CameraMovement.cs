@@ -3,31 +3,36 @@
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField]
-    Vector3 m_PlayerOffset;
+    private Vector3 m_playerOffset;
 
     [SerializeField]
-    float m_CameraDistance = 2f;
+    private float m_cameraDistance = 2f;
 
     [SerializeField]
-    float m_CameraRotationDamping = 0.2f;
+    private float m_cameraRotationDamping = 0.2f;
 
     [SerializeField]
-    float m_CameraPositionDamping = 0.2f;
+    private float m_cameraPositionDamping = 0.2f;
+
+    private Vector3 m_playerPosition;
 
     private void Start()
     {
-        Vector3 playerPosition = GameManager.PlayerPosition;
-        transform.position = playerPosition;
+        m_playerPosition = GameManager.PlayerPosition;
+        transform.position = m_playerPosition;
     }
 
     private void Update()
     {
-        Vector3 playerPosition = GameManager.PlayerPosition;
+        m_playerPosition = GameManager.PlayerPosition;
         Vector3 playerForward = GameManager.Player.transform.forward;
 
-        transform.position = Vector3.Lerp(transform.position, playerPosition + m_PlayerOffset + playerForward * m_CameraDistance, Time.deltaTime * m_CameraPositionDamping);
+        transform.position = Vector3.Lerp(
+            transform.position,
+            m_playerPosition + m_playerOffset + playerForward * m_cameraDistance,
+            Time.deltaTime * m_cameraPositionDamping);
 
-        Quaternion rotation = Quaternion.LookRotation(playerPosition - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * m_CameraRotationDamping);
+        Quaternion rotation = Quaternion.LookRotation(m_playerPosition - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * m_cameraRotationDamping);
     }
 }

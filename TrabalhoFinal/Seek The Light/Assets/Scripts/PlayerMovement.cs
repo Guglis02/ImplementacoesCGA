@@ -1,39 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    float m_GroundAccelerate = 10;
+    private float m_groundAccelerate = 10;
 
     [SerializeField]
-    float m_GroundFriction = 0.4f;
+    private float m_groundFriction = 0.4f;
 
     [SerializeField]
-    float m_GroundMaxSpeed = 10;
+    private float m_groundMaxSpeed = 10;
 
     [SerializeField]
-    float m_RotationDamping = 5;
+    private float m_rotationDamping = 5;
 
-    Vector3 m_Velocity;
-    Vector3 m_PreviousInputDirection;
-    CharacterController m_CharacterController;
-    Animator m_Animator;
+    private Vector3 m_velocity;
+    private Vector3 m_previousInputDirection;
+    private CharacterController m_characterController;
+    private Animator m_animator;
 
-    private Vector3 m_LastFramePos;
-    private float m_Speed;
+    private Vector3 m_lastFramePos;
+    private float m_speed;
 
-    void Awake()
+    private void Awake()
     {
-        m_PreviousInputDirection = Vector3.forward;
-        m_CharacterController = GetComponent<CharacterController>();
-        m_Animator = GetComponentInChildren<Animator>();
+        m_previousInputDirection = Vector3.forward;
+        m_characterController = GetComponent<CharacterController>();
+        m_animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
-    {        
-        m_Animator.SetFloat("Speed", m_Speed);
+    {
+        m_animator.SetFloat("Speed", m_speed);
     }
 
     private void FixedUpdate()
@@ -45,34 +44,34 @@ public class PlayerMovement : MonoBehaviour
 
         if (inputDirection != Vector3.zero)
         {
-            m_PreviousInputDirection = inputDirection;
-            m_Velocity = inputDirection;
+            m_previousInputDirection = inputDirection;
+            m_velocity = inputDirection;
         }
 
-        m_Velocity = MoveGround(inputDirection, m_Velocity);
+        m_velocity = MoveGround(inputDirection, m_velocity);
 
-        m_CharacterController.Move(m_Velocity * Time.fixedDeltaTime);
+        m_characterController.Move(m_velocity * Time.fixedDeltaTime);
 
-        Quaternion rotation = Quaternion.LookRotation(m_PreviousInputDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime * m_RotationDamping);
+        Quaternion rotation = Quaternion.LookRotation(m_previousInputDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime * m_rotationDamping);
 
         var position = transform.position;
         position.y = 1;
         transform.position = position;
 
-        m_Speed = (position - m_LastFramePos).magnitude / Time.deltaTime;
-        m_LastFramePos = position;
+        m_speed = (position - m_lastFramePos).magnitude / Time.deltaTime;
+        m_lastFramePos = position;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        m_Velocity = ClipVector(m_Velocity, hit.normal);
+        m_velocity = ClipVector(m_velocity, hit.normal);
     }
 
     private Vector3 MoveGround(Vector3 accelDir, Vector3 prevVelocity)
     {
-        prevVelocity = ApplyFriction(prevVelocity, m_GroundFriction);
-        return Accelerate(accelDir, prevVelocity, m_GroundAccelerate, m_GroundMaxSpeed);
+        prevVelocity = ApplyFriction(prevVelocity, m_groundFriction);
+        return Accelerate(accelDir, prevVelocity, m_groundAccelerate, m_groundMaxSpeed);
     }
 
     private Vector3 ApplyFriction(Vector3 prevVelocity, float friction)

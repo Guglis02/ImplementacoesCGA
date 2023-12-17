@@ -99,11 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf5d568b8c73d54db2900cfa4c0c7a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volumetricLight: {fileID: 8211923955622104325}
-  pointLight: {fileID: 434277080881267079}
-  maxLightIntensity: 4
-  minLightIntensity: 1
-  decayRate: 2
+  m_volumetricLight: {fileID: 8211923955622104325}
+  m_pointLight: {fileID: 434277080881267079}
+  m_maxLightIntensity: 4
+  m_minLightIntensity: 1
+  m_decayRate: 1
 --- !u!1 &6379468298995231835
 GameObject:
   m_ObjectHideFlags: 0

@@ -51,13 +51,13 @@ public class DrawNormals : MonoBehaviour
         }
     }
 
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
         EditorUtility.SetSelectedRenderState(GetComponent<Renderer>(), _displayWireframe ? EditorSelectedRenderState.Wireframe : EditorSelectedRenderState.Hidden);
         OnDrawNormals(true);
     }
 
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         if (!Selection.Contains(this))
             OnDrawNormals(false);

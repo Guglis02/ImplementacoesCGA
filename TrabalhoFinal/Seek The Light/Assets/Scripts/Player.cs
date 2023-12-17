@@ -4,16 +4,9 @@ using UnityEngine;
 [SelectionBase]
 public class Player : MonoBehaviour
 {
-    private CharacterController m_CharacterController;
-
     public int MaxHealth = 3;
 
-    private int health = 3;
-    private int points = 0;
-
     public const float PowerUpDuration = 30f;
-    private float powerUpTimer = 0f;
-
     public Vector3 Forward => transform.forward;
 
     public Action<int> OnPlayerHit;
@@ -23,42 +16,18 @@ public class Player : MonoBehaviour
     public Action OnPlayerDeath;
     public Action OnPlayerGotAllPoints;
 
-    private bool IsPoweredUp => powerUpTimer > 0;
+    private CharacterController m_characterController;
+
+    private int m_health = 3;
+    private int m_points = 0;
+
+    private float m_powerUpTimer = 0f;
+
+    private bool IsPoweredUp => m_powerUpTimer > 0;
 
     private void Awake()
     {
-        m_CharacterController = GetComponent<CharacterController>();
-    }
-
-    private void HandleEnemyCollision(Enemy enemy)
-    {
-        if (IsPoweredUp)
-        {
-            enemy.Die();
-            return;
-        }
-
-        TakeDamage();
-    }
-
-    private void HandleEnemyAttack()
-    {
-        if (IsPoweredUp)
-        {
-            return;
-        }
-
-        TakeDamage();
-    }
-
-    public void TakeDamage()
-    {
-        health--;
-        OnPlayerHit?.Invoke(health);
-        if (health <= 0)
-        {
-            OnPlayerDeath?.Invoke();
-        }
+        m_characterController = GetComponent<CharacterController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -69,27 +38,48 @@ public class Player : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("AttackCollider"))
         {
-            HandleEnemyAttack();
+            HandleEnemyCollision(null);
         }
         else if (other.gameObject.TryGetComponent(out Pickup pickup))
         {
             if (pickup.pickupType == Pickup.PickupType.Point)
             {
-                points++;
-                OnPointPickup?.Invoke(points);
+                m_points++;
+                OnPointPickup?.Invoke(m_points);
             }
             else if (pickup.pickupType == Pickup.PickupType.PowerUp)
             {
-                powerUpTimer = PowerUpDuration;
+                m_powerUpTimer = PowerUpDuration;
                 OnPlayerPowerUp?.Invoke();
             }
             Destroy(pickup.gameObject);
         }
     }
 
+    private void HandleEnemyCollision(Enemy enemy)
+    {
+        if (IsPoweredUp)
+        {
+            enemy?.Die();
+            return;
+        }
+
+        TakeDamage();
+    }
+
+    public void TakeDamage()
+    {
+        m_health--;
+        OnPlayerHit?.Invoke(m_health);
+        if (m_health <= 0)
+        {
+            OnPlayerDeath?.Invoke();
+        }
+    }
+
     private void Update()
     {
-        if (points == GameManager.Instance.TotalPoints)
+        if (m_points == GameManager.Instance.TotalPoints)
         {
             OnPlayerGotAllPoints?.Invoke();
         }
@@ -102,8 +92,8 @@ public class Player : MonoBehaviour
 
     private void UpdatePowerUp()
     {
-        powerUpTimer -= Time.deltaTime;
-        if (powerUpTimer <= 0f)
+        m_powerUpTimer -= Time.deltaTime;
+        if (m_powerUpTimer <= 0f)
         {
             OnPlayerPowerDown?.Invoke();
         }
@@ -111,6 +101,6 @@ public class Player : MonoBehaviour
 
     public void SetPosition(Vector3 position)
     {
-        m_CharacterController.SetPosition(position);
+        m_characterController.SetPosition(position);
     }
 }

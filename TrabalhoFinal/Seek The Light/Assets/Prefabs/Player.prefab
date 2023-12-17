@@ -62,10 +62,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3c5672d35ea6740b8290819de530ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_GroundAccelerate: 40
-  m_GroundFriction: 0.4
-  m_GroundMaxSpeed: 10
-  m_RotationDamping: 5
+  m_groundAccelerate: 40
+  m_groundFriction: 0.4
+  m_groundMaxSpeed: 10
+  m_rotationDamping: 5
 --- !u!143 &3442862102818078028
 CharacterController:
   m_ObjectHideFlags: 0
