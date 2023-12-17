@@ -64,20 +64,20 @@ TessellationFactors UnityCalcTriEdgeTessFactors (float3 triVertexFactors)
 
 float CalcDistanceTessFactor(float4 vertex, float minDist, float maxDist, float tess)
 {
-				float3 worldPosition = mul(unity_ObjectToWorld, vertex).xyz;
-				float dist = distance(worldPosition, _WorldSpaceCameraPos);
-				float f = clamp(1.0 - (dist - minDist) / (maxDist - minDist), 0.01, 1.0);
-				return f * tess;
+    float3 worldPosition = mul(unity_ObjectToWorld, vertex).xyz;
+    float dist = distance(worldPosition, _WorldSpaceCameraPos);
+    float f = clamp(1.0 - (dist - minDist) / (maxDist - minDist), 0.01, 1.0);
+    return f * tess;
 }
 
 TessellationFactors DistanceBasedTess(float4 v0, float4 v1, float4 v2, float minDist, float maxDist, float tess)
 {
-				float3 f;
-				f.x = CalcDistanceTessFactor(v0, minDist, maxDist, tess);
-				f.y = CalcDistanceTessFactor(v1, minDist, maxDist, tess);
-				f.z = CalcDistanceTessFactor(v2, minDist, maxDist, tess);
+    float3 f;
+    f.x = CalcDistanceTessFactor(v0, minDist, maxDist, tess);
+    f.y = CalcDistanceTessFactor(v1, minDist, maxDist, tess);
+    f.z = CalcDistanceTessFactor(v2, minDist, maxDist, tess);
 
-				return UnityCalcTriEdgeTessFactors(f);
+    return UnityCalcTriEdgeTessFactors(f);
 }
 
 uniform float3 _Position;
@@ -85,15 +85,14 @@ uniform sampler2D _MudEffectRT;
 uniform float _OrthographicCamSize;
 
 sampler2D  _Noise;
-float _NoiseScale, _SnowHeight, _NoiseWeight, _SnowDepth;
+float _NoiseScale, _MudHeight, _NoiseWeight, _MudDepth;
 
 TessellationFactors patchConstantFunction(InputPatch<ControlPoint, 3> patch)
 {
     float minDist = 2.0;
     float maxDist = _MaxTessDistance;
     TessellationFactors f;
-    return DistanceBasedTess(patch[0].vertex, patch[1].vertex, patch[2].vertex, minDist, maxDist, _Tess);
-   
+    return DistanceBasedTess(patch[0].vertex, patch[1].vertex, patch[2].vertex, minDist, maxDist, _Tess);   
 }
 
 float4 GetShadowPositionHClip(Attributes input)
@@ -116,32 +115,32 @@ Varyings vert(Attributes input)
     Varyings output;
     
     float3 worldPosition = mul(unity_ObjectToWorld, input.vertex).xyz;
-    //create local uv
+    // Cria um UV local
     float2 uv = worldPosition.xz - _Position.xz;
     uv = uv / (_OrthographicCamSize * 2);
     uv += 0.5;
     
-    // Effects RenderTexture Reading
+    // Le a textura amostrada pela camera
     float4 RTEffect = tex2Dlod(_MudEffectRT, float4(uv, 0, 0));
-    // smoothstep to prevent bleeding
+    // Smoothstep para evitar bleeding
    	RTEffect *=  smoothstep(0.99, 0.9, uv.x) * smoothstep(0.99, 0.9,1- uv.x);
 	RTEffect *=  smoothstep(0.99, 0.9, uv.y) * smoothstep(0.99, 0.9,1- uv.y);
     
-    // worldspace noise texture
-    float SnowNoise = tex2Dlod(_Noise, float4(worldPosition.xz * _NoiseScale, 0, 0)).r;
+    // Textura de noise amostrada em escala e posicao de mundo
+    float MudNoise = tex2Dlod(_Noise, float4(worldPosition.xz * _NoiseScale, 0, 0)).r;
     output.viewDir = SafeNormalize(GetCameraPositionWS() - worldPosition);
 
-	// move vertices up where snow is
-	input.vertex.xyz += SafeNormalize(input.normal) * saturate(( _SnowHeight) + (SnowNoise * _NoiseWeight)) * saturate(1-(RTEffect.g * _SnowDepth));
+	// Levanta vértices onde não tem caminho na textura
+	input.vertex.xyz += SafeNormalize(input.normal) * saturate(( _MudHeight) + (MudNoise * _NoiseWeight)) * saturate(1-(RTEffect.g * _MudDepth));
 
-    // transform to clip space
+    // Transforma o output para clip space
     #ifdef SHADERPASS_SHADOWCASTER
         output.vertex = GetShadowPositionHClip(input);
     #else
         output.vertex = TransformObjectToHClip(input.vertex.xyz);
     #endif
 
-    //outputs
+    // Outputs
     output.worldPos =  mul(unity_ObjectToWorld, input.vertex).xyz;
     output.normal = input.normal;
     output.uv = input.uv;

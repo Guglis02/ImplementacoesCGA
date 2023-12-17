@@ -4,10 +4,10 @@ public static class CharacterControllerExtensions
 {
     public static void SetPosition(this CharacterController characterController, Vector3 position)
     {
-        bool prevCharacterControlerEnabled = characterController.enabled;
+        bool prevActive = characterController.gameObject.activeSelf;
 
-        characterController.enabled = false;
+        characterController.gameObject.SetActive(false);
         characterController.transform.position = position;
-        characterController.enabled = prevCharacterControlerEnabled;
+        characterController.gameObject.SetActive(prevActive);
     }
 }

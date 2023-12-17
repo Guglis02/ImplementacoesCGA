@@ -38,21 +38,25 @@ Material:
     m_Ints: []
     m_Floats:
     - _MaxTessDistance: 50
+    - _MudDepth: 1
+    - _MudHeight: 0.8
+    - _MudTextureOpacity: 0.9
+    - _MudTextureScale: 1
     - _NoiseScale: 1
     - _NoiseWeight: 0.122
-    - _PathBlending: 3
-    - _RimPower: 15.78
-    - _SnowDepth: 0.9
-    - _SnowHeight: 0.674
+    - _PathBlending: 1.12
+    - _RimPower: 11.7
+    - _SnowDepth: 1
+    - _SnowHeight: 0.82
     - _SnowTextureOpacity: 0.914
     - _SnowTextureScale: 2
-    - _SparkCutoff: 0
-    - _SparkleScale: 0
+    - _SparkCutoff: 1.97
+    - _SparkleScale: 2.8
     - _Tess: 15
     m_Colors:
-    - _Color: {r: 0.1273585, g: 0.06367474, b: 0.043854576, a: 1}
-    - _PathColorIn: {r: 0.16202943, g: 0.086500466, b: 0.045186214, a: 1}
-    - _PathColorOut: {r: 0.16202943, g: 0.086500466, b: 0.045186214, a: 1}
-    - _RimColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    - _Color: {r: 0.509434, g: 0.22528607, b: 0.13648984, a: 1}
+    - _PathColorIn: {r: 0.16078432, g: 0.05285466, b: 0.047058817, a: 1}
+    - _PathColorOut: {r: 0.1509434, g: 0.033321463, b: 0.033321463, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_BuildTextureStacks: []

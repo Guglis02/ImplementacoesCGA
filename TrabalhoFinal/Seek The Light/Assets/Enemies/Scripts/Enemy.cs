@@ -232,7 +232,15 @@ public class Enemy : MonoBehaviour
         }
 
         int randomIndex = UnityEngine.Random.Range(0, possibleCells.Count - 1);
-        cellInterpolator.SetTargetCell(possibleCells[randomIndex]);
+        try
+        {
+            cellInterpolator.SetTargetCell(possibleCells[randomIndex]);
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Debug.Log("RandomIndex: " + randomIndex + " PossibleCells.Count: " + possibleCells.Count);
+            throw e;
+        }
     }
 
     private void UpdateDeadBehaviour()

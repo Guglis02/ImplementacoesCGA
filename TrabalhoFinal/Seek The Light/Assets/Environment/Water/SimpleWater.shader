@@ -5,7 +5,6 @@ Shader "Unlit/Simple Water"
 		_Color("Tint", Color) = (1, 1, 1, .5) 
 		_FoamC("Foam", Color) = (1, 1, 1, .5) 
 		_MainTex ("Main Texture", 2D) = "white" {}
-		_TextureDistort("Texture Wobble", range(0,1)) = 0.1
 		_NoiseTex("Extra Wave Noise", 2D) = "white" {}
 		_Speed("Wave Speed", Range(0,1)) = 0.5
 		_Amount("Wave Amount", Range(0,1)) = 0.6
@@ -47,7 +46,6 @@ Shader "Unlit/Simple Water"
 				float4 scrPos : TEXCOORD2;//
 				float4 worldPos : TEXCOORD4;//
 			};
-			float _TextureDistort;
 			float4 _Color;
 			sampler2D _CameraDepthTexture; // Textura de profundidade da camera
 			sampler2D _MainTex, _NoiseTex;//
@@ -103,7 +101,7 @@ Shader "Unlit/Simple Water"
                 distortx +=  (ripples *2);
            
 				// Multiplica cores da textura pelas cores escolhidas
-                half4 col = tex2D(_MainTex, (i.worldPos.xz * _Scale) - (distortx * _TextureDistort));   
+                half4 col = tex2D(_MainTex, (i.worldPos.xz * _Scale) - distortx);   
 				
 				// Profundidade do pixel
                 half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos )));
