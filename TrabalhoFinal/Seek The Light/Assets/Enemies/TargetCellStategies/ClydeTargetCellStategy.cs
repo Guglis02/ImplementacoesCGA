@@ -11,7 +11,7 @@ public class ClydeTargetCellStategy : TargetCellStategy
     public override Vector2Int CalculateChaseTargetCell(Vector2Int playerCell, Vector2Int enemyCell)
     {
         if (Vector2Int.Distance(playerCell, enemyCell) < 8)
-        { 
+        {
             return m_scatterTargetCell;
         }
 

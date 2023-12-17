@@ -5,7 +5,7 @@ public class InkyTargetCellStategy : TargetCellStategy
 {
     private Transform blinkyTransform;
 
-    Transform BlinkyTransform
+    private Transform BlinkyTransform
     {
         get
         {

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -34,7 +33,7 @@ public class LevelBuilder : MonoBehaviour
 
     private int levelWidth;
     private int levelHeight;
-    
+
     public Vector3 LevelSize => levelGrid.IsUnityNull() ? Vector3.one : levelGrid.GridTotalSize();
     public Vector3 LevelCenter => new Vector3(levelWidth / 2 * s_CellSize, 0, levelHeight / 2 * s_CellSize);
 

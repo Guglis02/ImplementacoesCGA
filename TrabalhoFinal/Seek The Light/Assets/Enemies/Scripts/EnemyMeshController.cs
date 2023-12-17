@@ -30,7 +30,7 @@ public class EnemyMeshController : MonoBehaviour
 
     private void Start()
     {
-        m_HeadMeshFilter.mesh = m_HeadMesh;        
+        m_HeadMeshFilter.mesh = m_HeadMesh;
     }
 
     public void SetScorchedMaterials()

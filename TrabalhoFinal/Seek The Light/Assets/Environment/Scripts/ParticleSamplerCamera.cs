@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class ParticleSamplerCamera : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     private string m_GlobalTextureName;
     [SerializeField]
     private RenderTexture m_RenderTexture;
     [SerializeField]
     private Transform m_WaterInteractor;
 
-    void Awake()
+    private void Awake()
     {
         Camera cam = GetComponent<Camera>();
 

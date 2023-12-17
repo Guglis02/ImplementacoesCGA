@@ -63,7 +63,7 @@ public class SteeringBehaviour : MonoBehaviour
 
     public Vector3 UpdateWanderPoint()
     {
-        float theta = m_WanderTheta + Mathf.Atan2(m_CharacterController.velocity.x, 
+        float theta = m_WanderTheta + Mathf.Atan2(m_CharacterController.velocity.x,
                                                   m_CharacterController.velocity.z);
 
         Vector3 wanderPoint = m_CharacterController.velocity;
@@ -124,7 +124,7 @@ public class SteeringBehaviour : MonoBehaviour
     }
 
     public void UpdateSteering(Vector3 target)
-    {        
+    {
         if (m_ShouldFlee)
         {
             Flee(GameManager.PlayerPosition);

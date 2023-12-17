@@ -13,7 +13,7 @@ public class CellInterpolator
 
     public CellInterpolator(Vector2Int starterCell,
                             Grid<LevelBuilder.LevelCell> grid,
-                            CharacterController characterController, 
+                            CharacterController characterController,
                             float moveSpeed)
     {
         currentCell = starterCell;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [SelectionBase]
@@ -17,10 +16,12 @@ public class Enemy : MonoBehaviour
 
     private BehaviourState CurrentBehaviourState
     {
-        get {
+        get
+        {
             return m_CurrentBehaviourState;
         }
-        set {
+        set
+        {
             if (m_CurrentBehaviourState == value)
             {
                 return;
@@ -98,7 +99,7 @@ public class Enemy : MonoBehaviour
         starterCell = m_grid.PositionToCoord(transform.position);
         cellInterpolator = new CellInterpolator(starterCell, m_grid, m_characterController, m_MoveSpeed);
     }
-    
+
     public void Die()
     {
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Player"), true);
@@ -252,7 +253,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    bool IsPlayerOnAttackRange(float attackRange)
+    private bool IsPlayerOnAttackRange(float attackRange)
     {
         Vector3 playerPosition = GameManager.PlayerPosition;
         Vector2 player2dPosition = new Vector2(playerPosition.x, playerPosition.z);
@@ -265,15 +266,17 @@ public class Enemy : MonoBehaviour
 
     private void UpdateBehaviour()
     {
-        if (CurrentBehaviourState == BehaviourState.Dead 
+        if (CurrentBehaviourState == BehaviourState.Dead
             || CurrentBehaviourState == BehaviourState.Frightened)
         {
             return;
-        } else if (IsPlayerOnAttackRange(AttackRange))
+        }
+        else if (IsPlayerOnAttackRange(AttackRange))
         {
             CurrentBehaviourState = BehaviourState.Attack;
             timer += 20;
-        } else if (timer >= 20f && CurrentBehaviourState != BehaviourState.Scatter)
+        }
+        else if (timer >= 20f && CurrentBehaviourState != BehaviourState.Scatter)
         {
             CurrentBehaviourState = BehaviourState.Scatter;
             timer = 0;
