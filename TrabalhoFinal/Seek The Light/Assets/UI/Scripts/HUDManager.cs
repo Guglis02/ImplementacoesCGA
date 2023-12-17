@@ -1,43 +1,34 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HUDManager : MonoBehaviour
 {
     [SerializeField]
-    private HealthIndicator HealthIndicatorPrefab;
+    private HealthIndicator m_healthIndicatorPrefab;
     [SerializeField]
-    private RectTransform HpPanel;
+    private RectTransform m_hpPanel;
 
-    private List<HealthIndicator> healthIndicators = new List<HealthIndicator>();
+    private readonly List<HealthIndicator> m_healthIndicators = new();
 
-    private int maxHealth;
+    private int m_maxHealth;
 
     private void Start()
     {
         GameManager.Player.OnPlayerHit += UpdateHealth;
-        maxHealth = GameManager.Player.MaxHealth;
-        
-        for (int i = 0; i < maxHealth; i++)
+        m_maxHealth = GameManager.Player.MaxHealth;
+
+        for (int i = 0; i < m_maxHealth; i++)
         {
-            HealthIndicator healthIndicator = Instantiate(HealthIndicatorPrefab, HpPanel);
-            healthIndicators.Add(healthIndicator);
+            HealthIndicator healthIndicator = Instantiate(m_healthIndicatorPrefab, m_hpPanel);
+            m_healthIndicators.Add(healthIndicator);
         }
     }
 
     private void UpdateHealth(int value)
     {
-        for (int i = 0; i < maxHealth; i++)
+        for (int i = 0; i < m_maxHealth; i++)
         {
-            if (i < value)
-            {
-                healthIndicators[i].lampOnImage.SetActive(true);
-            }
-            else
-            {
-                healthIndicators[i].lampOnImage.SetActive(false);
-            }
-        }       
+            m_healthIndicators[i].LampOnImage.SetActive(i < value);
+        }
     }
 }

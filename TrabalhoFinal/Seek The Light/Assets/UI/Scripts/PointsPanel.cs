@@ -1,23 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class PointsPanel : MonoBehaviour
 {
-    [SerializeField] private TMP_Text pointsText;
+    [SerializeField]
+    private TMP_Text m_pointsText;
 
-    private int totalPoints;
+    private int m_totalPoints;
 
     private void Start()
     {
-        totalPoints = GameManager.Instance.TotalPoints;
-        pointsText.text = $"0/{totalPoints}";
+        m_totalPoints = GameManager.Instance.TotalPoints;
+        m_pointsText.text = $"0/{m_totalPoints}";
         GameManager.Player.OnPointPickup += UpdatePoints;
     }
 
     private void UpdatePoints(int value)
     {
-        pointsText.text = $"{value}/{totalPoints}";
+        m_pointsText.text = $"{value}/{m_totalPoints}";
     }
 }

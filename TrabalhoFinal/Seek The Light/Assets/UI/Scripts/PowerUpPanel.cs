@@ -1,40 +1,39 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PowerUpPanel : MonoBehaviour
 {
-    [SerializeField] private TMP_Text timerText;
-    [SerializeField] private Image radialImage;
+    [SerializeField]
+    private TMP_Text m_timerText;
+    [SerializeField]
+    private Image m_radialImage;
 
-    private float powerUpTime;
-    private float timer;
+    private float m_powerUpTime;
+    private float m_timer;
 
     private void Start()
     {
-        powerUpTime = Player.PowerUpDuration;
-        timerText.text = "0";
+        m_powerUpTime = Player.PowerUpDuration;
+        m_timerText.text = "0";
         GameManager.Player.OnPlayerPowerUp += OnPlayerPowerUp;
     }
 
     private void Update()
     {
-        if (timer <= 0)
+        if (m_timer <= 0)
         {
             return;
         }
 
-        float newTime = timer - Time.deltaTime;
-        timerText.text = Mathf.CeilToInt(newTime).ToString();
-        timer = Mathf.Clamp(newTime, 0, powerUpTime);
-        radialImage.fillAmount = timer / powerUpTime;
+        float newTime = m_timer - Time.deltaTime;
+        m_timerText.text = Mathf.CeilToInt(newTime).ToString();
+        m_timer = Mathf.Clamp(newTime, 0, m_powerUpTime);
+        m_radialImage.fillAmount = m_timer / m_powerUpTime;
     }
 
     private void OnPlayerPowerUp()
     {
-        timer = powerUpTime;
+        m_timer = m_powerUpTime;
     }
 }

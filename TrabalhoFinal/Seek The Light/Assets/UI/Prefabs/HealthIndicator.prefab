@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2c069a5d1d76940884d29fd33cf09c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lampOnImage: {fileID: 4393221356074575302}
+  LampOnImage: {fileID: 4393221356074575302}
 --- !u!222 &2041837293414683368
 CanvasRenderer:
   m_ObjectHideFlags: 0

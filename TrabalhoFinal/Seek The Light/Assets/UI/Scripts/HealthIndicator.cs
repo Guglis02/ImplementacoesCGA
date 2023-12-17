@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthIndicator : MonoBehaviour
 {
-    public GameObject lampOnImage;
+    public GameObject LampOnImage;
 }
