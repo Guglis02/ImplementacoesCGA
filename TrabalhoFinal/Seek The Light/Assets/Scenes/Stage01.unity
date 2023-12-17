@@ -1161,12 +1161,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b602fe17474c445aabc16ecdd08a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelBuilder: {fileID: 421480803}
-  mainMenuScene: {fileID: 102900000, guid: caba4ac1419a86340906328e94f5bf59, type: 3}
-  m_NextScene: {fileID: 102900000, guid: 5d40ed91351e7a04fb2b9f8bd3ec7bda, type: 3}
-  playerCamera: {fileID: 330585543}
-  topCamera: {fileID: 678497674}
-  aiMode: 0
+  m_levelBuilder: {fileID: 421480803}
+  m_mainMenuScene: {fileID: 102900000, guid: caba4ac1419a86340906328e94f5bf59, type: 3}
+  m_nextScene: {fileID: 102900000, guid: 5d40ed91351e7a04fb2b9f8bd3ec7bda, type: 3}
+  m_playerCamera: {fileID: 330585543}
+  m_topCamera: {fileID: 678497674}
+  CurrentAiMode: 0
 --- !u!4 &1743499131
 Transform:
   m_ObjectHideFlags: 0

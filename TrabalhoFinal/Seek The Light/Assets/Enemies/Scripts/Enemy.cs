@@ -171,7 +171,7 @@ public class Enemy : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
 
-        switch (GameManager.Instance.aiMode)
+        switch (GameManager.Instance.CurrentAiMode)
         {
             case GameManager.AiMode.GridInterpolation:
                 cellInterpolator.Update();

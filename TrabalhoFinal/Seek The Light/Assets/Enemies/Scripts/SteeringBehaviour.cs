@@ -84,7 +84,7 @@ public class SteeringBehaviour : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying
-            || GameManager.Instance.aiMode != GameManager.AiMode.SteeringBehaviour)
+            || GameManager.Instance.CurrentAiMode != GameManager.AiMode.SteeringBehaviour)
         {
             return;
         }
