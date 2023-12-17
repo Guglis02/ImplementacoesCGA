@@ -3,25 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] private Object gameScene;
-
-    public void Awake()
-    {
-        try {SceneManager.UnloadSceneAsync(gameScene.name);}
-        catch (System.ArgumentException) {}
-    }
+    [SerializeField] private Object m_gameScene;
 
     public void StartGame()
     {
-        SceneManager.LoadScene(gameScene.name);
+        SceneManager.LoadScene(m_gameScene.name);
     }
 
     public void Quit()
     {
         Application.Quit();
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+#endif
     }
 }

@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    public enum PickupType
+    public enum PickupEffect
     {
         Point,
         PowerUp
     }
 
-    public PickupType pickupType;
+    public PickupEffect Effect;
 }

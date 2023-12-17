@@ -9760,6 +9760,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7114236057164356120, guid: 819a3b3d84738994692258f67314ae39,
         type: 3}
+      propertyPath: Effect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114236057164356120, guid: 819a3b3d84738994692258f67314ae39,
+        type: 3}
       propertyPath: pickupType
       value: 1
       objectReference: {fileID: 0}

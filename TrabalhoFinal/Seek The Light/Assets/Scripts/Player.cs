@@ -42,12 +42,12 @@ public class Player : MonoBehaviour
         }
         else if (other.gameObject.TryGetComponent(out Pickup pickup))
         {
-            if (pickup.pickupType == Pickup.PickupType.Point)
+            if (pickup.Effect == Pickup.PickupEffect.Point)
             {
                 m_points++;
                 OnPointPickup?.Invoke(m_points);
             }
-            else if (pickup.pickupType == Pickup.PickupType.PowerUp)
+            else if (pickup.Effect == Pickup.PickupEffect.PowerUp)
             {
                 m_powerUpTimer = PowerUpDuration;
                 OnPlayerPowerUp?.Invoke();

@@ -1,27 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 public class PickupAnimation : MonoBehaviour
 {
     [SerializeField]
-    float m_MovementSpeed;
-
+    private float m_movementSpeed;
     [SerializeField]
-    float m_MovementAltitude;
-
-    float m_InitialHegiht;
+    private float m_movementAltitude;
+    private float m_initialHegiht;
 
     private void Start()
     {
-        m_InitialHegiht = transform.position.y;
+        m_initialHegiht = transform.position.y;
     }
 
-    void Update()
+    private void Update()
     {
         var position = transform.position;
-        position.y = m_InitialHegiht + m_MovementAltitude * Mathf.Sin(Time.time * m_MovementSpeed);
+        position.y = m_initialHegiht + m_movementAltitude * Mathf.Sin(Time.time * m_movementSpeed);
         transform.position = position;
     }
 }
