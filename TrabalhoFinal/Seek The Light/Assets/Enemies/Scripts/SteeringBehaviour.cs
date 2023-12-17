@@ -83,7 +83,8 @@ public class SteeringBehaviour : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying)
+        if (!Application.isPlaying
+            || GameManager.Instance.aiMode != GameManager.AiMode.SteeringBehaviour)
         {
             return;
         }
@@ -111,7 +112,9 @@ public class SteeringBehaviour : MonoBehaviour
 
         forwardRayVector = Vector3.ClampMagnitude(forwardRayVector, m_WallDetectionDistance);
 
-        if (Physics.Raycast(transform.position, forwardRayVector, out RaycastHit forwardHit, m_WallDetectionDistance))
+        int wallLayer = LayerMask.GetMask("Wall");
+
+        if (Physics.Raycast(transform.position, forwardRayVector, out RaycastHit forwardHit, m_WallDetectionDistance, wallLayer))
         {
             Vector3 force = forwardHit.normal * m_MaxSpeed;
             force -= m_CharacterController.velocity.normalized;

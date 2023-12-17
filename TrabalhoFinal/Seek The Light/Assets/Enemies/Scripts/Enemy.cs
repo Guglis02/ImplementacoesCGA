@@ -105,6 +105,7 @@ public class Enemy : MonoBehaviour
         CurrentBehaviourState = BehaviourState.Dead;
         cellInterpolator.SetTargetCell(starterCell);
         m_EnemyMeshController.SetScorchedMaterials();
+        m_SteeringBehaviour.m_ShouldFlee = false;
     }
 
     private void Revive()

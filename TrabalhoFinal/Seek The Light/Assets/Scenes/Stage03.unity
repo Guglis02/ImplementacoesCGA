@@ -1163,10 +1163,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelBuilder: {fileID: 421480803}
   mainMenuScene: {fileID: 102900000, guid: caba4ac1419a86340906328e94f5bf59, type: 3}
-  m_NextScene: {fileID: 102900000, guid: caba4ac1419a86340906328e94f5bf59, type: 3}
+  m_NextScene: {fileID: 102900000, guid: 26d7b5e3d88825c4d86be9fb9b17b262, type: 3}
   playerCamera: {fileID: 330585543}
   topCamera: {fileID: 678497674}
-  aiMode: 0
+  aiMode: 1
 --- !u!4 &1743499131
 Transform:
   m_ObjectHideFlags: 0
@@ -1530,7 +1530,7 @@ PrefabInstance:
         type: 3}
       propertyPath: levelMap
       value: 
-      objectReference: {fileID: 2800000, guid: 5a25f2f3a77e5a54c9748a356f878fed, type: 3}
+      objectReference: {fileID: 2800000, guid: 9f84bbddbe387e44fadf68ded47151f1, type: 3}
     - target: {fileID: 3650401382701274246, guid: bd1bed12ee54ed948b555d0c8ac6a820,
         type: 3}
       propertyPath: pickupPrefab
@@ -1557,7 +1557,7 @@ PrefabInstance:
         type: 3}
       propertyPath: terrainPrefab
       value: 
-      objectReference: {fileID: 6700048473591446016, guid: 874013a7969d03a46baf26b7b327ec4b,
+      objectReference: {fileID: 7364648056697803485, guid: 48ce0b09e1d92fd4ab1455c8aa75949a,
         type: 3}
     - target: {fileID: 4909377674760760219, guid: bd1bed12ee54ed948b555d0c8ac6a820,
         type: 3}

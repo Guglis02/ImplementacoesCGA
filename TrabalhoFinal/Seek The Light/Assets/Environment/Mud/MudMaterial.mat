@@ -38,7 +38,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _MaxTessDistance: 50
-    - _MudDepth: 1
+    - _MudDepth: 0.9
     - _MudHeight: 0.8
     - _MudTextureOpacity: 0.9
     - _MudTextureScale: 1
